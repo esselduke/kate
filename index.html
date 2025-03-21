@@ -3,918 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Social Media & Brand Growth Specialist | Expert in Community Building & Networking">
-    <meta name="keywords" content="personal branding, social media growth, brand visibility, online presence, social media marketing">
-    <title>Social Media & Brand Growth Specialist</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Prata&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #3D5CFF; /* Professional blue */
-            --secondary: #18C5DD; /* Bright teal */
-            --accent: #FF6B6B; /* Subtle coral */
-            --gradient-1: linear-gradient(135deg, #3D5CFF, #5842E3);
-            --gradient-2: linear-gradient(135deg, #18C5DD, #13ADC3);
-            --gradient-3: linear-gradient(135deg, #FF6B6B, #FF8E70);
-            --text-dark: #1E2642;
-            --text-light: #FFFFFF;
-            --text-gray: #8A94A6;
-            --bg-light: #F5F8FF;
-            --bg-dark: #0B1437;
-            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.18);
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --glass-shadow: 0 8px 32px rgba(14, 30, 115, 0.15);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #1C3366, #0B1437);
-            overflow-x: hidden;
-            line-height: 1.7;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Prata', serif;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
-        }
-
-        h2 {
-            font-size: 2.4rem;
-        }
-
-        h3 {
-            font-size: 1.8rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-align: center;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.4s ease;
-            z-index: -1;
-        }
-
-        .btn:hover:before {
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #3D5CFF, #5842E3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 8px 20px rgba(61, 92, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #5842E3, #3D5CFF);
-            box-shadow: 0 10px 25px rgba(61, 92, 255, 0.4);
-            transform: translateY(-5px);
-        }
-
-        .btn-secondary {
-            background: var(--gradient-2);
-            color: var(--text-light);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(24, 197, 221, 0.4);
-        }
-
-        .btn-accent {
-            background: var(--gradient-3);
-            color: var(--text-light);
-        }
-
-        .btn-accent:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.4s ease;
-            padding: 20px 0;
-            background: rgba(11, 20, 55, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        header.scrolled {
-            padding: 15px 0;
-            background: rgba(11, 20, 55, 0.8);
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Prata', serif;
-            font-size: 1.8rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #FFFFFF, #18C5DD);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 35px;
-        }
-
-        .nav-links a {
-            color: white;
-            font-weight: 500;
-            position: relative;
-            padding: 5px 0;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-links a:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #18C5DD;
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #18C5DD;
-        }
-
-        .nav-links a:hover:after, 
-        .nav-links a.active:after {
-            width: 100%;
-        }
-
-        .mobile-toggle {
-            display: none;
-            cursor: pointer;
-            z-index: 1001;
-            position: relative;
-        }
-
-        .mobile-toggle span {
-            display: block;
-            width: 28px;
-            height: 2px;
-            background-color: white;
-            margin: 6px 0;
-            transition: all 0.3s ease;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            padding: 140px 0 100px;
-            overflow: hidden;
-            background: transparent;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(28, 51, 102, 0.2), rgba(11, 20, 55, 0.2));
-            z-index: -1;
-        }
-
-        .hero-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.8;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.4;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .shape-1 {
-            width: 150px;
-            height: 150px;
-            background: rgba(61, 92, 255, 0.15);
-            top: 20%;
-            left: 10%;
-        }
-
-        .shape-2 {
-            width: 80px;
-            height: 80px;
-            background: rgba(24, 197, 221, 0.15);
-            top: 60%;
-            left: 20%;
-        }
-
-        .shape-3 {
-            width: 180px;
-            height: 180px;
-            background: rgba(255, 107, 107, 0.1);
-            top: 30%;
-            right: 10%;
-        }
-
-        .shape-4 {
-            width: 120px;
-            height: 120px;
-            background: rgba(61, 92, 255, 0.15);
-            bottom: 20%;
-            right: 15%;
-        }
-
-        .hero-flex {
-            display: flex;
-            align-items: flex-start;
-            gap: 50px;
-        }
-
-        .hero-content {
-            flex: 1;
-            max-width: 600px;
-            padding-top: 0;
-        }
-
-        .hero-form-container {
-            flex: 1;
-            max-width: 500px;
-            margin-top: 30px;
-        }
-
-        .hero-title {
-            position: relative;
-            display: inline-block;
-            margin-top: 200px;
-            margin-bottom: 25px;
-        }
-
-        .hero-title h1 {
-            margin-bottom: 10px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-title p {
-            font-size: 1.2rem;
-            color: #18C5DD;
-            font-weight: 600;
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        .hero-title span {
-            color: white;
-            position: relative;
-        }
-
-        .hero-title span:after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: rgba(61, 92, 255, 0.2);
-            z-index: -1;
-        }
-
-        .hero-text {
-            margin-bottom: 30px;
-            animation: fadeInUp 1.2s ease forwards;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Hero Form */
-        .hero-form {
-            background: rgba(28, 51, 102, 0.2);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            position: relative;
-            animation: formAppear 1s ease forwards;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hero-form:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #3D5CFF, #18C5DD);
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .form-header h3 {
-            color: white;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .form-header p {
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            color: white;
-            background-color: rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        input::placeholder, 
-        select::placeholder, 
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        input:focus, 
-        select:focus, 
-        textarea:focus {
-            outline: none;
-            border-color: rgba(24, 197, 221, 0.5);
-            box-shadow: 0 0 0 3px rgba(24, 197, 221, 0.1);
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-divider {
-            position: relative;
-            text-align: center;
-            margin: 25px 0 15px;
-        }
-
-        .form-divider-text {
-            display: inline-block;
-            padding: 0 15px;
-            background-color: transparent;
-            position: relative;
-            z-index: 1;
-            color: #18C5DD;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        .form-divider:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background-color: rgba(255, 255, 255, 0.15);
-            z-index: 0;
-        }
-        
-        .checkbox-item label,
-        .package-option-name,
-        .package-option-number {
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .checkbox-item input {
-            width: auto;
-            margin-right: 8px;
-        }
-
-        .package-options {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .package-option {
-            position: relative;
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0 5px;
-            background-color: rgba(61, 92, 255, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .package-option:hover {
-            border-color: rgba(24, 197, 221, 0.5);
-            background-color: rgba(61, 92, 255, 0.15);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .package-option input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .package-option-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .package-option-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .package-option-number {
-            color: #18C5DD;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .package-option input:checked + .package-option-content {
-            color: white;
-        }
-
-        .package-option input:checked + .package-option-content .package-option-number {
-            color: #FF6B6B;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-footer strong {
-            color: #18C5DD;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes formAppear {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .delay-1 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-2 {
-            animation-delay: 0.4s;
-        }
-
-        .delay-3 {
-            animation-delay: 0.6s;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 992px) {
-            h1 {
-                font-size: 2.8rem;
-            }
-
-            .hero-flex {
-                flex-direction: column;
-                gap: 40px;
-            }
-
-            .hero-content, .hero-form-container {
-                max-width: 100%;
-            }
-            
-            .hero-form-container {
-                margin-top: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.4rem;
-            }
-
-            .hero {
-                padding: 120px 0 80px;
-            }
-            
-            .logo img {
-                height: 35px;
-            }
-
-            .mobile-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 30px;
-                padding: 0;
-                background: linear-gradient(135deg, rgba(28, 51, 102, 0.97), rgba(11, 20, 55, 0.97));
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-                transition: all 0.4s ease;
-                z-index: 1000;
-                opacity: 0;
-                visibility: hidden;
-                pointer-events: none;
-            }
-
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                pointer-events: all;
-            }
-
-            .mobile-toggle.active span:nth-child(1) {
-                transform: rotate(-45deg) translate(-5px, 6px);
-            }
-
-            .mobile-toggle.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .mobile-toggle.active span:nth-child(3) {
-                transform: rotate(45deg) translate(-5px, -6px);
-            }
-
-            .checkbox-group {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .package-option-name {
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .hero {
-                padding: 130px 0 60px;
-            }
-            
-            .logo img {
-                height: 30px;
-            }
-
-            .hero-form {
-                padding: 30px 20px;
-            }
-
-            .package-options {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .package-option {
-                margin: 0;
-            }
-        }
-    </style>
+    <title>Davon - Business Consulting School</title>
+ <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Fixed Background Image -->
+    <div class="background-image"></div>
+    
     <!-- Header -->
-    <header id="header">
+    <header>
         <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo"><img src="logo.png" alt=""></a>
-                <div class="mobile-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <ul class="nav-links">
-                    <li><a href="#" class="active">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Portfolio</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-shapes">
-            <div class="shape shape-1 float-animation"></div>
-            <div class="shape shape-2 float-animation delay-1"></div>
-            <div class="shape shape-3 float-animation delay-2"></div>
-            <div class="shape shape-4 float-animation delay-3"></div>
-        </div>
-        <div class="container">
-            <div class="hero-flex">
-                <div class="hero-content">
-                    <div class="hero-title">
-                        <h1>Turn Your Personal Brand into a <span>Business Asset</span></h1>
-                        <p><strong>Stand Out, Get Noticed, and Grow Online</strong></p>
-                    </div>
-                    <div class="hero-text">
-                        <p>In today's digital-first world, success isn't just about managing operations—it's about building your authority, scaling your brand, and positioning yourself as a leader in your industry.</p>
-                        <p>Your LinkedIn presence is your stage, and how you show up online can make or break your success. It's the difference between being a well-kept secret and becoming the name everyone knows.</p>
-                        <p>If you're ready to go from blending in to standing out, to turn your network into your net worth, I've got the strategy and execution you need.</p>
-                    </div>
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Kate<span class="dot">.</span></h1>
+                    <!-- <p>Business Consulting School</p> -->
                 </div>
                 
-                <div class="hero-form-container">
-                    <div class="hero-form">
-                        <div class="form-header">
-                            <h3>Ready to take the next step?</h3>
-                            <p>Fill out this form to kick-start the conversation. Our team will reach out soon to schedule your consultation.</p>
-                        </div>
-                        <form id="contact-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <input type="text" placeholder="NAME" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" placeholder="COMPANY" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <input type="email" placeholder="EMAIL ADDRESS" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="tel" placeholder="CONTACT NUMBER">
-                                </div>
-                            </div>
-                            
-                            <div class="form-divider">
-                                <span class="form-divider-text">SERVICES YOU'RE INTERESTED IN</span>
-                            </div>
-                            
-                            <div class="checkbox-group">
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="social-media" name="services[]">
-                                    <label for="social-media">Social Media Management</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="influencer" name="services[]">
-                                    <label for="influencer">Influencer Marketing</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="media-planning" name="services[]">
-                                    <label for="media-planning">Media Planning</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="ugc" name="services[]">
-                                    <label for="ugc">UGC Marketing</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="branding" name="services[]">
-                                    <label for="branding">Branding & Creative</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="email" name="services[]">
-                                    <label for="email">Email Marketing</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-divider">
-                                <span class="form-divider-text">CHOOSE YOUR PACKAGE</span>
-                            </div>
-                            
-                            <div class="package-options">
-                                <label class="package-option">
-                                    <input type="radio" name="package" value="social-savvy" required>
-                                    <div class="package-option-content">
-                                        <span class="package-option-number">1</span>
-                                        <span class="package-option-name">The Social Savvy</span>
-                                    </div>
-                                </label>
-                                
-                                <label class="package-option">
-                                    <input type="radio" name="package" value="storyteller">
-                                    <div class="package-option-content">
-                                        <span class="package-option-number">2</span>
-                                        <span class="package-option-name">The Storyteller</span>
-                                    </div>
-                                </label>
-                                
-                                <label class="package-option">
-                                    <input type="radio" name="package" value="brand-buzz">
-                                    <div class="package-option-content">
-                                        <span class="package-option-number">3</span>
-                                        <span class="package-option-name">Brand Buzz</span>
-                                    </div>
-                                </label>
-                            </div>
-                            
-                            <div class="form-group">
-                                <select name="budget" required>
-                                    <option value="" disabled selected>SELECT MONTHLY BUDGET</option>
-                                    <option value="Under $1,000">Under $1,000</option>
-                                    <option value="$1,000 - $2,500">$1,000 - $2,500</option>
-                                    <option value="$2,500 - $5,000">$2,500 - $5,000</option>
-                                    <option value="$5,000 - $10,000">$5,000 - $10,000</option>
-                                    <option value="$10,000+">$10,000+</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <textarea placeholder="Tell us about your goals and challenges"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary" style="width: 100%">Submit</button>
-                        </form>
-                        
-                        <div class="form-footer">
-                            <p>Got questions? Email us directly at <strong>hello@katejoyce.com</strong></p>
-                        </div>
+                <div class="nav-links">
+                    <ul class="nav-menu">
+                        <li><a href="#about">About Me</a></li>
+                        <li><a href="#modules">Services</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#team">Shop</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    
+                    <div class="mobile-menu">
+                        ☰
                     </div>
                 </div>
             </div>
         </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Turn Your Personal Brand into an Asset</h1>
+                    <p class="hero-subtitle">Stand Out, Get Noticed, and Grow Online Lorem Ipsum has been the industry's</p>
+                    <a href="#enroll" class="hero-btn">Enroll Now</a>
+                </div>
+                
+                <!-- Consultation Form -->
+                <div class="consultation-form">
+                    <h2>Ready to take the next step?</h2>
+                    <p>Fill out this form to kick-start the conversation. Our team will reach out soon.</p>
+                    
+                    <form>
+                        <input type="text" class="form-input" placeholder="NAME" required>
+                        <input type="text" class="form-input" placeholder="COMPANY">
+                        <input type="email" class="form-input" placeholder="EMAIL ADDRESS" required>
+                        <input type="tel" class="form-input" placeholder="CONTACT NUMBER" required>
+                        
+                        <div class="services-section">
+                            <div class="services-title">SERVICES YOU'RE INTERESTED IN</div>
+                            
+                            <div class="checkbox-row">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="social-media">
+                                    <label for="social-media">Social Media</label>
+                                </div>
+                                
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="influencer">
+                                    <label for="influencer">Influencer Marketing</label>
+                                </div>
+                            </div>
+                            
+                            <div class="checkbox-row">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="media-planning">
+                                    <label for="media-planning">Media Planning</label>
+                                </div>
+                                
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="email">
+                                    <label for="email">Email Marketing</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="package-title">CHOOSE YOUR PACKAGE</div>
+                        
+                        <div class="package-boxes">
+                            <div class="package-box">
+                                <div class="package-number">1</div>
+                                <div class="package-name">Social Savvy</div>
+                            </div>
+                            
+                            <div class="package-box">
+                                <div class="package-number">2</div>
+                                <div class="package-name">Storyteller</div>
+                            </div>
+                            
+                            <div class="package-box">
+                                <div class="package-number">3</div>
+                                <div class="package-name">Brand Buzz</div>
+                            </div>
+                        </div>
+                        
+                        <select class="form-select" required>
+                            <option value="" disabled selected>SELECT MONTHLY BUDGET</option>
+                            <option value="1000-3000">$1,000 - $3,000</option>
+                            <option value="3000-5000">$3,000 - $5,000</option>
+                            <option value="5000+">$5,000+</option>
+                        </select>
+                        
+                        <textarea class="form-textarea" placeholder="Tell us about your goals" required></textarea>
+                        
+                        <button type="submit" class="submit-btn">Submit</button>
+                        
+                        <div class="contact-email">
+                            Questions? Email us at 
+                            <a href="mailto:hello@katejoyce.com">hello@katejoyce.com</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
     </section>
-
-    <script src="script.js"></script>
+    
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-container">
+                <h2>Subscribe to our Mailing List</h2>
+                <p>Enter your email here *</p>
+                <form class="newsletter-form">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="subscribe">
+                            <label for="subscribe">Yes, subscribe me to your newsletter.</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="subscribe-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+<script src="script.js"></script>
 </body>
 </html>

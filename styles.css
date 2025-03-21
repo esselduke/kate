@@ -1,0 +1,538 @@
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    color: #fff;
+    line-height: 1.6;
+    background-color: #000;
+    position: relative;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Background Image - Fixed */
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/zia-syed-gOq27RHoL3s-unsplash.jpg') no-repeat center center/cover;
+    z-index: -1;
+}
+
+/* Header Styles */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 0;
+    transition: all 0.3s ease;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.logo .dot {
+    color: #8c52ff;
+}
+
+.logo p {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu {
+    display: flex;
+}
+
+.nav-menu li {
+    list-style: none;
+    margin: 0 15px;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #8c52ff;
+}
+
+.mobile-menu {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    padding: 120px 0 80px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.hero-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    gap: 40px;
+}
+
+.hero-content {
+    max-width: 45%;
+    margin-top: 30px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    margin-bottom: 40px;
+}
+
+.hero-btn {
+    display: inline-block;
+    background: transparent;
+    color: #fff;
+    padding: 12px 30px;
+    border: 1px solid #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+    background: #8c52ff;
+    border-color: #8c52ff;
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%);
+    }
+    40% {
+        transform: translateY(-20px) translateX(-50%);
+    }
+    60% {
+        transform: translateY(-10px) translateX(-50%);
+    }
+}
+
+/* Consultation Form Styles */
+.consultation-form {
+    background: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(140, 82, 255, 0.3);
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.consultation-form h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.consultation-form p {
+    font-size: 14px;
+    margin-bottom: 25px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(140, 82, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.services-section {
+    margin: 20px 0;
+}
+
+.services-title {
+    color: #8c52ff;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.checkbox-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #8c52ff;
+}
+
+.checkbox-container label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.package-title {
+    color: #8c52ff;
+    margin: 20px 0 15px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.package-boxes {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.package-box {
+    background-color: rgba(40, 40, 40, 0.6);
+    border: 1px solid rgba(140, 82, 255, 0.3);
+    border-radius: 4px;
+    padding: 15px 10px;
+    width: 31%;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.package-box:hover, .package-box.selected {
+    background-color: rgba(140, 82, 255, 0.2);
+    border-color: #8c52ff;
+}
+
+.package-number {
+    font-size: 22px;
+    color: #8c52ff;
+    margin-bottom: 5px;
+}
+
+.package-name {
+    font-size: 14px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 15px 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(140, 82, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+.form-select option {
+    background-color: #333;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(140, 82, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    min-height: 80px;
+    max-height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    background-color: #8c52ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.submit-btn:hover {
+    background-color: #7441d8;
+}
+
+.contact-email {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-email a {
+    color: #8c52ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.contact-email a:hover {
+    color: #7441d8;
+}
+
+/* Newsletter Section */
+.newsletter {
+    position: relative;
+    z-index: 1;
+    padding: 60px 0;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.newsletter-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+}
+
+.newsletter h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.newsletter p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.newsletter-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-row {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-group label {
+    font-size: 16px;
+}
+
+.subscribe-btn {
+    background-color: #8c52ff;
+    color: #fff;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.subscribe-btn:hover {
+    background-color: #7441d8;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+    .hero {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-container {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    
+    .consultation-form {
+        max-width: 500px;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    
+    .hero-title {
+        font-size: 42px;
+    }
+    
+    .hero-subtitle {
+        font-size: 20px;
+    }
+    
+    .newsletter-container {
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 20px 0;
+        z-index: 1000;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-menu li {
+        margin: 10px 0;
+    }
+    
+    .mobile-menu {
+        display: block;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+    
+    .hero-title {
+        font-size: 28px;
+    }
+    
+    .hero-subtitle {
+        font-size: 16px;
+    }
+    
+    .hero-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+    
+    .consultation-form {
+        padding: 20px;
+    }
+    
+    .consultation-form h2 {
+        font-size: 24px;
+    }
+    
+    .checkbox-container {
+        width: 100%;
+    }
+}

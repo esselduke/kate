@@ -2,9 +2,11 @@
 // Mobile Menu Toggle
 const mobileMenu = document.querySelector('.mobile-menu');
 const navMenu = document.querySelector('.nav-menu');
+const body = document.body;
 
 mobileMenu.addEventListener('click', () => {
     navMenu.classList.toggle('active');
+    body.classList.toggle('menu-active');
 });
 
 // Header Background on Scroll

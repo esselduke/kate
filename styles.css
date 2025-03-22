@@ -582,3 +582,327 @@ header {
         width: 100%;
     }
 }
+
+
+
+/* Enroll Section Styles */
+.enroll-section {
+    padding: 100px 0;
+    min-height: 100vh; /* Make it fill the screen */
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    color: #1a1a1a;
+    overflow: hidden; /* For animations */
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 60px; /* Increased spacing */
+    position: relative; /* For the dividing lines */
+}
+
+/* Dividing Lines */
+.features-grid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(140, 82, 255, 0.4), transparent);
+    transform: translateX(-50%);
+}
+
+.features-grid::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(140, 82, 255, 0.4), transparent);
+    transform: translateY(-50%);
+}
+
+/* Title Box Styles */
+.feature-title-box {
+    padding: 20px 0;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.section-title {
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Feature Cards */
+.feature-card {
+    padding: 30px 30px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Animation delays for each card */
+.feature-card:nth-of-type(2) {
+    animation: fadeInUp 0.8s ease 0.2s forwards;
+}
+
+.feature-card:nth-of-type(3) {
+    animation: fadeInUp 0.8s ease 0.4s forwards;
+}
+
+.feature-card:nth-of-type(4) {
+    animation: fadeInUp 0.8s ease 0.6s forwards;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.feature-icon-box {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #1a1a1a;
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+.feature-icon-color {
+    width: 30px;
+    height: 30px;
+    background-color: #8c52ff; /* Using your site's purple */
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+/* Icon hover effects */
+.feature-card:hover .feature-icon-box {
+    transform: translate(5px, -5px);
+}
+
+.feature-card:hover .feature-icon-color {
+    transform: translate(-5px, 5px);
+}
+
+/* Different positions for the icons */
+.top-right .feature-icon-box {
+    top: 0;
+    right: 0;
+}
+
+.top-right .feature-icon-color {
+    bottom: 0;
+    left: 0;
+}
+
+.bottom-left .feature-icon-box {
+    top: 0;
+    left: 0;
+}
+
+.bottom-left .feature-icon-color {
+    bottom: 0;
+    right: 0;
+}
+
+.top-left .feature-icon-box {
+    top: 0;
+    left: 0;
+}
+
+.top-left .feature-icon-color {
+    bottom: 0;
+    right: 0;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.feature-description {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Intersection Observer for scroll animations */
+.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+    .section-title {
+        font-size: 2.8rem;
+    }
+    
+    .features-grid {
+        gap: 40px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+    }
+    
+    /* Hide dividing lines on mobile */
+    .features-grid::before,
+    .features-grid::after {
+        display: none;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .feature-card {
+        margin-top: 10px;
+        padding: 20px 0;
+    }
+    
+    /* Add horizontal dividers for mobile */
+    .feature-card {
+        position: relative;
+    }
+    
+    .feature-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 15%;
+        right: 15%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(140, 82, 255, 0.3), transparent);
+    }
+    
+    .feature-card:last-child::after {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .enroll-section {
+        padding: 80px 0;
+        min-height: auto;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .feature-title {
+        font-size: 1.3rem;
+    }
+}
+
+
+
+
+
+/* Animation Styles - Added */
+
+/* Header Animation Styles */
+.animate-header {
+    animation: fadeInDown 0.5s ease forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0.8;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Element Animations */
+.consultation-form input,
+.consultation-form select,
+.consultation-form textarea,
+.consultation-form .package-box,
+.consultation-form .submit-btn {
+    transition: all 0.3s ease;
+}
+
+.consultation-form input:focus,
+.consultation-form select:focus,
+.consultation-form textarea:focus {
+    border-color: #8c52ff;
+    box-shadow: 0 0 0 2px rgba(140, 82, 255, 0.2);
+}
+
+.consultation-form .package-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.consultation-form .submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Newsletter Form Animations */
+.newsletter input,
+.newsletter .subscribe-btn {
+    transition: all 0.3s ease;
+}
+
+.newsletter input:focus {
+    border-color: #8c52ff;
+    box-shadow: 0 0 0 2px rgba(140, 82, 255, 0.2);
+}
+
+.newsletter .subscribe-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Scroll Arrow Animation - Enhancement */
+.scroll-down {
+    transition: opacity 0.3s ease;
+}
+
+.scroll-down:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+
+

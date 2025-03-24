@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (backgroundImage) {
             // Move the background image slightly to the right when scrolling
-            backgroundImage.style.transform = `translateX(${scrollPosition * 0.05}px)`;
+            backgroundImage.style.transform = `translateY(-${scrollPosition * 0.05}px)`;
         }
     });
     

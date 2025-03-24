@@ -922,6 +922,8 @@ header {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    align-items: stretch;
+    min-height: 80vh;
 }
 
 .about-text {
@@ -930,6 +932,8 @@ header {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease;
+    align-self: flex-start;
+    padding-top: 15vh;
 }
 
 .about-content {
@@ -937,6 +941,8 @@ header {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease;
+    align-self: flex-end;
+    padding-top: 40vh;
 }
 
 .about-section.section-visible .about-text,
@@ -1015,12 +1021,15 @@ header {
 @media screen and (max-width: 768px) {
     .about-container {
         flex-direction: column;
+        min-height: auto;
     }
     
     .about-text, .about-content {
         width: 100%;
         padding-right: 0;
         margin-bottom: 30px;
+        padding-top: 20px;
+        align-self: flex-start;
     }
     
     .about-text h1 {

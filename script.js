@@ -346,34 +346,3 @@ document.addEventListener('DOMContentLoaded', function() {
         sectionObserver.observe(section);
     });
 });
-
-// Additional CSS for the ripple effect (add to your CSS file)
-// 
-// .service-ripple {
-//     position: absolute;
-//     width: 10px;
-//     height: 10px;
-//     background: rgba(140, 82, 255, 0.4);
-//     border-radius: 50%;
-//     transform: scale(0);
-//     animation: rippleEffect 1s linear;
-//     pointer-events: none;
-//     top: 50%;
-//     left: 50%;
-//     z-index: 0;
-// }
-// 
-// @keyframes rippleEffect {
-//     to {
-//         transform: scale(20);
-//         opacity: 0;
-//     }
-// }
-// 
-// .section-animate {
-//     overflow: hidden;
-// }
-// 
-// .section-visible {
-//     visibility: visible;
-// }

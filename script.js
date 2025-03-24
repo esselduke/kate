@@ -164,3 +164,216 @@ document.addEventListener("DOMContentLoaded", function() {
         enrollObserver.observe(enrollSection);
     }
 });
+
+// Add this to your existing script.js file
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Testimonial Slider Functionality
+    initTestimonialSlider();
+    
+    // Services Animation with Intersection Observer
+    initServicesAnimation();
+});
+
+// Testimonial Slider
+function initTestimonialSlider() {
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    let currentIndex = 0;
+    
+    // Display only the first testimonial initially
+    if (testimonialCards.length > 0) {
+        testimonialCards.forEach((card, index) => {
+            if (index !== 0) {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    // Update active testimonial and indicator
+    function updateActiveTestimonial(index) {
+        // Hide all testimonials
+        testimonialCards.forEach(card => {
+            card.style.display = 'none';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+        });
+        
+        // Remove active class from all indicators
+        indicators.forEach(ind => ind.classList.remove('active'));
+        
+        // Show current testimonial with animation
+        if (testimonialCards[index]) {
+            testimonialCards[index].style.display = 'block';
+            setTimeout(() => {
+                testimonialCards[index].style.opacity = '1';
+                testimonialCards[index].style.transform = 'translateY(0)';
+            }, 50);
+            indicators[index].classList.add('active');
+        }
+    }
+    
+    // Next testimonial
+    function nextTestimonial() {
+        currentIndex = (currentIndex + 1) % testimonialCards.length;
+        updateActiveTestimonial(currentIndex);
+    }
+    
+    // Previous testimonial
+    function prevTestimonial() {
+        currentIndex = (currentIndex - 1 + testimonialCards.length) % testimonialCards.length;
+        updateActiveTestimonial(currentIndex);
+    }
+    
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextTestimonial);
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevTestimonial);
+    }
+    
+    // Indicator clicks
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateActiveTestimonial(currentIndex);
+        });
+    });
+    
+    // Auto-rotate testimonials every 5 seconds
+    let testimonialInterval = setInterval(nextTestimonial, 5000);
+    
+    // Pause auto-rotation on hover
+    const testimonialSlider = document.querySelector('.testimonial-slider');
+    if (testimonialSlider) {
+        testimonialSlider.addEventListener('mouseenter', () => {
+            clearInterval(testimonialInterval);
+        });
+        
+        testimonialSlider.addEventListener('mouseleave', () => {
+            testimonialInterval = setInterval(nextTestimonial, 5000);
+        });
+    }
+}
+
+// Services Animation with Intersection Observer
+function initServicesAnimation() {
+    const servicesSection = document.querySelector('.services-spotlight');
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    if (servicesSection && serviceCards.length > 0) {
+        const servicesObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                // Staggered animation for service cards
+                serviceCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 200 * index);
+                });
+                
+                // Once animated, disconnect observer
+                servicesObserver.disconnect();
+            }
+        }, {
+            threshold: 0.2,
+            rootMargin: "-50px 0px"
+        });
+        
+        servicesObserver.observe(servicesSection);
+    }
+}
+
+// Service Card Hover Effects (enhanced interactions)
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    serviceCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            // Create ripple effect
+            const ripple = document.createElement('div');
+            ripple.classList.add('service-ripple');
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        });
+    });
+});
+
+// Scroll Animation for All Sections
+document.addEventListener('DOMContentLoaded', function() {
+    // All sections that should be animated on scroll
+    const animatedSections = document.querySelectorAll('.testimonials, .services-spotlight');
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('section-visible');
+                
+                // Find header elements to animate
+                const header = entry.target.querySelector('.section-header');
+                if (header) {
+                    header.style.opacity = '1';
+                    header.style.transform = 'translateY(0)';
+                }
+                
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: "-50px 0px"
+    });
+    
+    // Prepare sections for animation
+    animatedSections.forEach(section => {
+        // Style section header for animation
+        const header = section.querySelector('.section-header');
+        if (header) {
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(30px)';
+            header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        }
+        
+        section.classList.add('section-animate');
+        sectionObserver.observe(section);
+    });
+});
+
+// Additional CSS for the ripple effect (add to your CSS file)
+// 
+// .service-ripple {
+//     position: absolute;
+//     width: 10px;
+//     height: 10px;
+//     background: rgba(140, 82, 255, 0.4);
+//     border-radius: 50%;
+//     transform: scale(0);
+//     animation: rippleEffect 1s linear;
+//     pointer-events: none;
+//     top: 50%;
+//     left: 50%;
+//     z-index: 0;
+// }
+// 
+// @keyframes rippleEffect {
+//     to {
+//         transform: scale(20);
+//         opacity: 0;
+//     }
+// }
+// 
+// .section-animate {
+//     overflow: hidden;
+// }
+// 
+// .section-visible {
+//     visibility: visible;
+// }

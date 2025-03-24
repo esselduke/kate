@@ -346,3 +346,38 @@ document.addEventListener('DOMContentLoaded', function() {
         sectionObserver.observe(section);
     });
 });
+
+
+
+// About Section Animation with Intersection Observer
+document.addEventListener('DOMContentLoaded', function() {
+    // Parallax effect for background image
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        const backgroundImage = document.querySelector('.background-image');
+        
+        if (backgroundImage) {
+            // Move the background image slightly to the right when scrolling
+            backgroundImage.style.transform = `translateX(${scrollPosition * 0.05}px)`;
+        }
+    });
+    
+    // Animation for about section
+    const aboutSection = document.querySelector('.about-section');
+    
+    if (aboutSection) {
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('section-visible');
+                    aboutObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: "-50px 0px"
+        });
+        
+        aboutObserver.observe(aboutSection);
+    }
+});

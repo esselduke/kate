@@ -667,12 +667,19 @@ header {
     animation: fadeInUp 0.8s ease 0.6s forwards;
 }
 
-.feature-icon {
-    width: 60px;
+/* .feature-icon {
+   
     height: 60px;
     position: relative;
     margin-bottom: 25px;
-}
+    color: #8c52ff;
+    font-weight: bold;
+    margin-right: 10px;
+    display: flex; Add this to ensure proper alignment
+    align-items: center; Add this to vertically center the icon 
+    justify-content: center; 
+    width: 20px;
+} */
 
 .feature-icon-box {
     width: 50px;
@@ -1202,12 +1209,16 @@ header {
     background: rgba(25, 25, 25, 0.8);
     border: 1px solid rgba(140, 82, 255, 0.3);
     border-radius: 10px;
-    padding: 40px 30px;
+    padding: 25px 20px;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
     opacity: 0;
     transform: translateY(30px);
+    height: auto;
+    min-height: 400px; /* Reduced from 520px */
+    display: flex;
+    flex-direction: column;
 }
 
 .service-card::before {
@@ -1232,7 +1243,7 @@ header {
 }
 
 .service-icon {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     position: relative;
     z-index: 1;
 }
@@ -1256,27 +1267,33 @@ header {
 }
 
 .service-title {
-    font-size: 24px;
+    font-size: 22px;  /* Reduced from 24px */
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 10px;  /* Reduced from 15px */
     color: #fff;
 }
 
 .service-description {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 14px;  /* Reduced from 16px */
+    line-height: 1.5;  /* Reduced from 1.6 */
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 25px;
+    margin-bottom: 15px;  /* Reduced from 25px */
 }
 
 .service-features {
-    margin: 25px 0;
+    margin: 15px 0;
+    flex-grow: 1; /* Allow this section to take available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .feature-item {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .feature-icon {
@@ -1300,7 +1317,17 @@ header {
     text-decoration: none;
     font-size: 16px;
     transition: all 0.3s ease;
-    margin-top: 10px;
+    margin-top: 15px;
+    align-self: flex-start;
+}
+
+.feature-item .feature-icon {
+    color: #8c52ff;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 0;
+    width: auto;
+    height: auto;
 }
 
 .service-btn:hover {
@@ -1497,26 +1524,12 @@ header {
 
 /* Staggered fade in for feature items */
 .feature-item {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.5s ease;
-}
-
-.service-card:hover .feature-item {
+    display: flex;
+    align-items: center; /* This keeps items vertically centered */
+    margin-bottom: 12px;
     opacity: 1;
     transform: translateX(0);
-}
-
-.service-card:hover .feature-item:nth-child(1) {
-    transition-delay: 0.1s;
-}
-
-.service-card:hover .feature-item:nth-child(2) {
-    transition-delay: 0.2s;
-}
-
-.service-card:hover .feature-item:nth-child(3) {
-    transition-delay: 0.3s;
+    transition: all 0.5s ease;
 }
 
 /* Button hover animation */

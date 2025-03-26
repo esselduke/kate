@@ -381,3 +381,42 @@ document.addEventListener('DOMContentLoaded', function() {
         aboutObserver.observe(aboutSection);
     }
 });
+
+// RESOURCES DOES STARTS HERE
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Resources Section Animation with Intersection Observer
+    initResourcesAnimation();
+});
+
+// Resources Animation with Intersection Observer
+function initResourcesAnimation() {
+    const resourcesSection = document.querySelector('.resources-section');
+    const resourceCards = document.querySelectorAll('.resource-card');
+    
+    if (resourcesSection) {
+        const resourcesObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                // Animate header
+                resourcesSection.classList.add('section-visible');
+                
+                // Staggered animation for resource cards
+                resourceCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    }, 200 * index);
+                });
+                
+                // Once animated, disconnect observer
+                resourcesObserver.disconnect();
+            }
+        }, {
+            threshold: 0.2,
+            rootMargin: "-50px 0px"
+        });
+        
+        resourcesObserver.observe(resourcesSection);
+    }
+}

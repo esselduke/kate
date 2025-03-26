@@ -96,8 +96,54 @@ header {
 
 .mobile-menu {
     display: none;
-    font-size: 24px;
     cursor: pointer;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Styles for the hamburger bars */
+.mobile-menu span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #fff;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+/* Position the three bars */
+.mobile-menu span:nth-child(1) {
+    top: 0px;
+}
+
+.mobile-menu span:nth-child(2) {
+    top: 10px;
+}
+
+.mobile-menu span:nth-child(3) {
+    top: 20px;
+}
+
+/* Create the X animation */
+.mobile-menu.active span:nth-child(1) {
+    top: 10px;
+    transform: rotate(45deg);
+}
+
+.mobile-menu.active span:nth-child(2) {
+    opacity: 0;
+    width: 0%;
+}
+
+.mobile-menu.active span:nth-child(3) {
+    top: 10px;
+    transform: rotate(-45deg);
 }
 
 /* Hero Section */
@@ -654,6 +700,13 @@ header {
     transform: translateY(30px);
 }
 
+.decorative-feature-icon {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin-bottom: 25px;
+}
+
 /* Animation delays for each card */
 .feature-card:nth-of-type(2) {
     animation: fadeInUp 0.8s ease 0.2s forwards;
@@ -666,20 +719,6 @@ header {
 .feature-card:nth-of-type(4) {
     animation: fadeInUp 0.8s ease 0.6s forwards;
 }
-
-/* .feature-icon {
-   
-    height: 60px;
-    position: relative;
-    margin-bottom: 25px;
-    color: #8c52ff;
-    font-weight: bold;
-    margin-right: 10px;
-    display: flex; Add this to ensure proper alignment
-    align-items: center; Add this to vertically center the icon 
-    justify-content: center; 
-    width: 20px;
-} */
 
 .feature-icon-box {
     width: 50px;
@@ -698,41 +737,44 @@ header {
 }
 
 /* Icon hover effects */
-.feature-card:hover .feature-icon-box {
+.feature-card:hover .decorative-feature-icon .feature-icon-box {
     transform: translate(5px, -5px);
 }
 
-.feature-card:hover .feature-icon-color {
+.feature-card:hover .decorative-feature-icon .feature-icon-color {
     transform: translate(-5px, 5px);
 }
 
 /* Different positions for the icons */
-.top-right .feature-icon-box {
+/* Top-right position */
+.decorative-feature-icon.top-right .feature-icon-box {
     top: 0;
     right: 0;
 }
 
-.top-right .feature-icon-color {
+.decorative-feature-icon.top-right .feature-icon-color {
     bottom: 0;
     left: 0;
 }
 
-.bottom-left .feature-icon-box {
+/* Bottom-left position */
+.decorative-feature-icon.bottom-left .feature-icon-box {
     top: 0;
     left: 0;
 }
 
-.bottom-left .feature-icon-color {
+.decorative-feature-icon.bottom-left .feature-icon-color {
     bottom: 0;
     right: 0;
 }
 
-.top-left .feature-icon-box {
+/* Top-left position */
+.decorative-feature-icon.top-left .feature-icon-box {
     top: 0;
     left: 0;
 }
 
-.top-left .feature-icon-color {
+.decorative-feature-icon.top-left .feature-icon-color {
     bottom: 0;
     right: 0;
 }

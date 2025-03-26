@@ -6,6 +6,7 @@ const body = document.body;
 mobileMenu.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     body.classList.toggle('menu-active');
+    mobileMenu.classList.toggle('active'); // Add this line
 });
 
 // Header Background on Scroll
@@ -423,24 +424,6 @@ function initResourcesAnimation() {
 
 
 // FOOTER JS
-document.addEventListener("DOMContentLoaded", function() {
-    // Footer Animation with Intersection Observer
-    initFooterAnimation();
-    
-    // Back to top button functionality
-    const topBtn = document.querySelector('.top-btn');
-    if (topBtn) {
-        topBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-});
-
-// Footer Animation with Intersection Observer
 document.addEventListener("DOMContentLoaded", function() {
     // Footer Animation with Intersection Observer
     initFooterAnimation();

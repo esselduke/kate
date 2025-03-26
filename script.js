@@ -1,13 +1,3 @@
-// Mobile Menu Toggle
-const mobileMenu = document.querySelector('.mobile-menu');
-const navMenu = document.querySelector('.nav-menu');
-const body = document.body;
-
-mobileMenu.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    body.classList.toggle('menu-active');
-    mobileMenu.classList.toggle('active'); // Add this line
-});
 
 // Header Background on Scroll
 window.addEventListener('scroll', () => {
@@ -28,6 +18,152 @@ packageBoxes.forEach(box => {
         // Add selected class to clicked box
         box.classList.add('selected');
     });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Scroll down arrow functionality
+    const scrollDownArrow = document.querySelector('.scroll-down');
+    const aboutSection = document.querySelector('.about-section');
+    
+    if (scrollDownArrow && aboutSection) {
+        scrollDownArrow.addEventListener('click', function() {
+            aboutSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+    
+    // Logo click functionality - scroll to top
+    const logo = document.querySelector('.logo');
+    
+    if (logo) {
+        logo.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Add cursor pointer to indicate it's clickable
+        logo.style.cursor = 'pointer';
+    }
+    
+    // Set index variables for menu items (for staggered animations)
+    const menuItems = document.querySelectorAll('.nav-menu li');
+    menuItems.forEach((item, index) => {
+        item.style.setProperty('--index', index);
+    });
+    
+    // Navigation links functionality
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    const navMenu = document.querySelector('.nav-menu');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const body = document.body;
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            
+            // Handle specific section navigation
+            if (targetId === '#about') {
+                e.preventDefault();
+                document.querySelector('.about-section').scrollIntoView({ behavior: 'smooth' });
+            } 
+            else if (targetId === '#modules' || targetId === '#services') {
+                e.preventDefault();
+                document.querySelector('.services-spotlight').scrollIntoView({ behavior: 'smooth' });
+            }
+            else if (targetId === '#resources') {
+                e.preventDefault();
+                document.querySelector('.resources-section').scrollIntoView({ behavior: 'smooth' });
+            }
+            else if (targetId === '#testimonials') {
+                e.preventDefault();
+                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
+            }
+            else if (targetId === '#contact') {
+                e.preventDefault();
+                document.querySelector('.footer-section').scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Close mobile menu if it's open
+            if (navMenu.classList.contains('active')) {
+                // Hamburger icon transforms immediately
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                }
+                
+                // Menu closes with animation
+                navMenu.classList.remove('active');
+                body.classList.remove('menu-active');
+            }
+        });
+    });
+    
+    // Update mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu');
+    
+    if (mobileMenuToggle) {
+        // Remove existing event listeners (if possible)
+        const oldToggle = mobileMenuToggle.cloneNode(true);
+        mobileMenuToggle.parentNode.replaceChild(oldToggle, mobileMenuToggle);
+        
+        // Add new event listener
+        oldToggle.addEventListener('click', function() {
+            // Toggle menu with animations from CSS
+            navMenu.classList.toggle('active');
+            body.classList.toggle('menu-active');
+            this.classList.toggle('active');
+        });
+    }
+    
+    // Add Testimonials link to the nav menu if it doesn't exist
+    const navMenuElement = document.querySelector('.nav-menu');
+    if (navMenuElement) {
+        // Check if testimonials link already exists
+        let testimonialsLinkExists = false;
+        const navItems = navMenuElement.querySelectorAll('li a');
+        navItems.forEach(item => {
+            if (item.getAttribute('href') === '#testimonials') {
+                testimonialsLinkExists = true;
+            }
+        });
+        
+        // If testimonials link doesn't exist, add it before the Contact link
+        if (!testimonialsLinkExists) {
+            const newTestimonialsItem = document.createElement('li');
+            const newTestimonialsLink = document.createElement('a');
+            newTestimonialsLink.setAttribute('href', '#testimonials');
+            newTestimonialsLink.textContent = 'Testimonials';
+            
+            newTestimonialsItem.appendChild(newTestimonialsLink);
+            
+            // Find the contact link (last item) and insert before it
+            const contactItem = navMenuElement.querySelector('li:last-child');
+            if (contactItem) {
+                navMenuElement.insertBefore(newTestimonialsItem, contactItem);
+                
+                // Set the index for animation
+                const menuItems = navMenuElement.querySelectorAll('li');
+                menuItems.forEach((item, index) => {
+                    item.style.setProperty('--index', index);
+                });
+                
+                // Add the event listener to the new testimonials link
+                newTestimonialsLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Close mobile menu if it's open
+                    if (navMenu.classList.contains('active')) {
+                        if (mobileMenu) {
+                            mobileMenu.classList.remove('active');
+                        }
+                        navMenu.classList.remove('active');
+                        body.classList.remove('menu-active');
+                    }
+                });
+            }
+        }
+    }
 });
 
 // Animation code for existing sections

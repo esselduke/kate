@@ -896,11 +896,12 @@ function setupLikeButton(card, cardIndex) {
     const button = card.querySelector('.like-button');
     console.log(`Card ${cardIndex + 1} - like button found:`, !!button);
     
+
     if (!button) {
         console.warn(`Card ${cardIndex + 1} missing like button`);
         return;
     }
-
+ 
     const countElement = button.querySelector('.count');
     if (!countElement) {
         console.warn(`Card ${cardIndex + 1} like button missing count element`);
@@ -918,18 +919,18 @@ function setupLikeButton(card, cardIndex) {
     let count = parseInt(button.getAttribute('data-count') || '0');
     countElement.textContent = count;
     console.log(`Card ${cardIndex + 1} - initial like count:`, count);
-
+ 
     // Check if previously liked
     if (localStorage.getItem(storageKey) === 'true') {
         button.classList.add('liked');
         console.log(`Card ${cardIndex + 1} - previously liked`);
     }
-
+ 
     button.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         console.log(`Like button clicked on card ${cardIndex + 1}`);
-
+ 
         if (button.classList.contains('liked')) {
             // Unlike
             button.classList.remove('liked');
@@ -943,20 +944,39 @@ function setupLikeButton(card, cardIndex) {
             localStorage.setItem(storageKey, 'true');
             console.log(`Card ${cardIndex + 1} - liked, new count:`, count);
         }
-
+ 
         // Update count
         countElement.textContent = count;
         button.setAttribute('data-count', count);
     });
-}
-
-// IMPROVED: View count handler with debugging
-function handleViewCount(card, cardIndex) {
+ }
+ 
+ // IMPROVED: View count handler with specific focus on visibility
+ function handleViewCount(card, cardIndex) {
     const viewElement = card.querySelector('.views .count');
     console.log(`Card ${cardIndex + 1} - view counter found:`, !!viewElement);
     
     if (!viewElement) {
         console.warn(`Card ${cardIndex + 1} missing view counter`);
+        
+        // Try to create the views element if it doesn't exist
+        const statGroup = card.querySelector('.stat-group');
+        if (statGroup) {
+            const viewsSpan = document.createElement('span');
+            viewsSpan.className = 'views';
+            viewsSpan.setAttribute('data-count', '0');
+            viewsSpan.innerHTML = '<i class="fas fa-eye"></i> <span class="count">0</span>';
+            statGroup.prepend(viewsSpan);
+            console.log(`Created missing view element for card ${cardIndex + 1}`);
+            
+            // Now try to get the element again
+            const newViewElement = viewsSpan.querySelector('.count');
+            if (newViewElement) {
+                // Continue with the new element
+                setupViewCounter(card, cardIndex, newViewElement, viewsSpan);
+                return;
+            }
+        }
         return;
     }
     
@@ -966,14 +986,33 @@ function handleViewCount(card, cardIndex) {
         return;
     }
     
+    setupViewCounter(card, cardIndex, viewElement, viewsContainer);
+ }
+ 
+ // Helper function to set up the view counter functionality
+ function setupViewCounter(card, cardIndex, viewElement, viewsContainer) {
+    // Ensure the view icon is visible
+    const viewIcon = viewsContainer.querySelector('i');
+    if (viewIcon) {
+        viewIcon.style.display = 'inline-block';
+        viewIcon.style.visibility = 'visible';
+        viewIcon.style.fontSize = '16px';
+        viewIcon.style.color = '#666';
+    }
+    
+    // Ensure the count element is visible
+    viewElement.style.display = 'inline-block';
+    viewElement.style.visibility = 'visible';
+    
     const resourceId = card.getAttribute('data-url');
     const viewStorageKey = `viewed_${resourceId}`;
-
+ 
     // Get current view count
     let viewCount = parseInt(viewsContainer.getAttribute('data-count') || '0');
     viewElement.textContent = viewCount;
     console.log(`Card ${cardIndex + 1} - initial view count:`, viewCount);
-
+ 
+    // Add click handler to the card for view counting
     card.addEventListener('click', function(e) {
         // Only count view if not clicking on specific elements
         if (e.target.closest('.like-button') || e.target.closest('.resource-date')) {
@@ -989,38 +1028,97 @@ function handleViewCount(card, cardIndex) {
             console.log(`Card ${cardIndex + 1} - view count increased to:`, viewCount);
         }
     });
-}
-
-// IMPROVED: Date interaction with debugging
-function setupDateInteraction(card, cardIndex) {
+ }
+ 
+ // IMPROVED: Date interaction with enhanced styling and visibility
+ function setupDateInteraction(card, cardIndex) {
     const dateEl = card.querySelector('.resource-date');
     console.log(`Card ${cardIndex + 1} - date element found:`, !!dateEl);
     
     if (!dateEl) {
         console.warn(`Card ${cardIndex + 1} missing date element`);
+        
+        // Try to create a date element if it doesn't exist
+        const contentWrapper = card.querySelector('.content-wrapper');
+        if (contentWrapper) {
+            const dateDiv = document.createElement('div');
+            dateDiv.className = 'resource-date';
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+            dateDiv.setAttribute('data-date', dateStr);
+            dateDiv.textContent = `${today.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})} • 1 min read`;
+            
+            // Insert at the beginning of content wrapper
+            if (contentWrapper.firstChild) {
+                contentWrapper.insertBefore(dateDiv, contentWrapper.firstChild);
+            } else {
+                contentWrapper.appendChild(dateDiv);
+            }
+            
+            console.log(`Created missing date element for card ${cardIndex + 1}`);
+            
+            // Set up the newly created date element
+            setupDateElement(dateDiv, dateStr, cardIndex);
+            return;
+        }
         return;
     }
-
+ 
     const dateValue = dateEl.getAttribute('data-date');
     if (!dateValue) {
         console.warn(`Card ${cardIndex + 1} date element missing data-date attribute`);
+        
+        // Try to add a data-date attribute if missing
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0];
+        dateEl.setAttribute('data-date', dateStr);
+        console.log(`Added missing data-date attribute to card ${cardIndex + 1}`);
+        
+        setupDateElement(dateEl, dateStr, cardIndex);
         return;
     }
     
-    console.log(`Card ${cardIndex + 1} - date value:`, dateValue);
+    setupDateElement(dateEl, dateValue, cardIndex);
+ }
+ 
+ // Helper function to set up the date element functionality
+ function setupDateElement(dateEl, dateValue, cardIndex) {
+    // Make sure the date element is styled properly
+    dateEl.style.cursor = 'pointer';
+    dateEl.style.color = '#666';
+    dateEl.style.fontSize = '14px';
+    dateEl.style.marginBottom = '10px';
+    dateEl.style.display = 'block';
+    
+    // Add a subtle hover effect
+    dateEl.addEventListener('mouseenter', function() {
+        this.style.color = '#ff9bb3';
+    });
+    
+    dateEl.addEventListener('mouseleave', function() {
+        this.style.color = '#666';
+    });
     
     // Update the displayed date format if needed
     try {
         const displayDate = new Date(dateValue);
         if (!isNaN(displayDate.getTime())) {
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            const readTime = dateEl.textContent.split('•')[1] || '1 min read';
-            dateEl.textContent = `${displayDate.toLocaleDateString('en-US', options)} • ${readTime.trim()}`;
+            let readTime = '1 min read';
+            
+            // Preserve read time if it exists
+            const currentText = dateEl.textContent;
+            if (currentText && currentText.includes('•')) {
+                readTime = currentText.split('•')[1].trim();
+            }
+            
+            dateEl.textContent = `${displayDate.toLocaleDateString('en-US', options)} • ${readTime}`;
         }
     } catch (e) {
         console.error(`Error formatting date for card ${cardIndex + 1}:`, e);
     }
     
+    // Add click event for date popup
     dateEl.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1050,4 +1148,4 @@ function setupDateInteraction(card, cardIndex) {
             alert("Sorry, there was an error processing the date.");
         }
     });
-}
+ }

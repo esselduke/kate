@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Initialize existing functionality
     initPackageSelection();
-    setupBaseNavigation(); // <-- New function
+    setupBaseNavigation();
     setupMobileMenu();
     initAnimations();
     initIntersectionObservers();
@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
     initFormValidation();
     initStickyHeader();
     updateSvgColors();
+    
+    // Initialize resource card functionality
+    initResourceCards();
 });
 
 // Header Background on Scroll
@@ -363,41 +366,6 @@ function setupBaseNavigation() {
         });
     });
     
-    // Add Testimonials link to the nav menu if it doesn't exist
-    const navMenuElement = document.querySelector('.nav-menu');
-    if (navMenuElement) {
-        // Check if testimonials link already exists
-        let testimonialsLinkExists = false;
-        const navItems = navMenuElement.querySelectorAll('li a');
-        navItems.forEach(item => {
-            if (item.getAttribute('href') === '#testimonials') {
-                testimonialsLinkExists = true;
-            }
-        });
-        
-        // If testimonials link doesn't exist, add it before the Contact link
-        if (!testimonialsLinkExists) {
-            const newTestimonialsItem = document.createElement('li');
-            const newTestimonialsLink = document.createElement('a');
-            newTestimonialsLink.setAttribute('href', '#testimonials');
-            newTestimonialsLink.textContent = 'Testimonials';
-            
-            newTestimonialsItem.appendChild(newTestimonialsLink);
-            
-            // Find the contact link (last item) and insert before it
-            const contactItem = navMenuElement.querySelector('li:last-child');
-            if (contactItem) {
-                navMenuElement.insertBefore(newTestimonialsItem, contactItem);
-                
-                // Set the index for animation
-                const menuItems = navMenuElement.querySelectorAll('li');
-                menuItems.forEach((item, index) => {
-                    item.style.setProperty('--index', index);
-                });
-            }
-        }
-    }
-    
     // Back to top button functionality
     const topBtn = document.querySelector('.top-btn');
     if (topBtn) {
@@ -410,7 +378,6 @@ function setupBaseNavigation() {
         });
     }
 }
-
 // Mobile menu specific functionality
 function setupMobileMenu() {
     const mobileMenuToggle = document.querySelector('.mobile-menu');
@@ -539,7 +506,6 @@ function initIntersectionObservers() {
     // Footer Section
     observeElement('.footer-section', '.footer-section', { threshold: 0.1, rootMargin: "-100px 0px" });
 }
-
 // Generic section observer
 function observeElement(sectionSelector, targetSelector, options) {
     const section = document.querySelector(sectionSelector);
@@ -673,7 +639,6 @@ function observeServicesSection() {
 function observeResourcesSection() {
     const resourcesSection = document.querySelector('.resources-section');
     const resourceCards = document.querySelectorAll('.resource-card');
-    
     
     if (resourcesSection) {
         const resourcesHeader = resourcesSection.querySelector('.resources-header');
@@ -865,164 +830,103 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Add this to your existing script.js file
-
-// Function to make resource cards clickable
-function setupResourceCardLinks() {
+// Function to initialize resource card functionality
+function initResourceCards() {
     const resourceCards = document.querySelectorAll('.resource-card');
-    const targetUrl = "https://shorturl.at/iHzVC";
     
     resourceCards.forEach(card => {
-        // Make the entire card clickable
-        card.style.cursor = 'pointer';
-        
-        // Add click event listener to the card
-        card.addEventListener('click', function(e) {
-            // Prevent default action if clicked on something that's already clickable
-            if (e.target.tagName === 'A') {
-                return;
-            }
-            
-            // Open the URL in a new tab
-            window.open(targetUrl, '_blank');
-        });
-        
-        // Add hover effect to indicate card is clickable
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px)';
-            this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            this.style.boxShadow = '';
-        });
+        setupLikeButton(card);
+        handleViewCount(card);
+        setupDateInteraction(card);
     });
 }
 
-// Initialize the resource card links
-document.addEventListener("DOMContentLoaded", function() {
-    // Add to your existing DOMContentLoaded event or call separately
-    setupResourceCardLinks();
-});
+// Function to setup like buttons
+function setupLikeButton(card) {
+    const button = card.querySelector('.like-button');
+    if (!button) return;
 
-
-// Add this to your existing script.js file
-
-// Function to handle likes and view counts for resource cards
-function setupResourceCardLinks() {
-    const resourceCards = document.querySelectorAll('.resource-card');
-    const targetUrl = "https://shorturl.at/iHzVC";
+    const countElement = button.querySelector('.count');
+    const resourceId = card.getAttribute('data-url');
+    const storageKey = `liked_${resourceId}`;
     
-    resourceCards.forEach(card => {
-        // Make the entire card clickable
-        card.style.cursor = 'pointer';
-        
-        // Add click event listener to the card
-        card.addEventListener('click', function(e) {
-            // Prevent default action if clicked on something that's already clickable
-            if (e.target.tagName === 'A') {
-                return;
-            }
-            
-            // Open the URL in a new tab
-            window.open(targetUrl, '_blank');
-        });
-        
-        // Add hover effect to indicate card is clickable
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px)';
-            this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            this.style.boxShadow = '';
-        });
-    });
-}
+    // Initialize count
+    let count = parseInt(button.getAttribute('data-count') || '0');
+    countElement.textContent = count;
 
-// Set up like button functionality
-function setupLikeButtons() {
-    const likeButtons = document.querySelectorAll('.like-button');
-    
-    likeButtons.forEach(button => {
-        // Get current count
-        const countElement = button.querySelector('.count');
-        let count = parseInt(button.getAttribute('data-count'));
-        
-        // Use localStorage to keep track of liked state
-        const resourceId = button.closest('.resource-card').getAttribute('data-url');
-        const storageKey = `liked_${resourceId}`;
-        
-        // Check if previously liked
-        if (localStorage.getItem(storageKey) === 'true') {
+    // Check if previously liked
+    if (localStorage.getItem(storageKey) === 'true') {
+        button.classList.add('liked');
+    }
+
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (button.classList.contains('liked')) {
+            // Unlike
+            button.classList.remove('liked');
+            count = Math.max(0, count - 1);
+            localStorage.removeItem(storageKey);
+        } else {
+            // Like
             button.classList.add('liked');
+            count++;
+            localStorage.setItem(storageKey, 'true');
         }
-        
-        button.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent card click event
-            
-            if (button.classList.contains('liked')) {
-                // Unlike
-                button.classList.remove('liked');
-                count--;
-                localStorage.removeItem(storageKey);
-            } else {
-                // Like
-                button.classList.add('liked');
-                count++;
-                localStorage.setItem(storageKey, 'true');
-                
-                // Add heart animation
-                button.querySelector('i').style.animation = 'none';
-                setTimeout(() => {
-                    button.querySelector('i').style.animation = 'heartBeat 0.3s ease-in-out';
-                }, 10);
-            }
-            
-            // Update count
-            countElement.textContent = count;
-            button.setAttribute('data-count', count);
-        });
+
+        // Update count
+        countElement.textContent = count;
+        button.setAttribute('data-count', count);
     });
 }
 
-// Update view count when card is clicked
-function handleViewCounts() {
-    const resourceCards = document.querySelectorAll('.resource-card');
-    
-    resourceCards.forEach(card => {
-        // Get view count element
-        const viewElement = card.querySelector('.views .count');
-        const resourceId = card.getAttribute('data-url');
-        const viewStorageKey = `viewed_${resourceId}`;
-        
-        // Update or get view count from localStorage
-        let viewCount = parseInt(card.querySelector('.views').getAttribute('data-count'));
-        
-        // Check if viewed in this session
+// Function to handle view counts
+function handleViewCount(card) {
+    const link = card.querySelector('.card-content-link');
+    const viewElement = card.querySelector('.views .count');
+    const resourceId = card.getAttribute('data-url');
+    const viewStorageKey = `viewed_${resourceId}`;
+
+    // Get current view count
+    let viewCount = parseInt(card.querySelector('.views').getAttribute('data-count') || '0');
+    viewElement.textContent = viewCount;
+
+    link.addEventListener('click', function() {
+        // Only count view once per session
         if (!sessionStorage.getItem(viewStorageKey)) {
-            card.addEventListener('click', function() {
-                // Only count view once per session
-                if (!sessionStorage.getItem(viewStorageKey)) {
-                    viewCount++;
-                    viewElement.textContent = viewCount;
-                    card.querySelector('.views').setAttribute('data-count', viewCount);
-                    sessionStorage.setItem(viewStorageKey, 'true');
-                }
-                
-                // Still navigate to the URL
-                window.open(card.getAttribute('data-url'), '_blank');
-            });
+            viewCount++;
+            viewElement.textContent = viewCount;
+            card.querySelector('.views').setAttribute('data-count', viewCount);
+            sessionStorage.setItem(viewStorageKey, 'true');
         }
     });
 }
 
-// Initialize all resource card functionality
-document.addEventListener("DOMContentLoaded", function() {
-    // Add to your existing DOMContentLoaded event or call separately
-    setupResourceCardLinks();
-    setupLikeButtons();
-    handleViewCounts();
-});
+// Function to setup date interaction
+function setupDateInteraction(card) {
+    const dateEl = card.querySelector('.resource-date');
+    if (!dateEl) return;
+
+    const dateValue = dateEl.getAttribute('data-date');
+    
+    dateEl.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const date = new Date(dateValue);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        alert(`Published: ${formattedDate}\n${diffDays} days ago`);
+    });
+}
+

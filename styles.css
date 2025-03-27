@@ -1279,6 +1279,10 @@ header {
     padding: 20px;
 }
 
+.card-content-link {
+text-decoration: none;
+}
+
 .resource-date {
     font-size: 14px;
     color: #666;

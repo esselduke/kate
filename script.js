@@ -1,3 +1,20 @@
+// Main Document Ready Function
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize existing functionality
+    initPackageSelection();
+    setupNavigation();
+    initAnimations();
+    initIntersectionObservers();
+    initTestimonialSlider();
+    setupFormScroll();
+    setupServiceCardEffects();
+    
+    // Add essential new functionality
+    initFormValidation();
+    initStickyHeader();
+    updateSvgColors();
+});
+
 // Header Background on Scroll
 window.addEventListener('scroll', () => {
     const header = document.querySelector('header');
@@ -8,28 +25,277 @@ window.addEventListener('scroll', () => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Initialize all functionality
-    initPackageSelection();
-    setupNavigation();
-    initAnimations();
-    initIntersectionObservers();
-    initTestimonialSlider();
-    setupFormScroll();
-    setupServiceCardEffects();
-});
+// Function to update SVG stroke colors from purple to pink
+function updateSvgColors() {
+    // Update the service icons
+    const serviceIcons = document.querySelectorAll('.service-card svg');
+    serviceIcons.forEach(svg => {
+        // Change the stroke color from #8c52ff to #ff9bb3
+        svg.setAttribute('stroke', '#ff9bb3');
+    });
+    
+    // Update the quote icons
+    const quoteIcons = document.querySelectorAll('.quote-icon svg');
+    quoteIcons.forEach(svg => {
+        svg.setAttribute('stroke', '#ff9bb3');
+    });
+}
 
-// Package Selection
+// Package Selection with form value storage
 function initPackageSelection() {
     const packageBoxes = document.querySelectorAll('.package-box');
+    // Create hidden input for selected package
+    const consultationForm = document.querySelector('.consultation-form form');
+    
+    if (consultationForm) {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.id = 'selected-package';
+        hiddenInput.name = 'selected-package';
+        hiddenInput.value = '';
+        consultationForm.appendChild(hiddenInput);
+    }
+    
     packageBoxes.forEach(box => {
         box.addEventListener('click', () => {
             // Remove selected class from all boxes
             packageBoxes.forEach(b => b.classList.remove('selected'));
             // Add selected class to clicked box
             box.classList.add('selected');
+            
+            // Store the selected package value in hidden input
+            if (consultationForm) {
+                const packageNumber = box.querySelector('.package-number').textContent;
+                const packageName = box.querySelector('.package-name').textContent;
+                document.getElementById('selected-package').value = packageNumber + ': ' + packageName;
+            }
         });
     });
+}
+
+// Form Validation
+function initFormValidation() {
+    const forms = document.querySelectorAll('form');
+    
+    forms.forEach(form => {
+        // Form submission handler
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Check if form is valid
+            if (validateForm(this)) {
+                // Show success message
+                showFormMessage(this, 'success', 'Thank you for your submission! We will be in touch shortly.');
+                
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    this.reset();
+                    // Remove any success/error messages
+                    const messageEl = this.querySelector('.form-message');
+                    if (messageEl) {
+                        messageEl.remove();
+                    }
+                }, 3000);
+                
+                // In a real scenario, you would send the form data to a server here
+            }
+        });
+        
+        // Real-time validation
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateInput(this);
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    validateInput(this);
+                }
+            });
+        });
+    });
+}
+
+// Validate individual input
+function validateInput(input) {
+    // Return true if the input is valid, false otherwise
+    let isValid = true;
+    const value = input.value.trim();
+    
+    // Remove any existing error message
+    const existingError = input.parentElement.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    // Remove error class
+    input.classList.remove('error');
+    
+    // Check required fields
+    if (input.hasAttribute('required') && value === '') {
+        showInputError(input, 'This field is required');
+        isValid = false;
+    } 
+    // Check email format
+    else if (input.type === 'email' && value !== '') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            showInputError(input, 'Please enter a valid email address');
+            isValid = false;
+        }
+    }
+    // Check phone format
+    else if (input.type === 'tel' && value !== '') {
+        // Allow different phone formats, but require at least 10 digits
+        const phoneRegex = /(?:\d[-. ]?){9,}/;
+        if (!phoneRegex.test(value.replace(/[^0-9]/g, ''))) {
+            showInputError(input, 'Please enter a valid phone number');
+            isValid = false;
+        }
+    }
+    
+    return isValid;
+}
+
+// Show error message for an input
+function showInputError(input, message) {
+    input.classList.add('error');
+    
+    const errorEl = document.createElement('div');
+    errorEl.className = 'error-message';
+    errorEl.textContent = message;
+    errorEl.style.color = '#ff4545';
+    errorEl.style.fontSize = '12px';
+    errorEl.style.marginTop = '-10px';
+    errorEl.style.marginBottom = '15px';
+    
+    input.parentElement.insertBefore(errorEl, input.nextSibling);
+}
+
+// Validate entire form
+function validateForm(form) {
+    const inputs = form.querySelectorAll('input, textarea, select');
+    let isFormValid = true;
+    
+    inputs.forEach(input => {
+        if (!validateInput(input)) {
+            isFormValid = false;
+        }
+    });
+    
+    // Additional validations for consultation form
+    if (form.parentElement.classList.contains('consultation-form')) {
+        // Check that at least one service is selected
+        const serviceCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+        const isAnyChecked = Array.from(serviceCheckboxes).some(checkbox => checkbox.checked);
+        
+        if (!isAnyChecked) {
+            const servicesSection = form.querySelector('.services-section');
+            const errorEl = document.createElement('div');
+            errorEl.className = 'error-message';
+            errorEl.textContent = 'Please select at least one service';
+            errorEl.style.color = '#ff4545';
+            errorEl.style.fontSize = '12px';
+            errorEl.style.marginTop = '5px';
+            
+            const existingError = servicesSection.querySelector('.error-message');
+            if (!existingError) {
+                servicesSection.appendChild(errorEl);
+            }
+            
+            isFormValid = false;
+        } else {
+            const existingError = form.querySelector('.services-section .error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+        
+        // Check that a package is selected
+        const selectedPackage = document.getElementById('selected-package').value;
+        if (!selectedPackage) {
+            const packageSection = form.querySelector('.package-title').parentElement;
+            const errorEl = document.createElement('div');
+            errorEl.className = 'error-message';
+            errorEl.textContent = 'Please select a package';
+            errorEl.style.color = '#ff4545';
+            errorEl.style.fontSize = '12px';
+            errorEl.style.marginTop = '5px';
+            
+            const existingError = packageSection.querySelector('.error-message');
+            if (!existingError) {
+                form.querySelector('.package-boxes').after(errorEl);
+            }
+            
+            isFormValid = false;
+        } else {
+            const existingError = form.querySelector('.package-boxes + .error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+    }
+    
+    return isFormValid;
+}
+
+// Show form message (success/error)
+function showFormMessage(form, type, message) {
+    // Remove any existing message
+    const existingMessage = form.querySelector('.form-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create new message element
+    const messageEl = document.createElement('div');
+    messageEl.className = `form-message ${type}-message`;
+    messageEl.textContent = message;
+    
+    // Style the message
+    messageEl.style.padding = '15px';
+    messageEl.style.marginTop = '20px';
+    messageEl.style.borderRadius = '4px';
+    
+    if (type === 'success') {
+        messageEl.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+        messageEl.style.color = '#28a745';
+        messageEl.style.border = '1px solid rgba(40, 167, 69, 0.2)';
+    } else {
+        messageEl.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+        messageEl.style.color = '#dc3545';
+        messageEl.style.border = '1px solid rgba(220, 53, 69, 0.2)';
+    }
+    
+    // Add to form
+    form.appendChild(messageEl);
+    
+    // Scroll to the message
+    messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Sticky Header with improved UX
+function initStickyHeader() {
+    const header = document.querySelector('header');
+    if (header) {
+        // Add sticky header class on scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                header.classList.add('sticky-header');
+                // Add box shadow and additional styles
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                header.style.backdropFilter = 'blur(10px)';
+                header.style.webkitBackdropFilter = 'blur(10px)';
+            } else {
+                header.classList.remove('sticky-header');
+                // Remove box shadow and additional styles
+                header.style.boxShadow = 'none';
+                header.style.backdropFilter = 'none';
+                header.style.webkitBackdropFilter = 'none';
+            }
+        });
+    }
 }
 
 // Setup Navigation and Scroll Functionality

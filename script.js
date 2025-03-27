@@ -598,3 +598,38 @@ function initFooterAnimation() {
         footerObserver.observe(footerSection);
     }
 }
+
+
+
+
+
+
+
+// SCROLL BEHAVIOR FOR THE CONTACT FORM
+
+document.addEventListener("DOMContentLoaded", function() {
+    const consultationForm = document.querySelector('.consultation-form');
+    
+    if (consultationForm) {
+        // Prevent wheel events from propagating when cursor is over the form
+        consultationForm.addEventListener('wheel', function(e) {
+            const scrollTop = this.scrollTop;
+            const scrollHeight = this.scrollHeight;
+            const height = this.clientHeight;
+            
+            // If we're at the top and trying to scroll up, or
+            // at the bottom and trying to scroll down, let the page scroll
+            if ((scrollTop === 0 && e.deltaY < 0) || 
+                (scrollTop + height >= scrollHeight && e.deltaY > 0)) {
+                return;
+            }
+            
+            // Otherwise, prevent the event from propagating to the page
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Handle the scroll within the form
+            this.scrollTop += e.deltaY;
+        });
+    }
+});

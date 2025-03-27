@@ -1,5 +1,7 @@
 // Main Document Ready Function
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOM fully loaded");
+    
     // Initialize existing functionality
     initPackageSelection();
     setupBaseNavigation();
@@ -378,6 +380,7 @@ function setupBaseNavigation() {
         });
     }
 }
+
 // Mobile menu specific functionality
 function setupMobileMenu() {
     const mobileMenuToggle = document.querySelector('.mobile-menu');
@@ -458,22 +461,30 @@ function initAnimations() {
     const heroContent = document.querySelector('.hero-content');
     const heroForm = document.querySelector('.consultation-form');
     
-    heroContent.style.opacity = '0';
-    heroContent.style.transform = 'translateX(-50px)';
+    if (heroContent) {
+        heroContent.style.opacity = '0';
+        heroContent.style.transform = 'translateX(-50px)';
+    }
     
-    heroForm.style.opacity = '0';
-    heroForm.style.transform = 'translateX(50px)';
+    if (heroForm) {
+        heroForm.style.opacity = '0';
+        heroForm.style.transform = 'translateX(50px)';
+    }
     
     // Trigger hero animations after header is animated - both elements at same time
     setTimeout(() => {
-        heroContent.style.opacity = '1';
-        heroContent.style.transform = 'translateX(0)';
-        heroContent.style.transition = 'all 0.8s ease';
+        if (heroContent) {
+            heroContent.style.opacity = '1';
+            heroContent.style.transform = 'translateX(0)';
+            heroContent.style.transition = 'all 0.8s ease';
+        }
         
         // Start form animation at the same time
-        heroForm.style.opacity = '1';
-        heroForm.style.transform = 'translateX(0)';
-        heroForm.style.transition = 'all 0.8s ease';
+        if (heroForm) {
+            heroForm.style.opacity = '1';
+            heroForm.style.transform = 'translateX(0)';
+            heroForm.style.transition = 'all 0.8s ease';
+        }
     }, 800);
 }
 
@@ -506,6 +517,7 @@ function initIntersectionObservers() {
     // Footer Section
     observeElement('.footer-section', '.footer-section', { threshold: 0.1, rootMargin: "-100px 0px" });
 }
+
 // Generic section observer
 function observeElement(sectionSelector, targetSelector, options) {
     const section = document.querySelector(sectionSelector);
@@ -830,49 +842,106 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Function to initialize resource card functionality
+// IMPROVED: Resource card functionality with debugging
 function initResourceCards() {
-    const resourceCards = document.querySelectorAll('.resource-card');
+    console.log("Initializing resource cards");
     
-    resourceCards.forEach(card => {
-        setupLikeButton(card);
-        handleViewCount(card);
-        setupDateInteraction(card);
+    const resourceCards = document.querySelectorAll('.resource-card');
+    console.log(`Found ${resourceCards.length} resource cards`);
+    
+    if (resourceCards.length === 0) {
+        console.warn("No resource cards found on page");
+        return;
+    }
+    
+    // Check if the first card has content
+    if (resourceCards[0]) {
+        const firstCardContent = resourceCards[0].querySelector('.content-wrapper');
+        if (firstCardContent) {
+            console.log("First card content:", firstCardContent.innerHTML.trim());
+        } else {
+            console.warn("First card missing content wrapper");
+        }
+    }
+    
+    resourceCards.forEach((card, index) => {
+        console.log(`Setting up card ${index + 1}`);
+        
+        // Make entire card clickable
+        card.addEventListener('click', function(event) {
+            // Only navigate if the click wasn't on a button or specific interactive element
+            if (!event.target.closest('.like-button') && 
+                !event.target.closest('.resource-date')) {
+                const url = this.getAttribute('data-url');
+                console.log(`Clicked card ${index + 1}, navigating to: ${url}`);
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            }
+        });
+        
+        // Set up like button
+        setupLikeButton(card, index);
+        
+        // Set up view counter
+        handleViewCount(card, index);
+        
+        // Set up date interaction
+        setupDateInteraction(card, index);
     });
 }
 
-// Function to setup like buttons
-function setupLikeButton(card) {
+// IMPROVED: Like button setup with debugging
+function setupLikeButton(card, cardIndex) {
     const button = card.querySelector('.like-button');
-    if (!button) return;
+    console.log(`Card ${cardIndex + 1} - like button found:`, !!button);
+    
+    if (!button) {
+        console.warn(`Card ${cardIndex + 1} missing like button`);
+        return;
+    }
 
     const countElement = button.querySelector('.count');
+    if (!countElement) {
+        console.warn(`Card ${cardIndex + 1} like button missing count element`);
+        return;
+    }
+    
     const resourceId = card.getAttribute('data-url');
+    if (!resourceId) {
+        console.warn(`Card ${cardIndex + 1} missing data-url attribute`);
+    }
+    
     const storageKey = `liked_${resourceId}`;
     
     // Initialize count
     let count = parseInt(button.getAttribute('data-count') || '0');
     countElement.textContent = count;
+    console.log(`Card ${cardIndex + 1} - initial like count:`, count);
 
     // Check if previously liked
     if (localStorage.getItem(storageKey) === 'true') {
         button.classList.add('liked');
+        console.log(`Card ${cardIndex + 1} - previously liked`);
     }
 
     button.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        console.log(`Like button clicked on card ${cardIndex + 1}`);
 
         if (button.classList.contains('liked')) {
             // Unlike
             button.classList.remove('liked');
             count = Math.max(0, count - 1);
             localStorage.removeItem(storageKey);
+            console.log(`Card ${cardIndex + 1} - unliked, new count:`, count);
         } else {
             // Like
             button.classList.add('liked');
             count++;
             localStorage.setItem(storageKey, 'true');
+            console.log(`Card ${cardIndex + 1} - liked, new count:`, count);
         }
 
         // Update count
@@ -881,52 +950,104 @@ function setupLikeButton(card) {
     });
 }
 
-// Function to handle view counts
-function handleViewCount(card) {
-    const link = card.querySelector('.card-content-link');
+// IMPROVED: View count handler with debugging
+function handleViewCount(card, cardIndex) {
     const viewElement = card.querySelector('.views .count');
+    console.log(`Card ${cardIndex + 1} - view counter found:`, !!viewElement);
+    
+    if (!viewElement) {
+        console.warn(`Card ${cardIndex + 1} missing view counter`);
+        return;
+    }
+    
+    const viewsContainer = card.querySelector('.views');
+    if (!viewsContainer) {
+        console.warn(`Card ${cardIndex + 1} missing views container`);
+        return;
+    }
+    
     const resourceId = card.getAttribute('data-url');
     const viewStorageKey = `viewed_${resourceId}`;
 
     // Get current view count
-    let viewCount = parseInt(card.querySelector('.views').getAttribute('data-count') || '0');
+    let viewCount = parseInt(viewsContainer.getAttribute('data-count') || '0');
     viewElement.textContent = viewCount;
+    console.log(`Card ${cardIndex + 1} - initial view count:`, viewCount);
 
-    link.addEventListener('click', function() {
+    card.addEventListener('click', function(e) {
+        // Only count view if not clicking on specific elements
+        if (e.target.closest('.like-button') || e.target.closest('.resource-date')) {
+            return;
+        }
+        
         // Only count view once per session
         if (!sessionStorage.getItem(viewStorageKey)) {
             viewCount++;
             viewElement.textContent = viewCount;
-            card.querySelector('.views').setAttribute('data-count', viewCount);
+            viewsContainer.setAttribute('data-count', viewCount);
             sessionStorage.setItem(viewStorageKey, 'true');
+            console.log(`Card ${cardIndex + 1} - view count increased to:`, viewCount);
         }
     });
 }
 
-// Function to setup date interaction
-function setupDateInteraction(card) {
+// IMPROVED: Date interaction with debugging
+function setupDateInteraction(card, cardIndex) {
     const dateEl = card.querySelector('.resource-date');
-    if (!dateEl) return;
+    console.log(`Card ${cardIndex + 1} - date element found:`, !!dateEl);
+    
+    if (!dateEl) {
+        console.warn(`Card ${cardIndex + 1} missing date element`);
+        return;
+    }
 
     const dateValue = dateEl.getAttribute('data-date');
+    if (!dateValue) {
+        console.warn(`Card ${cardIndex + 1} date element missing data-date attribute`);
+        return;
+    }
+    
+    console.log(`Card ${cardIndex + 1} - date value:`, dateValue);
+    
+    // Update the displayed date format if needed
+    try {
+        const displayDate = new Date(dateValue);
+        if (!isNaN(displayDate.getTime())) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const readTime = dateEl.textContent.split('•')[1] || '1 min read';
+            dateEl.textContent = `${displayDate.toLocaleDateString('en-US', options)} • ${readTime.trim()}`;
+        }
+    } catch (e) {
+        console.error(`Error formatting date for card ${cardIndex + 1}:`, e);
+    }
     
     dateEl.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        console.log(`Date clicked on card ${cardIndex + 1}`);
         
-        const date = new Date(dateValue);
-        const formattedDate = date.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        alert(`Published: ${formattedDate}\n${diffDays} days ago`);
+        try {
+            const date = new Date(dateValue);
+            if (isNaN(date.getTime())) {
+                throw new Error("Invalid date");
+            }
+            
+            const formattedDate = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            console.log(`Card ${cardIndex + 1} - showing date alert: ${formattedDate}, ${diffDays} days ago`);
+            alert(`Published: ${formattedDate}\n${diffDays} days ago`);
+        } catch (e) {
+            console.error(`Error processing date click for card ${cardIndex + 1}:`, e);
+            alert("Sorry, there was an error processing the date.");
+        }
     });
 }
-

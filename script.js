@@ -1,4 +1,3 @@
-
 // Header Background on Scroll
 window.addEventListener('scroll', () => {
     const header = document.querySelector('header');
@@ -9,18 +8,32 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Package Selection
-const packageBoxes = document.querySelectorAll('.package-box');
-packageBoxes.forEach(box => {
-    box.addEventListener('click', () => {
-        // Remove selected class from all boxes
-        packageBoxes.forEach(b => b.classList.remove('selected'));
-        // Add selected class to clicked box
-        box.classList.add('selected');
-    });
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize all functionality
+    initPackageSelection();
+    setupNavigation();
+    initAnimations();
+    initIntersectionObservers();
+    initTestimonialSlider();
+    setupFormScroll();
+    setupServiceCardEffects();
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+// Package Selection
+function initPackageSelection() {
+    const packageBoxes = document.querySelectorAll('.package-box');
+    packageBoxes.forEach(box => {
+        box.addEventListener('click', () => {
+            // Remove selected class from all boxes
+            packageBoxes.forEach(b => b.classList.remove('selected'));
+            // Add selected class to clicked box
+            box.classList.add('selected');
+        });
+    });
+}
+
+// Setup Navigation and Scroll Functionality
+function setupNavigation() {
     // Scroll down arrow functionality
     const scrollDownArrow = document.querySelector('.scroll-down');
     const aboutSection = document.querySelector('.about-section');
@@ -164,10 +177,22 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     }
-});
+    
+    // Back to top button functionality
+    const topBtn = document.querySelector('.top-btn');
+    if (topBtn) {
+        topBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+}
 
-// Animation code for existing sections
-document.addEventListener("DOMContentLoaded", function() {
+// Handle Initial Animations (Header and Hero)
+function initAnimations() {
     // Header Animation
     const header = document.querySelector('header');
     const logo = document.querySelector('.logo');
@@ -198,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }, 300);
     
-    // Hero Section Animation
+    // Hero Section Animation - Fixed timing so both elements appear together
     const heroContent = document.querySelector('.hero-content');
     const heroForm = document.querySelector('.consultation-form');
     
@@ -208,48 +233,72 @@ document.addEventListener("DOMContentLoaded", function() {
     heroForm.style.opacity = '0';
     heroForm.style.transform = 'translateX(50px)';
     
-    // Trigger hero animations after header is animated
+    // Trigger hero animations after header is animated - both elements at same time
     setTimeout(() => {
         heroContent.style.opacity = '1';
         heroContent.style.transform = 'translateX(0)';
         heroContent.style.transition = 'all 0.8s ease';
         
-        setTimeout(() => {
-            heroForm.style.opacity = '1';
-            heroForm.style.transform = 'translateX(0)';
-            heroForm.style.transition = 'all 0.8s ease';
-        }, 200);
+        // Start form animation at the same time
+        heroForm.style.opacity = '1';
+        heroForm.style.transform = 'translateX(0)';
+        heroForm.style.transition = 'all 0.8s ease';
     }, 800);
+}
+
+// Initialize All Intersection Observers
+function initIntersectionObservers() {
+    // Main observer options
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "-100px 0px"  // Adjust this to trigger animations earlier
+    };
     
-    // Newsletter Section Animation with Intersection Observer
-    const newsletterSection = document.querySelector('.newsletter');
+    // Newsletter Section Animation
+    observeElement('.newsletter', '.newsletter-container', observerOptions);
     
-    const observerNewsletter = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const newsletterContainer = entry.target.querySelector('.newsletter-container');
-                
-                if (newsletterContainer) {
-                    newsletterContainer.style.opacity = '1';
-                    newsletterContainer.style.transform = 'translateY(0)';
+    // About Section Animation
+    observeElement('.about-section', '.about-section', { threshold: 0.1, rootMargin: "-150px 0px" });
+    
+    // Enroll Section (Why Work With Me)
+    observeEnrollSection();
+    
+    // Services Section Animation
+    observeServicesSection();
+    
+    // Testimonials Section
+    observeElement('.testimonials', '.testimonials', observerOptions);
+    
+    // Resources Section
+    observeResourcesSection();
+    
+    // Footer Section
+    observeElement('.footer-section', '.footer-section', { threshold: 0.1, rootMargin: "-100px 0px" });
+}
+
+// Generic section observer
+function observeElement(sectionSelector, targetSelector, options) {
+    const section = document.querySelector(sectionSelector);
+    
+    if (section) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('section-visible');
+                    observer.unobserve(entry.target);
                 }
-                
-                observerNewsletter.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-    
-    if (newsletterSection) {
-        const newsletterContainer = newsletterSection.querySelector('.newsletter-container');
-        if (newsletterContainer) {
-            newsletterContainer.style.opacity = '0';
-            newsletterContainer.style.transform = 'translateY(30px)';
-            newsletterContainer.style.transition = 'all 0.8s ease';
+            });
+        }, options);
+        
+        const target = document.querySelector(targetSelector);
+        if (target) {
+            observer.observe(target);
         }
-        observerNewsletter.observe(newsletterSection);
     }
-    
-    // Remove the CSS animations that are causing the conflict
+}
+
+// Enroll Section specific observer
+function observeEnrollSection() {
     const enrollSection = document.querySelector('.enroll-section');
     if (enrollSection) {
         const titleBox = enrollSection.querySelector('.feature-title-box');
@@ -294,25 +343,121 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }, {
             threshold: 0.2,
-            rootMargin: "-50px 0px"
+            rootMargin: "-100px 0px" // Adjust to trigger earlier
         });
         
         // Start observing
         enrollObserver.observe(enrollSection);
     }
-});
+}
 
-// Add this to your existing script.js file
+// Services Section specific observer
+function observeServicesSection() {
+    const servicesSection = document.querySelector('.services-spotlight');
+    if (servicesSection) {
+        const sectionHeader = servicesSection.querySelector('.section-header');
+        const serviceCards = servicesSection.querySelectorAll('.service-card');
+        
+        // Prepare header for animation
+        if (sectionHeader) {
+            sectionHeader.style.opacity = '0';
+            sectionHeader.style.transform = 'translateY(30px)';
+            sectionHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        }
+        
+        // Prepare cards for animation
+        serviceCards.forEach(card => {
+            card.style.animation = 'none';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
+        
+        // Create observer
+        const servicesObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                // Animate header first
+                if (sectionHeader) {
+                    sectionHeader.style.opacity = '1';
+                    sectionHeader.style.transform = 'translateY(0)';
+                }
+                
+                // Then staggered animation for service cards
+                serviceCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 300 + (200 * index)); // Start after header animation
+                });
+                
+                // Add visible class to the section
+                servicesSection.classList.add('section-visible');
+                
+                // Once animated, disconnect observer
+                servicesObserver.disconnect();
+            }
+        }, {
+            threshold: 0.2,
+            rootMargin: "-150px 0px" // Trigger animation earlier
+        });
+        
+        servicesObserver.observe(servicesSection);
+    }
+}
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Testimonial Slider Functionality
-    initTestimonialSlider();
+// Resources Section specific observer
+function observeResourcesSection() {
+    const resourcesSection = document.querySelector('.resources-section');
+    const resourceCards = document.querySelectorAll('.resource-card');
     
-    // Services Animation with Intersection Observer
-    initServicesAnimation();
-});
+    if (resourcesSection) {
+        const resourcesHeader = resourcesSection.querySelector('.resources-header');
+        
+        // Prepare header and cards for animation
+        if (resourcesHeader) {
+            resourcesHeader.style.opacity = '0';
+            resourcesHeader.style.transform = 'translateY(30px)';
+            resourcesHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        }
+        
+        resourceCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
+        
+        const resourcesObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                // Animate header first
+                if (resourcesHeader) {
+                    resourcesHeader.style.opacity = '1';
+                    resourcesHeader.style.transform = 'translateY(0)';
+                }
+                
+                // Staggered animation for resource cards
+                resourceCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 300 + (200 * index)); // Start after header animation
+                });
+                
+                // Add visible class to the section
+                resourcesSection.classList.add('section-visible');
+                
+                // Once animated, disconnect observer
+                resourcesObserver.disconnect();
+            }
+        }, {
+            threshold: 0.2,
+            rootMargin: "-150px 0px" // Trigger animation earlier
+        });
+        
+        resourcesObserver.observe(resourcesSection);
+    }
+}
 
-// Testimonial Slider
+// Testimonial Slider Function
 function initTestimonialSlider() {
     const testimonialCards = document.querySelectorAll('.testimonial-card');
     const indicators = document.querySelectorAll('.indicator');
@@ -398,36 +543,8 @@ function initTestimonialSlider() {
     }
 }
 
-// Services Animation with Intersection Observer
-function initServicesAnimation() {
-    const servicesSection = document.querySelector('.services-spotlight');
-    const serviceCards = document.querySelectorAll('.service-card');
-    
-    if (servicesSection && serviceCards.length > 0) {
-        const servicesObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Staggered animation for service cards
-                serviceCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 200 * index);
-                });
-                
-                // Once animated, disconnect observer
-                servicesObserver.disconnect();
-            }
-        }, {
-            threshold: 0.2,
-            rootMargin: "-50px 0px"
-        });
-        
-        servicesObserver.observe(servicesSection);
-    }
-}
-
-// Service Card Hover Effects (enhanced interactions)
-document.addEventListener('DOMContentLoaded', function() {
+// Service Card Hover Effects
+function setupServiceCardEffects() {
     const serviceCards = document.querySelectorAll('.service-card');
     
     serviceCards.forEach(card => {
@@ -442,172 +559,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000);
         });
     });
-});
-
-// Scroll Animation for All Sections
-document.addEventListener('DOMContentLoaded', function() {
-    // All sections that should be animated on scroll
-    const animatedSections = document.querySelectorAll('.testimonials, .services-spotlight');
-    
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('section-visible');
-                
-                // Find header elements to animate
-                const header = entry.target.querySelector('.section-header');
-                if (header) {
-                    header.style.opacity = '1';
-                    header.style.transform = 'translateY(0)';
-                }
-                
-                sectionObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: "-50px 0px"
-    });
-    
-    // Prepare sections for animation
-    animatedSections.forEach(section => {
-        // Style section header for animation
-        const header = section.querySelector('.section-header');
-        if (header) {
-            header.style.opacity = '0';
-            header.style.transform = 'translateY(30px)';
-            header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        }
-        
-        section.classList.add('section-animate');
-        sectionObserver.observe(section);
-    });
-});
-
-
-
-// About Section Animation with Intersection Observer
-document.addEventListener('DOMContentLoaded', function() {
-    // Parallax effect for background image
-    window.addEventListener('scroll', function() {
-        const scrollPosition = window.scrollY;
-        const backgroundImage = document.querySelector('.background-image');
-        
-        if (backgroundImage) {
-            // Move the background image slightly to the right when scrolling
-            backgroundImage.style.transform = `translateY(-${scrollPosition * 0.05}px)`;
-        }
-    });
-    
-    // Animation for about section
-    const aboutSection = document.querySelector('.about-section');
-    
-    if (aboutSection) {
-        const aboutObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('section-visible');
-                    aboutObserver.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.2,
-            rootMargin: "-50px 0px"
-        });
-        
-        aboutObserver.observe(aboutSection);
-    }
-});
-
-// RESOURCES DOES STARTS HERE
-
-document.addEventListener("DOMContentLoaded", function() {
-    // Resources Section Animation with Intersection Observer
-    initResourcesAnimation();
-});
-
-// Resources Animation with Intersection Observer
-function initResourcesAnimation() {
-    const resourcesSection = document.querySelector('.resources-section');
-    const resourceCards = document.querySelectorAll('.resource-card');
-    
-    if (resourcesSection) {
-        const resourcesObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Animate header
-                resourcesSection.classList.add('section-visible');
-                
-                // Staggered animation for resource cards
-                resourceCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                    }, 200 * index);
-                });
-                
-                // Once animated, disconnect observer
-                resourcesObserver.disconnect();
-            }
-        }, {
-            threshold: 0.2,
-            rootMargin: "-50px 0px"
-        });
-        
-        resourcesObserver.observe(resourcesSection);
-    }
 }
 
-
-// FOOTER JS
-document.addEventListener("DOMContentLoaded", function() {
-    // Footer Animation with Intersection Observer
-    initFooterAnimation();
-    
-    // Back to top button functionality
-    const topBtn = document.querySelector('.top-btn');
-    if (topBtn) {
-        topBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-});
-
-// Footer Animation with Intersection Observer
-function initFooterAnimation() {
-    const footerSection = document.querySelector('.footer-section');
-    
-    if (footerSection) {
-        const footerObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Add visible class to trigger animations
-                footerSection.classList.add('section-visible');
-                
-                // Once animated, disconnect observer
-                footerObserver.disconnect();
-            }
-        }, {
-            threshold: 0.2,
-            rootMargin: "-50px 0px"
-        });
-        
-        footerObserver.observe(footerSection);
-    }
-}
-
-
-
-
-
-
-
-// SCROLL BEHAVIOR FOR THE CONTACT FORM
-
-document.addEventListener("DOMContentLoaded", function() {
+// Scroll Behavior for Consultation Form
+function setupFormScroll() {
     const consultationForm = document.querySelector('.consultation-form');
     
     if (consultationForm) {
@@ -631,5 +586,16 @@ document.addEventListener("DOMContentLoaded", function() {
             // Handle the scroll within the form
             this.scrollTop += e.deltaY;
         });
+    }
+}
+
+// Parallax background effect
+window.addEventListener('scroll', function() {
+    const scrollPosition = window.scrollY;
+    const backgroundImage = document.querySelector('.background-image');
+    
+    if (backgroundImage) {
+        // Move the background image slightly when scrolling
+        backgroundImage.style.transform = `translateY(-${scrollPosition * 0.05}px)`;
     }
 });

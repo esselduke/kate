@@ -2053,3 +2053,96 @@ html {
     opacity: 1;
     transform: translateY(0);
 }
+
+
+/* Animation Timing Fixes */
+
+/* Hero Section Animation - Ensure simultaneous animations */
+.hero-content, .consultation-form {
+    transition: opacity 0.8s ease, transform 0.8s ease !important;
+}
+
+/* Improved Section Visibility Transitions */
+.section-visible .about-text,
+.section-visible .about-content,
+.section-visible .section-header,
+.section-visible .resources-header,
+.section-visible .footer-top,
+.section-visible .resource-card {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+}
+
+/* Ensure sections become visible immediately when class is added */
+.section-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Service Cards Animation */
+.service-card {
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Testimonial Cards Animation */
+.testimonial-card {
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease !important;
+}
+
+/* Feature Cards Animation in 'Why Work With Me' Section */
+.feature-card {
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+}
+
+/* About Section Content Delay Adjustment */
+.about-section.section-visible .about-content {
+    transition-delay: 0.2s !important; /* Reduced from 0.3s */
+}
+
+/* Resource Cards Animation */
+.resources-section .resource-card {
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease !important;
+}
+
+/* Floating animation adjustment for testimonial cards */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px); /* Reduced from -10px for more subtle effect */
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Improved scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Section Reveal Animation - more consistent timings */
+.section-header,
+.resources-header,
+.feature-title-box {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+}
+
+/* Ensure consistency in scroll reveal animations */
+.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Adjust rootMargin in IntersectionObserver for earlier triggering */
+/* (This is handled in the JavaScript, not CSS, but noted here for reference) */

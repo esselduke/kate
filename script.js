@@ -2,7 +2,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Initialize existing functionality
     initPackageSelection();
-    setupNavigation();
+    setupBaseNavigation(); // <-- New function
+    setupMobileMenu();
     initAnimations();
     initIntersectionObservers();
     initTestimonialSlider();
@@ -298,8 +299,8 @@ function initStickyHeader() {
     }
 }
 
-// Setup Navigation and Scroll Functionality
-function setupNavigation() {
+// Base navigation setup - handles smooth scrolling
+function setupBaseNavigation() {
     // Scroll down arrow functionality
     const scrollDownArrow = document.querySelector('.scroll-down');
     const aboutSection = document.querySelector('.about-section');
@@ -331,11 +332,8 @@ function setupNavigation() {
         item.style.setProperty('--index', index);
     });
     
-    // Navigation links functionality
+    // Navigation links smooth scroll
     const navLinks = document.querySelectorAll('.nav-menu a');
-    const navMenu = document.querySelector('.nav-menu');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const body = document.body;
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -362,37 +360,8 @@ function setupNavigation() {
                 e.preventDefault();
                 document.querySelector('.footer-section').scrollIntoView({ behavior: 'smooth' });
             }
-            
-            // Close mobile menu if it's open
-            if (navMenu.classList.contains('active')) {
-                // Hamburger icon transforms immediately
-                if (mobileMenu) {
-                    mobileMenu.classList.remove('active');
-                }
-                
-                // Menu closes with animation
-                navMenu.classList.remove('active');
-                body.classList.remove('menu-active');
-            }
         });
     });
-    
-    // Update mobile menu toggle
-    const mobileMenuToggle = document.querySelector('.mobile-menu');
-    
-    if (mobileMenuToggle) {
-        // Remove existing event listeners (if possible)
-        const oldToggle = mobileMenuToggle.cloneNode(true);
-        mobileMenuToggle.parentNode.replaceChild(oldToggle, mobileMenuToggle);
-        
-        // Add new event listener
-        oldToggle.addEventListener('click', function() {
-            // Toggle menu with animations from CSS
-            navMenu.classList.toggle('active');
-            body.classList.toggle('menu-active');
-            this.classList.toggle('active');
-        });
-    }
     
     // Add Testimonials link to the nav menu if it doesn't exist
     const navMenuElement = document.querySelector('.nav-menu');
@@ -425,21 +394,6 @@ function setupNavigation() {
                 menuItems.forEach((item, index) => {
                     item.style.setProperty('--index', index);
                 });
-                
-                // Add the event listener to the new testimonials link
-                newTestimonialsLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Close mobile menu if it's open
-                    if (navMenu.classList.contains('active')) {
-                        if (mobileMenu) {
-                            mobileMenu.classList.remove('active');
-                        }
-                        navMenu.classList.remove('active');
-                        body.classList.remove('menu-active');
-                    }
-                });
             }
         }
     }
@@ -453,6 +407,50 @@ function setupNavigation() {
                 top: 0,
                 behavior: 'smooth'
             });
+        });
+    }
+}
+
+// Mobile menu specific functionality
+function setupMobileMenu() {
+    const mobileMenuToggle = document.querySelector('.mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+    const body = document.body;
+    
+    if (mobileMenuToggle && navMenu) {
+        // Direct click handler for mobile menu toggle
+        mobileMenuToggle.addEventListener('click', function() {
+            // Toggle menu and body classes
+            navMenu.classList.toggle('active');
+            body.classList.toggle('menu-active');
+            // Explicitly toggle the active class on the hamburger
+            this.classList.toggle('active');
+        });
+        
+        // Ensure menu closes when a link is clicked
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // Close mobile menu if it's open
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    body.classList.remove('menu-active');
+                    // Ensure the hamburger icon also changes back
+                    mobileMenuToggle.classList.remove('active');
+                }
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            // Check if menu is open and click is outside menu and toggle button
+            if (navMenu.classList.contains('active') && 
+                !navMenu.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                body.classList.remove('menu-active');
+                mobileMenuToggle.classList.remove('active');
+            }
         });
     }
 }
@@ -676,6 +674,7 @@ function observeResourcesSection() {
     const resourcesSection = document.querySelector('.resources-section');
     const resourceCards = document.querySelectorAll('.resource-card');
     
+    
     if (resourcesSection) {
         const resourcesHeader = resourcesSection.querySelector('.resources-header');
         
@@ -864,4 +863,166 @@ window.addEventListener('scroll', function() {
         // Move the background image slightly when scrolling
         backgroundImage.style.transform = `translateY(-${scrollPosition * 0.05}px)`;
     }
+});
+
+// Add this to your existing script.js file
+
+// Function to make resource cards clickable
+function setupResourceCardLinks() {
+    const resourceCards = document.querySelectorAll('.resource-card');
+    const targetUrl = "https://shorturl.at/iHzVC";
+    
+    resourceCards.forEach(card => {
+        // Make the entire card clickable
+        card.style.cursor = 'pointer';
+        
+        // Add click event listener to the card
+        card.addEventListener('click', function(e) {
+            // Prevent default action if clicked on something that's already clickable
+            if (e.target.tagName === 'A') {
+                return;
+            }
+            
+            // Open the URL in a new tab
+            window.open(targetUrl, '_blank');
+        });
+        
+        // Add hover effect to indicate card is clickable
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px)';
+            this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+}
+
+// Initialize the resource card links
+document.addEventListener("DOMContentLoaded", function() {
+    // Add to your existing DOMContentLoaded event or call separately
+    setupResourceCardLinks();
+});
+
+
+// Add this to your existing script.js file
+
+// Function to handle likes and view counts for resource cards
+function setupResourceCardLinks() {
+    const resourceCards = document.querySelectorAll('.resource-card');
+    const targetUrl = "https://shorturl.at/iHzVC";
+    
+    resourceCards.forEach(card => {
+        // Make the entire card clickable
+        card.style.cursor = 'pointer';
+        
+        // Add click event listener to the card
+        card.addEventListener('click', function(e) {
+            // Prevent default action if clicked on something that's already clickable
+            if (e.target.tagName === 'A') {
+                return;
+            }
+            
+            // Open the URL in a new tab
+            window.open(targetUrl, '_blank');
+        });
+        
+        // Add hover effect to indicate card is clickable
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px)';
+            this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+}
+
+// Set up like button functionality
+function setupLikeButtons() {
+    const likeButtons = document.querySelectorAll('.like-button');
+    
+    likeButtons.forEach(button => {
+        // Get current count
+        const countElement = button.querySelector('.count');
+        let count = parseInt(button.getAttribute('data-count'));
+        
+        // Use localStorage to keep track of liked state
+        const resourceId = button.closest('.resource-card').getAttribute('data-url');
+        const storageKey = `liked_${resourceId}`;
+        
+        // Check if previously liked
+        if (localStorage.getItem(storageKey) === 'true') {
+            button.classList.add('liked');
+        }
+        
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent card click event
+            
+            if (button.classList.contains('liked')) {
+                // Unlike
+                button.classList.remove('liked');
+                count--;
+                localStorage.removeItem(storageKey);
+            } else {
+                // Like
+                button.classList.add('liked');
+                count++;
+                localStorage.setItem(storageKey, 'true');
+                
+                // Add heart animation
+                button.querySelector('i').style.animation = 'none';
+                setTimeout(() => {
+                    button.querySelector('i').style.animation = 'heartBeat 0.3s ease-in-out';
+                }, 10);
+            }
+            
+            // Update count
+            countElement.textContent = count;
+            button.setAttribute('data-count', count);
+        });
+    });
+}
+
+// Update view count when card is clicked
+function handleViewCounts() {
+    const resourceCards = document.querySelectorAll('.resource-card');
+    
+    resourceCards.forEach(card => {
+        // Get view count element
+        const viewElement = card.querySelector('.views .count');
+        const resourceId = card.getAttribute('data-url');
+        const viewStorageKey = `viewed_${resourceId}`;
+        
+        // Update or get view count from localStorage
+        let viewCount = parseInt(card.querySelector('.views').getAttribute('data-count'));
+        
+        // Check if viewed in this session
+        if (!sessionStorage.getItem(viewStorageKey)) {
+            card.addEventListener('click', function() {
+                // Only count view once per session
+                if (!sessionStorage.getItem(viewStorageKey)) {
+                    viewCount++;
+                    viewElement.textContent = viewCount;
+                    card.querySelector('.views').setAttribute('data-count', viewCount);
+                    sessionStorage.setItem(viewStorageKey, 'true');
+                }
+                
+                // Still navigate to the URL
+                window.open(card.getAttribute('data-url'), '_blank');
+            });
+        }
+    });
+}
+
+// Initialize all resource card functionality
+document.addEventListener("DOMContentLoaded", function() {
+    // Add to your existing DOMContentLoaded event or call separately
+    setupResourceCardLinks();
+    setupLikeButtons();
+    handleViewCounts();
 });

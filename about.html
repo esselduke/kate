@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kate | About Me</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Roboto', 'Open Sans', sans-serif;
+        }
+
+        body {
+            color: #fff;
+            line-height: 1.6;
+            background-color: #000;
+            position: relative;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 1em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Background Image - Fixed */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/jaredd-craig-HH4WBGNyltc-unsplash.jpg') no-repeat center center/cover;
+            z-index: -1;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo .dot {
+            color: #ff9bb3;
+        }
+
+        .logo p {
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+        }
+
+        .nav-menu li {
+            list-style: none;
+            margin: 0 15px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ff9bb3;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: #ff9bb3;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            cursor: pointer;
+            width: 30px;
+            height: 24px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Styles for the hamburger bars */
+        .mobile-menu span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: #fff;
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        /* Position the three bars */
+        .mobile-menu span:nth-child(1) { top: 0px; }
+        .mobile-menu span:nth-child(2) { top: 10px; }
+        .mobile-menu span:nth-child(3) { top: 20px; }
+
+        /* Create the X animation */
+        .mobile-menu.active span:nth-child(1) {
+            top: 10px;
+            transform: rotate(45deg);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+            width: 0%;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            top: 10px;
+            transform: rotate(-45deg);
+        }
+
+        /* About Page Styles */
+        .about-hero {
+            padding: 150px 0 100px;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-size: 60px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .about-hero .subtitle {
+            font-size: 22px;
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 60px;
+            margin-bottom: 100px;
+        }
+
+        .profile-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .profile-content {
+            flex: 1;
+            padding-top: 20px;
+        }
+
+        .profile-content h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+        }
+
+        .profile-content .intro {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: #ff9bb3;
+        }
+
+        .more-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease;
+        }
+
+        .more-content.expanded {
+            max-height: 2000px;
+        }
+
+        .approach-list {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .approach-list li {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        .skills-section {
+            margin: 50px 0;
+        }
+
+        .skills-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff9bb3;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .skill-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 155, 179, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .skill-card h4 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .skill-level {
+            font-size: 14px;
+            color: #ff9bb3;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            border: 1px solid white;
+            padding: 12px 30px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            margin-top: 25px;
+            font-size: 16px;
+        }
+
+        .read-more-btn::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 100%;
+            top: 0;
+            left: -10%;
+            transform: skewX(-15deg);
+            background-color: #ff9bb3;
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .read-more-btn:hover::after {
+            width: 120%;
+        }
+
+        .read-more-btn:hover {
+            border-color: #ff9bb3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Certifications & Education Section */
+        .credentials-section {
+            margin-bottom: 80px;
+        }
+
+        .credentials-section h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: rgba(255, 155, 179, 0.5);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff9bb3;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 155, 179, 0.3);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: #ff9bb3;
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .timeline-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+            background: rgba(15, 15, 15, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-section h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff9bb3;
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: #ff7d9b;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #000;
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 40px;
+            background-color: #ff9bb3;
+        }
+
+        .footer-col p {
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #ff9bb3;
+            transform: translateY(-3px);
+        }
+
+        .footer-menu {
+            list-style: none;
+        }
+
+        .footer-menu li {
+            margin-bottom: 10px;
+        }
+
+        .footer-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-menu a:hover {
+            color: #ff9bb3;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .footer-bottom a {
+            color: #ff9bb3;
+            text-decoration: none;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 992px) {
+            .profile-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .profile-image, .profile-content {
+                width: 100%;
+                flex: none;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                flex-wrap: wrap;
+            }
+
+            .footer-col {
+                flex: 0 0 50%;
+                margin-bottom: 30px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 40px;
+            }
+
+            .about-hero .subtitle {
+                font-size: 18px;
+            }
+
+            .timeline::after {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 20px;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-item::after {
+                left: 20px;
+            }
+
+            .timeline-item:nth-child(odd)::after {
+                right: auto;
+                left: 20px;
+            }
+
+            body.menu-active {
+                overflow: hidden;
+            }
+            
+            .nav-menu {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: rgba(0, 0, 0, 0.95);
+                padding: 20px 0;
+                z-index: 1000;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+                transition: transform 0.3s ease, opacity 0.3s ease;
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            
+            .nav-menu.active {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            
+            .nav-menu li {
+                margin: 15px 0;
+                text-align: center;
+            }
+            
+            .nav-menu a {
+                display: block;
+                padding: 10px 0;
+                font-size: 20px;
+                font-weight: 500;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-col {
+                flex: 0 0 100%;
+            }
+
+            .about-hero {
+                padding: 120px 0 60px;
+            }
+
+            .profile-content h2 {
+                font-size: 28px;
+            }
+
+            .profile-content .intro {
+                font-size: 18px;
+            }
+
+            .cta-section h2 {
+                font-size: 32px;
+            }
+
+            .cta-section p {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Background Image -->
+    <div class="background-image"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Kate<span class="dot">.</span></h1>
+                </div>
+                
+                <div class="nav-links">
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <!-- <li><a href="about.html" class="active">About Me</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#contact">Contact</a></li> -->
+                    </ul>
+                    
+                    <div class="mobile-menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About Me</h1>
+            <p class="subtitle">I help industry leaders and startups cut through the noise with strategic positioning, branding, and content strategies that ensure they stand out in a competitive digital landscape.</p>
+        </div>
+    </section>
+    
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img src="images/DSC9912-Edit2.jpg" alt="Kate - Social Media Strategist">
+                </div>
+                
+                <div class="profile-content">
+                    <p class="intro">Social Media Strategist & LinkedIn Consultant</p>
+                    <h2>Kate Johnson</h2>
+                    <p>I help professionals, executives, and founders amplify their online presence.</p>
+                    <p>I specialize in cutting through digital clutter—whether it's refining personal brands, optimizing LinkedIn profiles, or developing content strategies that attract the right clients.</p>
+                    <p>If you're ready to stop blending in and start standing out, let's make it happen.</p>
+                    
+                    <!-- More content (hidden initially) -->
+                    <div class="more-content" id="more-content">
+                        <p>With over 8 years of experience in social media management and content strategy, I've helped hundreds of professionals transform their online presence and achieve tangible results.</p>
+                        <p>My approach combines data-driven insights with creative storytelling to craft authentic personal brands that resonate with target audiences.</p>
+                        
+                        <h3>My Philosophy</h3>
+                        <p>I believe that effective personal branding isn't about creating a polished facade—it's about strategically highlighting your authentic strengths and unique perspective in a way that connects with your ideal audience.</p>
+                        <p>Every client is unique, which is why I create custom strategies tailored to your specific goals, industry, and target audience.</p>
+                        
+                        <h3>Background</h3>
+                        <p>Before founding my consulting practice, I worked with leading tech companies and marketing agencies, managing social media strategies for Fortune 500 brands and high-profile executives.</p>
+                        <p>This experience gave me invaluable insights into what works across different platforms and how to cut through the noise in crowded digital spaces.</p>
+                        
+                        <div class="skills-section">
+                            <h3>Core Skills & Expertise</h3>
+                            <div class="skills-grid">
+                                <div class="skill-card">
+                                    <h4>LinkedIn Optimization</h4>
+                                    <div class="skill-level">Expert</div>
+                                </div>
+                                <div class="skill-card">
+                                    <h4>Content Strategy</h4>
+                                    <div class="skill-level">Expert</div>
+                                </div>
+                                <div class="skill-card">
+                                    <h4>Personal Branding</h4>
+                                    <div class="skill-level">Expert</div>
+                                </div>
+                                <div class="skill-card">
+                                    <h4>SEO</h4>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-card">
+                                    <h4>Data Analysis</h4>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                                <div class="skill-card">
+                                    <h4>Copywriting</h4>
+                                    <div class="skill-level">Advanced</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>My Approach</h3>
+                        <ul class="approach-list">
+                            <li><strong>Strategic:</strong> Every recommendation is backed by data and aligned with your business goals</li>
+                            <li><strong>Authentic:</strong> Your online presence should reflect your true expertise and personality</li>
+                            <li><strong>Actionable:</strong> I provide practical steps, not vague advice</li>
+                            <li><strong>Results-Focused:</strong> My strategies are designed to drive measurable outcomes</li>
+                        </ul>
+                    </div>
+                    
+                    <button id="read-more-btn" class="read-more-btn">Read More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Education & Certifications Section -->
+    <section class="credentials-section">
+        <div class="container">
+            <h2>Education & Certifications</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022</div>
+                        <h3 class="timeline-title">LinkedIn Marketing Certification</h3>
+                        <div class="timeline-subtitle">LinkedIn Learning</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2021</div>
+                        <h3 class="timeline-title">Content Strategy Master Class</h3>
+                        <div class="timeline-subtitle">Content Marketing Institute</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2019</div>
+                        <h3 class="timeline-title">Digital Marketing Certification</h3>
+                        <div class="timeline-subtitle">Google</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2015</div>
+                        <h3 class="timeline-title">MBA in Marketing</h3>
+                        <div class="timeline-subtitle">Stanford University</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2013</div>
+                        <h3 class="timeline-title">Bachelor's in Communications</h3>
+                        <div class="timeline-subtitle">University of Toronto</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Online Presence?</h2>
+            <p>Let's work together to build your personal brand, optimize your LinkedIn profile, and develop content that attracts your ideal clients.</p>
+            <a href="#contact" class="cta-button">Get Started</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3>About Kate</h3>
+                    <p>Social Media Strategist & LinkedIn Consultant helping professionals amplify their online presence and attract ideal clients.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p>Toronto, CA</p>
+                    <p>+1 437 871 3536</p>
+                    <p>tribesofleadership@outlook.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 by Kate. Social Media Strategist & LinkedIn Consultant. Powered and secured by <a href="#">Duke</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <!-- Internal JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize mobile menu
+            initMobileMenu();
+            
+            // Initialize read more button
+            initReadMoreButton();
+            
+            // Initialize sticky header
+            initStickyHeader();
+        });
+
+        // Mobile menu functionality
+        function initMobileMenu() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            const body = document.body;
+            
+            if (mobileMenuToggle && navMenu) {
+                // Direct click handler for mobile menu toggle
+                mobileMenuToggle.addEventListener('click', function() {
+                    // Toggle menu and body classes
+                    navMenu.classList.toggle('active');
+                    body.classList.toggle('menu-active');
+                    // Explicitly toggle the active class on the hamburger
+                    this.classList.toggle('active');
+                });
+                
+                // Ensure menu closes when a link is clicked
+                const navLinks = document.querySelectorAll('.nav-menu a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        // Close mobile menu if it's open
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            body.classList.remove('menu-active');
+                            // Ensure the hamburger icon also changes back
+                            mobileMenuToggle.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    // Check if menu is open and click is outside menu and toggle button
+                    if (navMenu.classList.contains('active') && 
+                        !navMenu.contains(e.target) && 
+                        !mobileMenuToggle.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                        body.classList.remove('menu-active');
+                        mobileMenuToggle.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+// Read More button functionality
+function initReadMoreButton() {
+            const readMoreBtn = document.getElementById('read-more-btn');
+            const moreContent = document.getElementById('more-content');
+            
+            if (readMoreBtn && moreContent) {
+                // Set up the click handler
+                readMoreBtn.addEventListener('click', function() {
+                    if (moreContent.classList.contains('expanded')) {
+                        // Content is expanded, so collapse it
+                        moreContent.classList.remove('expanded');
+                        readMoreBtn.textContent = 'Read More';
+                        
+                        // Scroll to the profile section
+                        document.querySelector('.profile-content').scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    } else {
+                        // Content is collapsed, so expand it
+                        moreContent.classList.add('expanded');
+                        readMoreBtn.textContent = 'Show Less';
+                        
+                        // Smooth scroll to show the beginning of the expanded content
+                        setTimeout(() => {
+                            moreContent.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 300);
+                    }
+                });
+                
+                // Check if the URL has a hash parameter for expanded content
+                if (window.location.hash === '#full-bio') {
+                    // Automatically expand the content if requested via URL
+                    readMoreBtn.click();
+                }
+            }
+        }
+        
+        // Sticky header functionality
+        function initStickyHeader() {
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                
+                if (window.scrollY > 50) {
+                    header.style.background = 'rgba(0, 0, 0, 0.9)';
+                    header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.background = 'rgba(0, 0, 0, 0.9)';
+                    header.style.boxShadow = 'none';
+                }
+            });
+        }
+        
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Animate elements when they come into view
+        function initScrollAnimations() {
+            const elements = document.querySelectorAll('.timeline-item, .skill-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '-50px'
+            });
+            
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+        
+        // Call the animation initialization
+        if ('IntersectionObserver' in window) {
+            initScrollAnimations();
+        }
+    </script>
+</body>
+</html>

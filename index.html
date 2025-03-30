@@ -136,27 +136,60 @@
         </div>
     </section>
     
-    <!-- Newsletter Section -->
-    <section class="newsletter">
-        <div class="container">
-            <div class="newsletter-container">
-                <h2>Subscribe to My Mailing List</h2>
-                <p>Enter your email here *</p>
-                <form class="newsletter-form">
-                    <div class="form-group">
-                        <input type="email" placeholder="Email Address" required>
+    <!-- Replace your current newsletter section with this code -->
+<section class="newsletter">
+    <div class="container">
+        <div class="newsletter-container">
+            <h2>Subscribe to My Mailing List</h2>
+            <p>Enter your email here *</p>
+            
+            <!-- Mailchimp Form using your original styles -->
+            <form action="https://katejoyceconnect.us10.list-manage.com/subscribe/post?u=716444656feef757dce4a7f14&amp;id=45c270b193&amp;f_id=000548e4f0" 
+                  method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" 
+                  class="newsletter-form validate" target="_blank">
+                
+                <div class="form-group">
+                    <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Email Address" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="subscribe" checked>
+                        <label for="subscribe">Yes, subscribe me to your newsletter.</label>
                     </div>
-                    <div class="form-row">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="subscribe">
-                            <label for="subscribe">Yes, subscribe me to your newsletter.</label>
-                        </div>
-                    </div>
-                    <button type="submit" class="subscribe-btn">Subscribe</button>
-                </form>
+                </div>
+                
+                <!-- Required Mailchimp bot protection field - don't remove this -->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                    <input type="text" name="b_716444656feef757dce4a7f14_45c270b193" tabindex="-1" value="">
+                </div>
+                
+                <!-- Use your original button but with the Mailchimp id -->
+                <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="subscribe-btn">Subscribe</button>
+                
+                <!-- Hidden response elements -->
+                <div id="mce-responses" class="clear foot" style="display:none;">
+                    <div class="response" id="mce-error-response" style="display:none"></div>
+                    <div class="response" id="mce-success-response" style="display:none"></div>
+                </div>
+            </form>
+            
+            <!-- Include the Mailchimp Javascript but hide it at the bottom of the page -->
+            <div style="height:0; overflow:hidden;">
+                <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+                <script type="text/javascript">
+                (function($) {
+                    window.fnames = new Array(); 
+                    window.ftypes = new Array();
+                    fnames[0]='EMAIL';
+                    ftypes[0]='email';
+                }(jQuery));
+                var $mcj = jQuery.noConflict(true);
+                </script>
             </div>
         </div>
-    </section>
+    </div>
+</section>
     
     <!-- Why Work With Me Section -->
 <section class="enroll-section">

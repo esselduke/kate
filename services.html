@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Details | Kate</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Roboto', 'Open Sans', sans-serif;
+        }
+
+        body {
+            color: #fff;
+            line-height: 1.6;
+            background-color: #000;
+            position: relative;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 1em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo .dot {
+            color: #ff9bb3;
+        }
+
+        .logo p {
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+        }
+
+        .nav-menu li {
+            list-style: none;
+            margin: 0 15px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ff9bb3;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: #ff9bb3;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            cursor: pointer;
+            width: 30px;
+            height: 24px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Styles for the hamburger bars */
+        .mobile-menu span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: #fff;
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        /* Position the three bars */
+        .mobile-menu span:nth-child(1) { top: 0px; }
+        .mobile-menu span:nth-child(2) { top: 10px; }
+        .mobile-menu span:nth-child(3) { top: 20px; }
+
+        /* Create the X animation */
+        .mobile-menu.active span:nth-child(1) {
+            top: 10px;
+            transform: rotate(45deg);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+            width: 0%;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            top: 10px;
+            transform: rotate(-45deg);
+        }
+
+        /* Service Detail Page Styles */
+        .service-detail {
+            padding: 120px 0 80px;
+        }
+
+        .service-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .service-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        .service-subtitle {
+            font-size: 20px;
+            color: #ff9bb3;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .service-intro {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .features-container {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 155, 179, 0.3);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .features-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .feature-item {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            color: #ff9bb3;
+            font-size: 24px;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .feature-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .action-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .action-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #ff9bb3;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #ff7d9b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .benefits-section {
+            margin: 60px 0;
+        }
+
+        .benefits-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .benefits-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-card {
+            background: rgba(25, 25, 25, 0.8);
+            border: 1px solid rgba(255, 155, 179, 0.2);
+            border-radius: 8px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff9bb3;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .benefit-icon {
+            font-size: 36px;
+            color: #ff9bb3;
+            margin-bottom: 20px;
+        }
+
+        .benefit-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #ff9bb3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link i {
+            margin-right: 5px;
+        }
+
+        .back-link:hover {
+            color: #ff7d9b;
+            transform: translateX(-5px);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #000;
+            color: #fff;
+            padding: 80px 0 0;
+            position: relative;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        .footer-top:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-left {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 50px;
+        }
+
+        .footer-brand h2 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .brand-dot {
+            color: #ff9bb3;
+        }
+
+        .footer-brand p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .footer-cta {
+            margin-top: 60px;
+        }
+
+        .footer-cta h3 {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 80px;
+            line-height: 1.2;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .enroll-btn {
+            display: inline-block;
+            padding: 12px 40px;
+            border: 1px solid #fff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+        }
+
+        .enroll-btn:hover {
+            background-color: #ff9bb3;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #ff9bb3;
+        }
+
+        .footer-right {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .footer-info, .footer-address, .footer-social {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+        }
+
+        .footer-info a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            color: #ff9bb3;
+            text-decoration: underline;
+        }
+
+        .footer-right h4 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-right p {
+            font-size: 15px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .social-link {
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 10px;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            display: block;
+            font-weight: 500;
+        }
+
+        .social-link:hover {
+            opacity: 1;
+            color: #ff9bb3;
+            transform: translateX(5px);
+        }
+
+        .back-to-top {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .top-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .top-btn:hover {
+            background-color: rgba(255, 155, 179, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-color: #ff9bb3;
+        }
+
+        .footer-bottom {
+            padding: 25px 0;
+            text-align: left;
+            font-size: 15px;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+
+        .wix-link {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .wix-link:hover {
+            color: #ff9bb3;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 992px) {
+            .service-title {
+                font-size: 36px;
+            }
+
+            .service-subtitle {
+                font-size: 18px;
+            }
+
+            .features-container {
+                padding: 30px;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+
+            .footer-top:before {
+                display: none;
+            }
+
+            .footer-left, .footer-right {
+                width: 100%;
+                padding: 0;
+            }
+
+            .footer-left {
+                margin-bottom: 60px;
+            }
+
+            .back-to-top {
+                position: relative;
+                margin-top: 30px;
+                align-self: flex-start;
+            }
+
+            .footer-cta h3 {
+                font-size: 36px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body.menu-active {
+                overflow: hidden;
+            }
+
+            .nav-menu {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: rgba(0, 0, 0, 0.95);
+                padding: 20px 0;
+                z-index: 1000;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+                transition: transform 0.3s ease, opacity 0.3s ease;
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            .nav-menu.active {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
+                text-align: center;
+            }
+
+            .nav-menu a {
+                display: block;
+                padding: 10px 0;
+                font-size: 20px;
+                font-weight: 500;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .service-title {
+                font-size: 32px;
+            }
+
+            .service-subtitle {
+                font-size: 16px;
+            }
+
+            .features-container {
+                padding: 20px;
+            }
+
+            .feature-item {
+                flex-direction: column;
+            }
+
+            .feature-icon {
+                margin-bottom: 10px;
+                margin-right: 0;
+                text-align: center;
+            }
+
+            .feature-content h3 {
+                text-align: center;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefit-card {
+                text-align: center;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .service-title {
+                font-size: 28px;
+            }
+
+            .service-subtitle {
+                font-size: 16px;
+            }
+
+            .service-intro {
+                font-size: 16px;
+            }
+
+            .features-title {
+                font-size: 20px;
+            }
+
+            .feature-content h3 {
+                font-size: 18px;
+            }
+
+            .action-text {
+                font-size: 18px;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .benefits-title {
+                font-size: 24px;
+            }
+
+            .footer-cta h3 {
+                font-size: 28px;
+                margin-bottom: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html" style="text-decoration: none; color: inherit;">
+                        <h1>Kate<span class="dot">.</span></h1>
+                    </a>
+                </div>
+                
+                <div class="nav-links">
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Me</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#testimonials">Testimonials</a></li>
+                        <li><a href="index.html#resources">Resources</a></li>
+                        <li><a href="index.html#footer">Contact</a></li>
+                    </ul>
+                    
+                    <div class="mobile-menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Service Detail Content - Profile Optimization & Branding -->
+    <section class="service-detail">
+        <div class="container">
+            <a href="index.html#services" class="back-link"><i class="fas fa-arrow-left"></i> Back to Services</a>
+            
+            <div class="service-header">
+                <h1 class="service-title">Profile Optimization & Branding</h1>
+                <h2 class="service-subtitle">Stand Out, Be Remembered</h2>
+            </div>
+            
+            <p class="service-intro">Your online profile should be more than just a résumé—it should tell a story that makes people say, "I need to connect with this person!"</p>
+            
+            <div class="features-container">
+                <h3 class="features-title">What You'll Get:</h3>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-content">
+                        <h3>Profile Enhancement</h3>
+                        <p>Make a killer first impression that speaks volumes. I'll optimize every element of your profile to ensure it clearly communicates your unique value proposition and stands out from the crowd.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-content">
+                        <h3>Strategic Storytelling</h3>
+                        <p>Show your unique value in a way that resonates with your target audience. I'll help craft your professional narrative to highlight your achievements, showcase your expertise, and communicate your authentic personal brand.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-content">
+                        <h3>Visual Identity</h3>
+                        <p>Craft a look that aligns with your expertise & industry. From professional profile photos to banner images and visual content guidance, I'll ensure your visual identity is cohesive and professional.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p>Your personal brand is what people say about you when you're not in the room. I'll help you take control of that narrative and ensure it's opening doors to the opportunities you deserve.</p>
+            
+            <div class="benefits-section">
+                <div class="benefits-heading">
+                    <h2 class="benefits-title">Benefits of Professional Profile Optimization</h2>
+                </div>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="benefit-title">Increased Visibility</h3>
+                        <p>A strategically optimized profile helps you appear in more searches and gets noticed by the right people in your industry.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="benefit-title">Better Connections</h3>
+                        <p>Attract higher-quality connections and opportunities that align with your professional goals and aspirations.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="benefit-title">Career Advancement</h3>
+                        <p>Position yourself as an expert in your field, opening doors to speaking engagements, collaborations, and career advancement.</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="benefit-title">Stand Out From Competition</h3>
+                        <p>In a crowded marketplace, a polished professional profile helps you differentiate yourself from peers and competitors.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-section">
+                <p class="action-text">Ready to make your brand unforgettable?</p>
+                <a href="index.html#footer" class="action-btn">Let's Talk!</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-left">
+                    <div class="footer-brand">
+                        <h2>Kate<span class="brand-dot">.</span></h2>
+                        <p>Social Media Strategist & LinkedIn Consultant</p>
+                    </div>
+                    <div class="footer-cta">
+                        <h3>Transform Your Digital Presence</h3>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-info">
+                        <h4>Info</h4>
+                        <p>+1 437 871 3536</p>
+                        <p>Click to Email: <a href="mailto:hello@katejoyceconnect.com">hello@katejoyceconnect.com</a></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Address</h4>
+                        <p>Toronto, CA</p>
+                    </div>
+                    <div class="footer-social">
+                        <h4>Follow</h4>
+                        <a href="https://www.linkedin.com/in/kate-joycen" class="social-link">LinkedIn</a>
+                        <a href="https://www.facebook.com/profile.php?id=61570121360094" class="social-link">Facebook</a>
+                        <a href="https://www.instagram.com/mind_mastery00/" class="social-link">Instagram</a>
+                    </div>
+                    <div class="back-to-top">
+                        <a href="#top" class="top-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 19V5M5 12l7-7 7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 by Kate. Social Media Strategist & LinkedIn Consultant. Powered and secured by <a href="#" class="wix-link">Duke</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize mobile menu
+            const mobileMenuToggle = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            const body = document.body;
+            
+            if (mobileMenuToggle && navMenu) {
+                // Direct click handler for mobile menu toggle
+                mobileMenuToggle.addEventListener('click', function() {
+                    // Toggle menu and body classes
+                    navMenu.classList.toggle('active');
+                    body.classList.toggle('menu-active');
+                    // Explicitly toggle the active class on the hamburger
+                    this.classList.toggle('active');
+                });
+                
+                // Ensure menu closes when a link is clicked
+                const navLinks = document.querySelectorAll('.nav-menu a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        // Close mobile menu if it's open
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            body.classList.remove('menu-active');
+                            // Ensure the hamburger icon also changes back
+                            mobileMenuToggle.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    // Check if menu is open and click is outside menu and toggle button
+                    if (navMenu.classList.contains('active') && 
+                        !navMenu.contains(e.target) && 
+                        !mobileMenuToggle.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                        body.classList.remove('menu-active');
+                        mobileMenuToggle.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Sticky header on scroll
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                
+                if (window.scrollY > 50) {
+                    header.style.background = 'rgba(0, 0, 0, 0.9)';
+                    header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.background = 'transparent';
+                    header.style.boxShadow = 'none';
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = this.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

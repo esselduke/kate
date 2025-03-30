@@ -784,7 +784,7 @@ header {
     transform: translateY(30px);
     transition: all 0.8s ease;
     align-self: flex-end;
-    padding-top: 40vh;
+    padding-top: 60vh;
 }
 
 .about-section.section-visible .about-text,

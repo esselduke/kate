@@ -262,11 +262,16 @@
         }
 
         .approach-list li {
-            color: rgba(255, 255, 255, 0.9);
+            color: #555;
             margin-bottom: 15px;
             line-height: 1.7;
             font-size: 17px;
         }
+
+        .approach-list li strong {
+    color: #333; /* Darker color for the strong tags to make them stand out */
+    font-weight: 600;
+}
 
         .skills-section {
             margin: 50px 0;
@@ -304,9 +309,9 @@
 
         .read-more-btn {
             display: inline-block;
-            border: 1px solid white;
+            border: 1px solid #333;
             padding: 12px 30px;
-            color: white;
+            color: #333;
             text-decoration: none;
             transition: all 0.3s ease;
             position: relative;
@@ -342,6 +347,7 @@
             border-color: #ff9bb3;
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            color: white;
         }
 
         /* Certifications & Education Section */
@@ -514,6 +520,15 @@
             font-size: 15px;
         }
 
+        .footer-col a{
+            color: black;
+            text-decoration: none;
+}
+
+        .footer-col a:hover{
+            color: #555; text-decoration: underline;
+}
+
         .social-links {
             display: flex;
             gap: 15px;
@@ -524,8 +539,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 40px;   /* Slightly larger size */
+            height: 40px; 
             border-radius: 50%;
             background: rgba(0, 0, 0, 0.1);
             color: #333;
@@ -533,7 +548,7 @@
         }
 
         .social-links a:hover {
-            background: #ff9bb3; 
+            background: #ff9bb3;
             transform: translateY(-3px);
         }
 
@@ -571,11 +586,18 @@
 
         svg {
             fill: #333; 
-}
+        }
 
         .social-links a:hover svg {
             fill: white; 
-}
+        }
+
+        .social-links svg {
+            width: 22px;
+            height: 22px;
+            fill: #333;
+        }
+
 
         /* Responsive Styles */
         @media screen and (max-width: 992px) {
@@ -680,6 +702,21 @@
             .mobile-menu {
                 display: block;
             }
+
+            .social-links {
+        justify-content: center;
+    }
+    
+    .social-links a {
+        width: 45px;   /* Even larger on mobile */
+        height: 45px;  /* Even larger on mobile */
+        background: rgba(0, 0, 0, 0.15); /* Slightly darker background for better contrast */
+    }
+    
+    .social-links svg {
+        width: 24px;   /* Larger SVG on mobile */
+        height: 24px;  /* Larger SVG on mobile */
+    }
         }
 
         @media screen and (max-width: 576px) {
@@ -712,14 +749,7 @@
             }
         }
 
-        .footer-col a{
-    color: black;
-    text-decoration: none;
-}
-
-.footer-col a:hover{
-    color: #555; text-decoration: underline;
-}
+ 
 
     </style>
 </head>
@@ -732,7 +762,9 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>Kate<span class="dot">.</span></h1>
+                    <a href="index.html" style="text-decoration: none; color: inherit;">
+                        <h1>Kate<span class="dot">.</span></h1>
+                    </a>
                 </div>
                 
                 <div class="nav-links">

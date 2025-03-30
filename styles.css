@@ -1508,7 +1508,7 @@ header {
  .footer-cta h3 {
     font-size: 44px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 80px;
     line-height: 1.2;
     font-family: 'Poppins', sans-serif;
  }
@@ -1547,6 +1547,16 @@ header {
     flex-direction: column;
     margin-bottom: 40px;
  }
+
+ .footer-info a{
+    color: white;
+    text-decoration: none;
+
+}
+
+.footer-info a:hover{
+    color: #555; text-decoration: underline;
+}
  
  .footer-right h4 {
     font-size: 20px;

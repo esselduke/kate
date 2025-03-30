@@ -16,9 +16,9 @@
         }
 
         body {
-            color: #fff;
+            color: #333;
             line-height: 1.6;
-            background-color: #000;
+            background-color: #fff;
             position: relative;
             font-weight: 400;
             letter-spacing: 0.5px;
@@ -44,7 +44,7 @@
             font-size: 17px;
             line-height: 1.8;
             margin-bottom: 1em;
-            color: rgba(255, 255, 255, 0.9);
+            color: #555;
         }
 
         /* Background Image - Fixed */
@@ -54,7 +54,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/jaredd-craig-HH4WBGNyltc-unsplash.jpg') no-repeat center center/cover;
+            background-color: white;
+            /* background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/jaredd-craig-HH4WBGNyltc-unsplash.jpg') no-repeat center center/cover; */
             z-index: -1;
         }
 
@@ -67,7 +68,8 @@
             z-index: 100;
             padding: 20px 0;
             transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.9);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
@@ -86,6 +88,7 @@
             font-size: 28px;
             font-weight: 700;
             font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
         .logo .dot {
@@ -113,7 +116,7 @@
         }
 
         .nav-menu a {
-            color: #fff;
+            color: #333;
             text-decoration: none;
             font-size: 16px;
             font-weight: 500;
@@ -159,7 +162,7 @@
             position: absolute;
             height: 3px;
             width: 100%;
-            background: #fff;
+            background: #333;
             border-radius: 3px;
             opacity: 1;
             left: 0;
@@ -403,13 +406,15 @@
             left: -10px;
         }
 
-        .timeline-content {
+        .timeline-content, .skill-card {
             padding: 20px;
-            background: rgba(30, 30, 30, 0.6);
-            border: 1px solid rgba(255, 155, 179, 0.3);
-            border-radius: 8px;
-            position: relative;
-        }
+    background: #f8f8f8; /* Light gray background instead of dark */
+    border: 1px solid rgba(255, 155, 179, 0.3); /* Keep pink border */
+}
+
+.timeline-content h3, .skill-card h4 {
+    color: #333; /* Dark text for headings */
+}
 
         .timeline-date {
             font-weight: 600;
@@ -423,7 +428,7 @@
         }
 
         .timeline-subtitle {
-            color: rgba(255, 255, 255, 0.8);
+            color: #666;
             font-size: 16px;
         }
 
@@ -431,9 +436,9 @@
         .cta-section {
             text-align: center;
             padding: 80px 0;
-            background: rgba(15, 15, 15, 0.7);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f8f8f8; /* Light gray background */
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .cta-section h2 {
@@ -469,9 +474,10 @@
 
         /* Footer Styles */
         footer {
-            background-color: #000;
+            background-color: #f8f8f8;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             padding: 60px 0 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
         }
 
         .footer-content {
@@ -490,6 +496,7 @@
             margin-bottom: 20px;
             position: relative;
             padding-bottom: 10px;
+            color: #333;
         }
 
         .footer-col h3::after {
@@ -520,13 +527,13 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: rgba(0, 0, 0, 0.1);
+            color: #333;
             transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-            background: #ff9bb3;
+            background: #ff9bb3; 
             transform: translateY(-3px);
         }
 
@@ -539,7 +546,7 @@
         }
 
         .footer-menu a {
-            color: rgba(255, 255, 255, 0.8);
+            color: #555;
             text-decoration: none;
             transition: all 0.3s ease;
         }
@@ -552,8 +559,8 @@
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
+            color: #777; /* Medium gray for footer text */
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             font-size: 14px;
         }
 
@@ -561,6 +568,14 @@
             color: #ff9bb3;
             text-decoration: none;
         }
+
+        svg {
+            fill: #333; 
+}
+
+        .social-links a:hover svg {
+            fill: white; 
+}
 
         /* Responsive Styles */
         @media screen and (max-width: 992px) {
@@ -632,15 +647,17 @@
                 left: 0;
                 width: 100%;
                 height: calc(100vh - 80px);
-                background-color: rgba(0, 0, 0, 0.95);
+                /* background-color: rgba(0, 0, 0, 0.95); */
                 padding: 20px 0;
                 z-index: 1000;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
                 justify-content: center;
                 align-items: center;
                 transition: transform 0.3s ease, opacity 0.3s ease;
                 transform: translateX(100%);
                 opacity: 0;
+                background-color: white;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             }
             
             .nav-menu.active {
@@ -694,6 +711,16 @@
                 font-size: 18px;
             }
         }
+
+        .footer-col a{
+    color: black;
+    text-decoration: none;
+}
+
+.footer-col a:hover{
+    color: #555; text-decoration: underline;
+}
+
     </style>
 </head>
 <body>
@@ -897,7 +924,7 @@
                     <h3>Contact Info</h3>
                     <p>Toronto, CA</p>
                     <p>+1 437 871 3536</p>
-                    <p>tribesofleadership@outlook.com</p>
+                    <p><a href="mailto:tribesofleadership@outlook.com">tribesofleadership@outlook.com</a></p>
                 </div>
             </div>
             

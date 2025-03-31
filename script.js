@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     initPackageSelection();
     initFormValidation();
     setupFormScroll();
+    initFormSubmissions()
     
     // Visual elements and effects
     updateSvgColors();
@@ -210,13 +211,11 @@ function setupLogoNavigation() {
     }
 }
 
-/**
- * Package Selection System
- * Handles the selection of service packages
- */
 function initPackageSelection() {
     const packageBoxes = document.querySelectorAll('.package-box');
     if (packageBoxes.length === 0) return;
+    
+    console.log("Found package boxes:", packageBoxes.length); // Debug
     
     // Create hidden input for selected package
     const consultationForm = document.querySelector('.consultation-form form');
@@ -226,6 +225,7 @@ function initPackageSelection() {
         let hiddenInput = document.getElementById('selected-package');
         
         if (!hiddenInput) {
+            console.log("Creating hidden input field"); // Debug
             hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
             hiddenInput.id = 'selected-package';
@@ -235,8 +235,12 @@ function initPackageSelection() {
         }
         
         // Add click listeners to all package boxes
-        packageBoxes.forEach(box => {
+        packageBoxes.forEach((box, index) => {
+            console.log("Setting up click handler for box", index); // Debug
+            
             box.addEventListener('click', () => {
+                console.log("Package box clicked:", index); // Debug
+                
                 // Remove selected class from all boxes
                 packageBoxes.forEach(b => b.classList.remove('selected'));
                 
@@ -247,6 +251,8 @@ function initPackageSelection() {
                 const packageNumber = box.querySelector('.package-number')?.textContent || '';
                 const packageName = box.querySelector('.package-name')?.textContent || '';
                 hiddenInput.value = packageNumber + ': ' + packageName;
+                
+                console.log("Selected package:", hiddenInput.value); // Debug
             });
         });
     }
@@ -262,9 +268,9 @@ function initFormValidation() {
     
     forms.forEach(form => {
         // Remove any previous event listeners (prevents duplicate submissions)
-        const newForm = form.cloneNode(true);
-        form.parentNode.replaceChild(newForm, form);
-        form = newForm;
+        // const newForm = form.cloneNode(true);
+        // form.parentNode.replaceChild(newForm, form);
+        // form = newForm;
         
         // Form submission handler
         form.addEventListener('submit', function(e) {
@@ -1222,3 +1228,153 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, 500);
   });
+
+
+
+ /**
+ * Form Submission Handler
+ * Handles AJAX submissions for consultation and newsletter forms
+ */
+ function initFormSubmissions() {
+    // Get consultation form
+    const consultationForm = document.getElementById('consultation-form');
+    
+    if (consultationForm) {
+        consultationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate form before submission
+            if (validateForm(this)) {
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalBtnText = submitBtn.textContent;
+                
+                // Change button text to indicate loading
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                try {
+                    // Collect form data
+                    const formData = new FormData(this);
+                    const formDataObject = {};
+                    
+                    // Convert FormData to JSON
+                    formData.forEach((value, key) => {
+                        // Handle checkboxes (services) which might have multiple values
+                        if (key === 'service[]') {
+                            if (!formDataObject['service']) {
+                                formDataObject['service'] = [];
+                            }
+                            formDataObject['service'].push(value);
+                        } else {
+                            formDataObject[key] = value;
+                        }
+                    });
+                    
+                    console.log('Sending data:', formDataObject); // Debug log
+                    
+                    // Send form data to backend API
+                    const response = await fetch('http://localhost:3000/api/send-consultation', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formDataObject)
+                    });
+                    
+                    // Log the raw response for debugging
+                    console.log('Response status:', response.status);
+                    
+                    const result = await response.json();
+                    console.log('Response data:', result);
+                    
+                    if (result.success) {
+                        // Show success message
+                        showFormMessage(this, 'success', 'Thank you for your submission! We will be in touch shortly.');
+                        
+                        // Reset form after 3 seconds
+                        setTimeout(() => {
+                            this.reset();
+                            
+                            // Reset hidden fields if they exist
+                            const selectedPackage = document.getElementById('selected-package');
+                            if (selectedPackage) selectedPackage.value = '';
+                            
+                            // Remove selected class from package boxes
+                            const packageBoxes = document.querySelectorAll('.package-box');
+                            packageBoxes.forEach(box => box.classList.remove('selected'));
+                            
+                            // Remove any success/error messages
+                            const messageEl = this.querySelector('.form-message');
+                            if (messageEl) {
+                                messageEl.remove();
+                            }
+                            
+                            // Restore button text
+                            submitBtn.textContent = originalBtnText;
+                            submitBtn.disabled = false;
+                        }, 3000);
+                    } else {
+                        // Show error message
+                        showFormMessage(this, 'error', result.message || 'There was an error sending your message. Please try again.');
+                        
+                        // Restore button text
+                        submitBtn.textContent = originalBtnText;
+                        submitBtn.disabled = false;
+                    }
+                    
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    
+                    // Show error message
+                    showFormMessage(this, 'error', 'There was an error sending your message. Please check your connection or try again later.');
+                    
+                    // Restore button text
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+    }
+    
+    // Newsletter form (as backup to Mailchimp)
+    const newsletterForm = document.getElementById('mc-embedded-subscribe-form');
+    
+    if (newsletterForm) {
+        // Add backup submission handler to the newsletter form
+        // This will trigger only if the Mailchimp submission fails somehow
+        newsletterForm.addEventListener('submit', async function(e) {
+            // We don't prevent default here because we want Mailchimp's handler to work first
+            // This is just a backup
+            
+            try {
+                const email = this.querySelector('#mce-EMAIL').value;
+                
+                if (email) {
+                    // Send to our backend as well (without interfering with Mailchimp)
+                    fetch('http://localhost:3000/api/subscribe-newsletter', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ EMAIL: email })
+                    }).then(response => {
+                        console.log('Newsletter backup submission completed');
+                    }).catch(error => {
+                        console.error('Newsletter backup submission error:', error);
+                    });
+                }
+            } catch (error) {
+                console.error('Newsletter form handling error:', error);
+                // Don't show any error message, as Mailchimp will handle that
+            }
+        });
+    }
+}
+
+// Add this function call to your document ready function
+document.addEventListener("DOMContentLoaded", function() {
+    // ... your existing initialization code ...
+    
+    // Initialize form submissions
+    initFormSubmissions();
+});

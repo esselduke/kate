@@ -1,8 +1,7 @@
-// server.js - Main server file
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
 
 // Load environment variables
@@ -11,23 +10,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Set up SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // Middleware
 app.use(cors({
-    origin: '*', // For development only; restrict this in production
+    origin: '*', // For development only
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Configure nodemailer transporter
-const transporter = nodemailer.createTransport({
-    service: 'gmail',  // You can use other services like SendGrid, Mailgun, etc.
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD // This should be an app password, not your regular password
-    }
-});
 
 // API route for consultation form
 app.post('/api/send-consultation', async (req, res) => {
@@ -48,10 +41,10 @@ app.post('/api/send-consultation', async (req, res) => {
         // Format services array for email
         const services = Array.isArray(service) ? service.join(', ') : service;
 
-        // Email options for the admin notification
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // Send to the same email account (admin)
+        // Email to admin
+        const adminMsg = {
+            to: process.env.EMAIL_USER,
+            from: process.env.EMAIL_USER, // Must be verified in SendGrid
             subject: 'New Consultation Request',
             html: `
                 <h2>New Consultation Request</h2>
@@ -66,13 +59,13 @@ app.post('/api/send-consultation', async (req, res) => {
             `
         };
 
-        // Send email
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(adminMsg);
+        console.log('Admin email sent successfully');
 
-        // Also send a confirmation email to the client
-        const clientMailOptions = {
-            from: process.env.EMAIL_USER,
+        // Confirmation email to client
+        const clientMsg = {
             to: email,
+            from: process.env.EMAIL_USER, // Must be verified in SendGrid
             subject: 'Thank You for Your Interest',
             html: `
                 <h2>Thank You for Reaching Out!</h2>
@@ -89,7 +82,8 @@ app.post('/api/send-consultation', async (req, res) => {
             `
         };
 
-        await transporter.sendMail(clientMailOptions);
+        await sgMail.send(clientMsg);
+        console.log('Client email sent successfully');
 
         res.status(200).json({ success: true, message: 'Your consultation request has been sent successfully!' });
     } catch (error) {
@@ -98,15 +92,15 @@ app.post('/api/send-consultation', async (req, res) => {
     }
 });
 
-// API route for newsletter subscription (as a backup to Mailchimp)
+// API route for newsletter
 app.post('/api/subscribe-newsletter', async (req, res) => {
     try {
         const { EMAIL } = req.body;
 
-        // Email options
-        const mailOptions = {
+        // Admin notification
+        const adminMsg = {
+            to: process.env.EMAIL_USER,
             from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // Send to the same email account (admin)
             subject: 'New Newsletter Subscription',
             html: `
                 <h2>New Newsletter Subscription</h2>
@@ -114,13 +108,12 @@ app.post('/api/subscribe-newsletter', async (req, res) => {
             `
         };
 
-        // Send email
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(adminMsg);
 
-        // Also send a confirmation email to the subscriber
-        const clientMailOptions = {
-            from: process.env.EMAIL_USER,
+        // Confirmation to subscriber
+        const clientMsg = {
             to: EMAIL,
+            from: process.env.EMAIL_USER,
             subject: 'Welcome to My Newsletter!',
             html: `
                 <h2>Thank You for Subscribing!</h2>
@@ -130,7 +123,7 @@ app.post('/api/subscribe-newsletter', async (req, res) => {
             `
         };
 
-        await transporter.sendMail(clientMailOptions);
+        await sgMail.send(clientMsg);
 
         res.status(200).json({ success: true, message: 'You have been subscribed successfully!' });
     } catch (error) {

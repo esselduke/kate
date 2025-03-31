@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    
+    <meta name="description" content="Kate is a Social Media Strategist and LinkedIn Consultant helping professionals build authority, attract clients, and grow their brands.">
+    <!-- Added preconnect for performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 </head>
 <body>
     <!-- Fixed Background Image -->
     <div class="background-image"></div>
     
     <!-- Header -->
-    <header>
+    <header id="top">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
@@ -25,14 +27,14 @@
                 <div class="nav-links">
                     <ul class="nav-menu">
                         <li><a href="#about">About Me</a></li>
-                        <li><a href="#modules">Services</a></li>
+                        <li><a href="#services">Services</a></li>
                         <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#resources">Resources</a></li>
                         <!-- <li><a href="#team">Shop</a></li> -->
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                     
-                    <div class="mobile-menu">
+                    <div class="mobile-menu" aria-label="Toggle mobile menu">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -57,36 +59,36 @@
                     <h2>Ready to elevate your digital brand?</h2>
                     <p>Fill out this form to kick-start the process. Our team will reach out shortly.</p>
                     
-                    <form>
-                        <input type="text" class="form-input" placeholder="NAME" required>
-                        <input type="text" class="form-input" placeholder="COMPANY">
-                        <input type="email" class="form-input" placeholder="EMAIL ADDRESS" required>
-                        <input type="tel" class="form-input" placeholder="CONTACT NUMBER" required>
+                    <form id="consultation-form">
+                        <input type="text" class="form-input" name="name" placeholder="NAME" required>
+                        <input type="text" class="form-input" name="company" placeholder="COMPANY">
+                        <input type="email" class="form-input" name="email" placeholder="EMAIL ADDRESS" required>
+                        <input type="tel" class="form-input" name="phone" placeholder="CONTACT NUMBER" required>
                         
                         <div class="services-section">
                             <div class="services-title">SERVICES YOU'RE INTERESTED IN</div>
                             
                             <div class="checkbox-row">
                                 <div class="checkbox-container">
-                                    <input type="checkbox" id="social-media">
+                                    <input type="checkbox" id="social-media" name="service[]" value="Profile Optimization & Branding">
                                     <label for="social-media">Profile Optimization & Branding</label>
                                 </div>
                                 
                                 <div class="checkbox-container">
-                                    <input type="checkbox" id="influencer">
-                                    <label for="influencer">Account & Community Management</label>
+                                    <input type="checkbox" id="account-management" name="service[]" value="Account & Community Management">
+                                    <label for="account-management">Account & Community Management</label>
                                 </div>
                             </div>
                             
                             <div class="checkbox-row">
                                 <div class="checkbox-container">
-                                    <input type="checkbox" id="media-planning">
-                                    <label for="media-planning">Content Strategy & Development</label>
+                                    <input type="checkbox" id="content-strategy" name="service[]" value="Content Strategy & Development">
+                                    <label for="content-strategy">Content Strategy & Development</label>
                                 </div>
                                 
                                 <div class="checkbox-container">
-                                    <input type="checkbox" id="email">
-                                    <label for="email">Website Development & SEO Setup</label>
+                                    <input type="checkbox" id="website-development" name="service[]" value="Website Development & SEO Setup">
+                                    <label for="website-development">Website Development & SEO Setup</label>
                                 </div>
                             </div>
                         </div>
@@ -94,30 +96,32 @@
                         <div class="package-title">CHOOSE YOUR PACKAGE</div>
                         
                         <div class="package-boxes">
-                            <div class="package-box">
+                            <div class="package-box" data-value="LinkedIn Profile Management">
                                 <div class="package-number">1</div>
                                 <div class="package-name">LinkedIn Profile Management</div>
                             </div>
                             
-                            <div class="package-box">
+                            <div class="package-box" data-value="Content & Strategy Development">
                                 <div class="package-number">2</div>
                                 <div class="package-name">Content & Strategy Development</div>
                             </div>
                             
-                            <div class="package-box">
+                            <div class="package-box" data-value="Business & Marketing Strategy">
                                 <div class="package-number">3</div>
                                 <div class="package-name">Business & Marketing Strategy</div>
                             </div>
                         </div>
+                        <!-- Hidden input for selected package - will be populated by JS -->
+                        <input type="hidden" id="selected-package" name="selected-package" value="">
                         
-                        <select class="form-select" required>
+                        <select class="form-select" name="budget" required>
                             <option value="" disabled selected>SELECT MONTHLY BUDGET</option>
-                            <option value="50-200">$50 - $200</option>
-                            <option value="250-500">$250 - $500</option>
-                            <option value="500-1000">$500 - $1,000</option>
+                            <option value="$50 - $200">$50 - $200</option>
+                            <option value="$250 - $500">$250 - $500</option>
+                            <option value="$500 - $1,000">$500 - $1,000</option>
                         </select>
                         
-                        <textarea class="form-textarea" placeholder="Tell us about your goals" required></textarea>
+                        <textarea class="form-textarea" name="goals" placeholder="Tell us about your goals" required></textarea>
                         
                         <button type="submit" class="submit-btn">Submit</button>
                         
@@ -129,55 +133,53 @@
                 </div>
             </div>
         </div>
-        <div class="scroll-down">
+        <div class="scroll-down" aria-label="Scroll to content">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 5v14M19 12l-7 7-7-7"/>
             </svg>
         </div>
     </section>
     
-    <!-- Replace your current newsletter section with this code -->
-<section class="newsletter">
-    <div class="container">
-        <div class="newsletter-container">
-            <h2>Subscribe to My Mailing List</h2>
-            <p>Enter your email here *</p>
-            
-            <!-- Mailchimp Form using your original styles -->
-            <form action="https://katejoyceconnect.us10.list-manage.com/subscribe/post?u=716444656feef757dce4a7f14&amp;id=45c270b193&amp;f_id=000548e4f0" 
-                  method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" 
-                  class="newsletter-form validate" target="_blank">
+    <!-- Newsletter Section with Mailchimp integration -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-container">
+                <h2>Subscribe to My Mailing List</h2>
+                <p>Enter your email here *</p>
                 
-                <div class="form-group">
-                    <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Email Address" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="subscribe" checked>
-                        <label for="subscribe">Yes, subscribe me to your newsletter.</label>
+                <!-- Mailchimp Form -->
+                <form action="https://katejoyceconnect.us10.list-manage.com/subscribe/post?u=716444656feef757dce4a7f14&amp;id=45c270b193&amp;f_id=000548e4f0" 
+                      method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" 
+                      class="newsletter-form validate" target="_blank" novalidate>
+                    
+                    <div class="form-group">
+                        <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Email Address" required>
                     </div>
-                </div>
+                    
+                    <div class="form-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="subscribe" name="subscribe" checked>
+                            <label for="subscribe">Yes, subscribe me to your newsletter.</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Required Mailchimp bot protection field -->
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                        <input type="text" name="b_716444656feef757dce4a7f14_45c270b193" tabindex="-1" value="">
+                    </div>
+                    
+                    <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="subscribe-btn">Subscribe</button>
+                    
+                    <!-- Response elements -->
+                    <div id="mce-responses" class="clear foot">
+                        <div class="response" id="mce-error-response" style="display:none"></div>
+                        <div class="response" id="mce-success-response" style="display:none"></div>
+                    </div>
+                </form>
                 
-                <!-- Required Mailchimp bot protection field - don't remove this -->
-                <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                    <input type="text" name="b_716444656feef757dce4a7f14_45c270b193" tabindex="-1" value="">
-                </div>
-                
-                <!-- Use your original button but with the Mailchimp id -->
-                <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="subscribe-btn">Subscribe</button>
-                
-                <!-- Hidden response elements -->
-                <div id="mce-responses" class="clear foot" style="display:none;">
-                    <div class="response" id="mce-error-response" style="display:none"></div>
-                    <div class="response" id="mce-success-response" style="display:none"></div>
-                </div>
-            </form>
-            
-            <!-- Include the Mailchimp Javascript but hide it at the bottom of the page -->
-            <div style="height:0; overflow:hidden;">
-                <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
-                <script type="text/javascript">
+                <!-- Mailchimp Javascript - deferred loading -->
+                <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js" defer></script>
+                <script type="text/javascript" defer>
                 (function($) {
                     window.fnames = new Array(); 
                     window.ftypes = new Array();
@@ -188,423 +190,433 @@
                 </script>
             </div>
         </div>
-    </div>
-</section>
+    </section>
     
     <!-- Why Work With Me Section -->
-<section class="enroll-section">
-    <div class="container">
-        <div class="features-grid">
-            <!-- Title in top-left position -->
-            <div class="feature-title-box">
-                <h2 id="color-black" class="section-title">Why Work With Me?</h2>
-            </div>
-            
-            <!-- Feature in top-right -->
-            <div class="feature-card">
-                <div class="decorative-feature-icon top-right">
-                    <div class="feature-icon-box"></div>
-                    <div class="feature-icon-color"></div>
+    <section class="enroll-section" id="about">
+        <div class="container">
+            <div class="features-grid">
+                <!-- Title in top-left position -->
+                <div class="feature-title-box">
+                    <h2 id="color-black" class="section-title">Why Work With Me?</h2>
                 </div>
-                <h3 class="feature-title">Strategic Planning & Client Attraction</h3>
-                <p class="feature-description">Your brand has something unique to offer, but without visibility, it gets lost. I create targeted LinkedIn and social media strategies to position your brand, attract ideal clients, and drive engagement. Your message will reach the right people with precision and clarity.</p>
-            </div>
-            
-            <!-- Feature in bottom-left -->
-            <div class="feature-card">
-                <div class="decorative-feature-icon bottom-left">
-                    <div class="feature-icon-box"></div>
-                    <div class="feature-icon-color"></div>
+                
+                <!-- Feature in top-right -->
+                <div class="feature-card">
+                    <div class="decorative-feature-icon top-right">
+                        <div class="feature-icon-box"></div>
+                        <div class="feature-icon-color"></div>
+                    </div>
+                    <h3 class="feature-title">Strategic Planning & Client Attraction</h3>
+                    <p class="feature-description">Your brand has something unique to offer, but without visibility, it gets lost. I create targeted LinkedIn and social media strategies to position your brand, attract ideal clients, and drive engagement. Your message will reach the right people with precision and clarity.</p>
                 </div>
-                <h3 class="feature-title">Industry-Leading Digital Presence</h3>
-                <p class="feature-description">While I focus on your audience reach, I work with top professionals in web design, branding, and identity creation. This ensures that when people find you, they see a polished and compelling brand that stands out.</p>
-            </div>
-            
-            <!-- Feature in bottom-right -->
-            <div class="feature-card">
-                <div class="decorative-feature-icon top-left">
-                    <div class="feature-icon-box"></div>
-                    <div class="feature-icon-color"></div>
+                
+                <!-- Feature in bottom-left -->
+                <div class="feature-card">
+                    <div class="decorative-feature-icon bottom-left">
+                        <div class="feature-icon-box"></div>
+                        <div class="feature-icon-color"></div>
+                    </div>
+                    <h3 class="feature-title">Industry-Leading Digital Presence</h3>
+                    <p class="feature-description">While I focus on your audience reach, I work with top professionals in web design, branding, and identity creation. This ensures that when people find you, they see a polished and compelling brand that stands out.</p>
                 </div>
-                <h3 class="feature-title">Profile Optimization & Thought Leadership</h3>
-                <p class="feature-description">We refine your LinkedIn presence and digital footprint to position you as an authority. From keyword-rich bios to high-impact content, we build a brand that inspires trust and credibility.</p>
+                
+                <!-- Feature in bottom-right -->
+                <div class="feature-card">
+                    <div class="decorative-feature-icon top-left">
+                        <div class="feature-icon-box"></div>
+                        <div class="feature-icon-color"></div>
+                    </div>
+                    <h3 class="feature-title">Profile Optimization & Thought Leadership</h3>
+                    <p class="feature-description">We refine your LinkedIn presence and digital footprint to position you as an authority. From keyword-rich bios to high-impact content, we build a brand that inspires trust and credibility.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- About Section -->
-<section class="about-section">
-    <div class="container">
-        <div class="about-container">
-            <div class="about-text">
-                <h1>About Kate<br><span class="role-title">Social Media Strategist<br>& LinkedIn Consultant</span></h1>
-                <p>I help professionals, executives, and founders amplify their online presence.</p>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-text">
+                    <h1>About Kate<br><span class="role-title">Social Media Strategist<br>& LinkedIn Consultant</span></h1>
+                    <p>I help professionals, executives, and founders amplify their online presence.</p>
+                </div>
+                
+                <div class="about-content">
+                    <div class="horizontal-rule"></div>
+                    <p>I specialize in cutting through digital clutter—whether it's refining personal brands, optimizing LinkedIn profiles, or developing content strategies that attract the right clients.</p>
+                    <p>If you're ready to stop blending in and start standing out, let's make it happen.</p>
+                    <a href="about.html" class="read-more-btn">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-spotlight">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">My Services</h2>
+                <div class="accent-line"></div>
+                <p class="section-subtitle">Tailored solutions to grow your online authority and influence</p>
             </div>
             
-            <div class="about-content">
-                <div class="horizontal-rule"></div>
-                <p>I specialize in cutting through digital clutter—whether it's refining personal brands, optimizing LinkedIn profiles, or developing content strategies that attract the right clients.</p>
-                <p>If you're ready to stop blending in and start standing out, let's make it happen.</p>
-                <a href="about.html" class="read-more-btn">Read More</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Services Section -->
-<section id="services" class="services-spotlight">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">My Services</h2>
-            <div class="accent-line"></div>
-            <p class="section-subtitle">Tailored solutions to grow your online authority and influence</p>
-        </div>
-        
-        <div class="services-grid">
-            <!-- Service Card 1 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                </div>
-                <h3 class="service-title">Profile Optimization & Branding</h3>
-                <p class="service-description">Craft a strong personal brand that highlights your unique expertise and value proposition.</p>
-                <div class="service-features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Profile Enhancement</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Strategic Storytelling</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Visual Identity</span>
-                    </div>
-                </div>
-                <a href="services.html" class="service-btn">Learn More</a>
-            </div>
-            
-            <!-- Service Card 2 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                </div>
-                <h3 class="service-title">Content Strategy & Development</h3>
-                <p class="service-description">Engage your audience with high-value content that positions you as a thought leader in your field.</p>
-                <div class="service-features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Thought Leadership Content</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Audience Engagement Analysis</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Content Planning & Scheduling</span>
-                    </div>
-                </div>
-                <a href="services.html" class="service-btn">Learn More</a>
-            </div>
-            
-            <!-- Service Card 3 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                </div>
-                <h3 class="service-title">Account Growth & Engagement</h3>
-                <p class="service-description">Expand your network and influence with strategic engagement techniques that drive meaningful connections.</p>
-                <div class="service-features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Audience Targeting</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Engagement Strategies</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✓</span>
-                        <span class="feature-text">Community Building</span>
-                    </div>
-                </div>
-                <a href="services.html" class="service-btn">Learn More</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- Testimonials Section -->
-<section id="testimonials" class="testimonials">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">What My Clients Say</h2>
-            <div class="accent-line"></div>
-        </div>
-        
-        <div class="testimonial-slider">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <div class="quote-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
-                            <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+            <div class="services-grid">
+                <!-- Service Card 1 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
                     </div>
-                    <p>"This service completely transformed my online presence. I went from being invisible to having industry leaders reach out to ME!"</p>
-                    <div class="client-info">
-                        <div class="client-image">
-                            <img class="client-image-placeholder" src="images/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg" alt="">
+                    <h3 class="service-title">Profile Optimization & Branding</h3>
+                    <p class="service-description">Craft a strong personal brand that highlights your unique expertise and value proposition.</p>
+                    <div class="service-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Profile Enhancement</span>
                         </div>
-                        <div class="client-details">
-                            <h4>Michael Chen</h4>
-                            <p>Startup Founder</p>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Strategic Storytelling</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Visual Identity</span>
                         </div>
                     </div>
+                    <a href="services.html" class="service-btn">Learn More</a>
                 </div>
-            </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <div class="quote-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
-                            <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
                         </svg>
                     </div>
-                    <p>"Before working together, I struggled to stand out. Now, my profile speaks for itself, and I’m getting opportunities I never even imagined!"</p>
-                    <div class="client-info">
-                        <div class="client-image">
-                            <img class="client-image-placeholder" src="images/ian-dooley-d1UPkiFd04A-unsplash.jpg" alt="">
+                    <h3 class="service-title">Content Strategy & Development</h3>
+                    <p class="service-description">Engage your audience with high-value content that positions you as a thought leader in your field.</p>
+                    <div class="service-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Thought Leadership Content</span>
                         </div>
-                        <div class="client-details">
-                            <h4>Sarah Johnson</h4>
-                            <p>Marketing Director, TechFirm</p>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Audience Engagement Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Content Planning & Scheduling</span>
                         </div>
                     </div>
+                    <a href="services.html" class="service-btn">Learn More</a>
                 </div>
-            </div>
-            
-            
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <div class="quote-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
-                            <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
                     </div>
-                    <p>"I never realized how much potential my profile had until we optimized it. Now, I’m landing dream opportunities effortlessly!"</p>
-                    <div class="client-info">
-                        <div class="client-image">
-                            <img class="client-image-placeholder" src="images/michael-dam-mEZ3PoFGs_k-unsplash.jpg" alt=""> 
+                    <h3 class="service-title">Account Growth & Engagement</h3>
+                    <p class="service-description">Expand your network and influence with strategic engagement techniques that drive meaningful connections.</p>
+                    <div class="service-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Audience Targeting</span>
                         </div>
-                        <div class="client-details">
-                            <h4>Amanda Rodriguez</h4>
-                            <p>COO, Growth Ventures</p>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Engagement Strategies</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span class="feature-text">Community Building</span>
                         </div>
                     </div>
+                    <a href="services.html" class="service-btn">Learn More</a>
                 </div>
-            </div>
-            
-            <!-- Testimonial Navigation -->
-            <div class="testimonial-nav">
-                <button class="nav-btn prev-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                </button>
-                <div class="nav-indicators">
-                    <span class="indicator active"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                </div>
-                <button class="nav-btn next-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Resource Section -->
-<section id="resources" class="resources-section">
-    <div class="container">
-        <div class="resources-header">
-            <div class="title-container">
-                <h2>Resources</h2>
-                <p>Expert insights and tools to help you grow your brand.</p>
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What My Clients Say</h2>
+                <div class="accent-line"></div>
             </div>
-            <div class="view-more-container">
-                <a href="https://shorturl.at/iHzVC" class="view-more-btn">View More</a>
+            
+            <div class="testimonial-slider">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                                <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                            </svg>
+                        </div>
+                        <p>"This service completely transformed my online presence. I went from being invisible to having industry leaders reach out to ME!"</p>
+                        <div class="client-info">
+                            <div class="client-image">
+                                <img class="client-image-placeholder" src="images/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg" alt="Photo of Michael Chen">
+                            </div>
+                            <div class="client-details">
+                                <h4>Michael Chen</h4>
+                                <p>Startup Founder</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                                <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                            </svg>
+                        </div>
+                        <p>"Before working together, I struggled to stand out. Now, my profile speaks for itself, and I'm getting opportunities I never even imagined!"</p>
+                        <div class="client-info">
+                            <div class="client-image">
+                                <img class="client-image-placeholder" src="images/ian-dooley-d1UPkiFd04A-unsplash.jpg" alt="Photo of Sarah Johnson">
+                            </div>
+                            <div class="client-details">
+                                <h4>Sarah Johnson</h4>
+                                <p>Marketing Director, TechFirm</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8c52ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                                <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4v6zm0 0v6h-4"></path>
+                            </svg>
+                        </div>
+                        <p>"I never realized how much potential my profile had until we optimized it. Now, I'm landing dream opportunities effortlessly!"</p>
+                        <div class="client-info">
+                            <div class="client-image">
+                                <img class="client-image-placeholder" src="images/michael-dam-mEZ3PoFGs_k-unsplash.jpg" alt="Photo of Amanda Rodriguez"> 
+                            </div>
+                            <div class="client-details">
+                                <h4>Amanda Rodriguez</h4>
+                                <p>COO, Growth Ventures</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial Navigation -->
+                <div class="testimonial-nav">
+                    <button class="nav-btn prev-btn" aria-label="Previous testimonial">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="nav-indicators">
+                        <span class="indicator active" aria-label="Testimonial 1"></span>
+                        <span class="indicator" aria-label="Testimonial 2"></span>
+                        <span class="indicator" aria-label="Testimonial 3"></span>
+                    </div>
+                    <button class="nav-btn next-btn" aria-label="Next testimonial">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div class="resources-grid">
-            <!-- Resource Card 1 -->
-            <div class="resource-card" data-url="https://shorturl.at/iHzVC">
-                <div class="resource-image">
-                    <img src="images/jess-bailey-q10VITrVYUM-unsplash.jpg" alt="Man working at computer">
+    </section>
+
+    <!-- Resource Section -->
+    <section id="resources" class="resources-section">
+        <div class="container">
+            <div class="resources-header">
+                <div class="title-container">
+                    <h2>Resources</h2>
+                    <p>Expert insights and tools to help you grow your brand.</p>
                 </div>
-                <div class="resource-content">
-                    <div class="content-wrapper">
-                        <div class="resource-date" data-date="2025-03-16">March 16, 2025 • 1 min read</div>
-                        <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
-                            <h3>The Cluster of Work: Navigating Your Brand and Position.</h3>
-                            <p>I get it—sometimes we think we need to do everything ourselves. But here's the truth: you don’t have to have all the answers. Whether it's branding, strategy, or tech, seeking assistance from others—whether a coach, a strategist, or a mentor—can help you get the clarity you need to move forward.....</p>
+                <div class="view-more-container">
+                    <a href="https://shorturl.at/iHzVC" class="view-more-btn">View More</a>
+                </div>
+            </div>
+            
+            <div class="resources-grid">
+                <!-- Resource Card 1 -->
+                <div class="resource-card" data-url="https://shorturl.at/iHzVC">
+                    <div class="resource-image">
+                        <img src="images/jess-bailey-q10VITrVYUM-unsplash.jpg" alt="Man working at computer">
+                    </div>
+                    <div class="resource-content">
+                        <div class="content-wrapper">
+                            <div class="resource-date" data-date="2025-03-16">March 16, 2025 • 1 min read</div>
+                            <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
+                                <h3>The Cluster of Work: Navigating Your Brand and Position</h3>
+                                <p>I get it—sometimes we think we need to do everything ourselves. But here's the truth: you don't have to have all the answers. Whether it's branding, strategy, or tech, seeking assistance from others—whether a coach, a strategist, or a mentor—can help you get the clarity you need to move forward...</p>
+                            </a>
+                        </div>
+                        <div class="resource-stats">
+                            <div class="stat-group">
+                                <span class="views" data-count="0">
+                                    <i class="fas fa-eye"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                                <span class="comments" data-count="0">
+                                    <i class="fas fa-comment"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                            </div>
+                            <div class="likes">
+                                <button class="like-button" data-count="0" aria-label="Like this article">
+                                    <i class="fas fa-heart"></i> 
+                                    <span class="count">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resource Card 2 -->
+                <div class="resource-card" data-url="https://shorturl.at/iHzVC">
+                    <div class="resource-image">
+                        <img src="images/alexander-grey-tn57JI3CewI-unsplash.jpg" alt="Branding materials">
+                    </div>
+                    <div class="resource-content">
+                        <div class="content-wrapper">
+                            <div class="resource-date" data-date="2025-03-10">March 10, 2025 • 1 min read</div>
+                            <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
+                                <h3>The Hidden Formula to Growing Your Network & Driving Meaningful Engagement</h3>
+                                <p>Alright, let's talk about something you probably hear all the time in professional circles: networking. But here's the kicker—it's not just about collecting business cards or following a bunch of accounts on LinkedIn. We're diving into the real secret sauce that can help you stand out and build the connections that truly matter...</p>
+                            </a>
+                        </div>
+                        <div class="resource-stats">
+                            <div class="stat-group">
+                                <span class="views" data-count="0">
+                                    <i class="fas fa-eye"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                                <span class="comments" data-count="0">
+                                    <i class="fas fa-comment"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                            </div>
+                            <div class="likes">
+                                <button class="like-button" data-count="0" aria-label="Like this article">
+                                    <i class="fas fa-heart"></i> 
+                                    <span class="count">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resource Card 3 -->
+                <div class="resource-card" data-url="https://shorturl.at/iHzVC">
+                    <div class="resource-image">
+                        <img src="images/edho-pratama-T6fDN60bMWY-unsplash.jpg" alt="People reviewing charts">
+                    </div>
+                    <div class="resource-content">
+                        <div class="content-wrapper">
+                            <div class="resource-date" data-date="2025-03-01">March 1, 2025 • 1 min read</div>
+                            <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
+                                <h3>The Truth About Personal Branding: Why You Need to Build Yours Now!</h3>
+                                <p>Let me ask you something: Who are you online? Is it the same version of you at work? The polished, professional you? Or are you the hilarious, unfiltered gamer who shares every thought?
+                                    The way you choose to show up online is how the world will recognize you...</p>
+                            </a>
+                        </div>
+                        <div class="resource-stats">
+                            <div class="stat-group">
+                                <span class="views" data-count="0">
+                                    <i class="fas fa-eye"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                                <span class="comments" data-count="0">
+                                    <i class="fas fa-comment"></i> 
+                                    <span class="count">0</span>
+                                </span>
+                            </div>
+                            <div class="likes">
+                                <button class="like-button" data-count="3" aria-label="Like this article">
+                                    <i class="fas fa-heart"></i> 
+                                    <span class="count">3</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-section" id="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-left">
+                    <div class="footer-brand">
+                        <h2>Kate<span class="brand-dot">.</span></h2>
+                        <p>Social Media Strategist & LinkedIn Consultant</p>
+                    </div>
+                    <div class="footer-cta">
+                        <h3>Transform Your Digital Presence</h3>
+                        <!-- <a href="#" class="enroll-btn">Get Started</a> -->
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-info" id="contact">
+                        <h4>Info</h4>
+                        <p>+1 437 871 3536</p>
+                        <p>Click to Email: <a href="mailto:hello@katejoyceconnect.com">hello@katejoyceconnect.com</a></p>
+                    </div>
+                    <div class="footer-address">
+                        <h4>Address</h4>
+                        <p>Toronto, CA</p>
+                    </div>
+                    <div class="footer-social">
+                        <h4>Follow</h4>
+                        <a href="https://www.linkedin.com/in/kate-joycen" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+                        <a href="https://www.facebook.com/profile.php?id=61570121360094" class="social-link" target="_blank" rel="noopener">Facebook</a>
+                        <a href="https://www.instagram.com/mind_mastery00/" class="social-link" target="_blank" rel="noopener">Instagram</a>
+                    </div>
+                    <div class="back-to-top">
+                        <a href="#top" class="top-btn" aria-label="Back to top">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 19V5M5 12l7-7 7 7"/>
+                            </svg>
                         </a>
                     </div>
-                    <div class="resource-stats">
-                        <div class="stat-group">
-                            <span class="views" data-count="0">
-                                <i class="fas fa-eye"></i> 
-                                <span class="count">0</span>
-                            </span>
-                            <span class="comments" data-count="0">
-                                <i class="fas fa-comment"></i> 
-                                <span class="count">0</span>
-                            </span>
-                        </div>
-                        <div class="likes">
-                            <button class="like-button" data-count="0">
-                                <i class="fas fa-heart"></i> 
-                                <span class="count">0</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
-            
-            <!-- Resource Card 2 -->
-            <div class="resource-card" data-url="https://shorturl.at/iHzVC">
-                <div class="resource-image">
-                    <img src="images/alexander-grey-tn57JI3CewI-unsplash.jpg" alt="Branding materials">
-                </div>
-                <div class="resource-content">
-                    <div class="content-wrapper">
-                        <div class="resource-date" data-date="2025-03-16">March 16, 2025 • 1 min read</div>
-                        <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
-                            <h3>The Hidden Formula to Growing Your Network & Driving Meaningful Engagement.</h3>
-                            <p>Alright, let’s talk about something you probably hear all the time in professional circles: networking. But here's the kicker—it's not just about collecting business cards or following a bunch of accounts on LinkedIn. Nope. We're diving into the real secret sauce that can help you stand out and build the connections that truly matter.....</p>
-                        </a>
-                    </div>
-                    <div class="resource-stats">
-                        <div class="stat-group">
-                            <span class="views" data-count="0">
-                                <i class="fas fa-eye"></i> 
-                                <span class="count">0</span>
-                            </span>
-                            <span class="comments" data-count="0">
-                                <i class="fas fa-comment"></i> 
-                                <span class="count">0</span>
-                            </span>
-                        </div>
-                        <div class="likes">
-                            <button class="like-button" data-count="0">
-                                <i class="fas fa-heart"></i> 
-                                <span class="count">0</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Resource Card 3 -->
-            <div class="resource-card" data-url="https://shorturl.at/iHzVC">
-                <div class="resource-image">
-                    <img src="images/edho-pratama-T6fDN60bMWY-unsplash.jpg" alt="People reviewing charts">
-                </div>
-                <div class="resource-content">
-                    <div class="content-wrapper">
-                        <div class="resource-date" data-date="2025-03-16">March 16, 2025 • 1 min read</div>
-                        <a href="https://shorturl.at/iHzVC" target="_blank" class="card-content-link">
-                            <h3>The Truth About Personal Branding Why You Need to Build Yours Now!</h3>
-                            <p>Let ask u something: Who are you online? Is it the same version of you at work? The polished, professional you? Or are you the hilarious, unfiltered gamer who shares every thought?
-                                The way you choose to show up online is how the world will recognize you.....</p>
-                        </a>
-                    </div>
-                    <div class="resource-stats">
-                        <div class="stat-group">
-                            <span class="views" data-count="0"><i class="fas fa-eye"></i> <span class="count">0</span></span>
-                            <span class="comments" data-count="0"><i class="fas fa-comment"></i> <span class="count">0</span></span>
-                        </div>
-                        <div class="likes">
-                            <button class="like-button" data-count="3"><i class="fas fa-heart"></i> <span class="count">3</span></button>
-                        </div>
-                    </div>
-                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 by Kate. Social Media Strategist & LinkedIn Consultant. Powered and secured by <a href="#" class="wix-link">Duke</a></p>
             </div>
         </div>
-    </div>
-</section>
+    </footer>
 
-<!-- FOOTER -->
-<footer class="footer-section" id="footer">
-    <div class="footer-container">
-        <div class="footer-top">
-            <div class="footer-left">
-                <div class="footer-brand">
-                    <h2>Kate<span class="brand-dot">.</span></h2>
-                    <p>Social Media Strategist & LinkedIn Consultant</p>
-                </div>
-                <div class="footer-cta">
-                    <h3>Transform Your Digital Presence</h3>
-                    <!-- <a href="#" class="enroll-btn">Get Started</a> -->
-                </div>
-            </div>
-            <div class="footer-right">
-                <div class="footer-info">
-                    <h4>Info</h4>
-                    <p>+1 437 871 3536</p>
-                    <p>Click to Email: <a href="mailto:hello@katejoyceconnect.com">hello@katejoyceconnect.com</a></p>
-                </div>
-                <div class="footer-address">
-                    <h4>Address</h4>
-                    <p>Toronto, CA</p>
-                </div>
-                <div class="footer-social">
-                    <h4>Follow</h4>
-                    <a href="https://www.linkedin.com/in/kate-joycen?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" class="social-link">LinkedIn</a>
-                    <a href="https://www.facebook.com/profile.php?id=61570121360094&sk=about" class="social-link">Facebook</a>
-                    <a href="https://www.instagram.com/mind_mastery00/" class="social-link">Instagram</a>
-                </div>
-                <div class="back-to-top">
-                    <a href="#top" class="top-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 19V5M5 12l7-7 7 7"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 by Kate. Social Media Strategist & LinkedIn Consultant. Powered and secured by <a href="#" class="wix-link">Duke</a></p>
-        </div>
-    </div>
-</footer>
-
-<script src="script.js"></script>
+    <!-- Include jQuery for Mailchimp integration (with defer to improve loading) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" defer></script>
+    
+    <!-- Main JavaScript file -->
+    <script src="script.js" defer></script>
 </body>
 </html>

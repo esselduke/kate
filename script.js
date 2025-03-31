@@ -1,89 +1,271 @@
+
+
 // Main Document Ready Function
 document.addEventListener("DOMContentLoaded", function() {
     console.log("DOM fully loaded");
     
-    // Initialize existing functionality
-    initPackageSelection();
-    setupBaseNavigation();
-    setupMobileMenu();
-    initAnimations();
-    initIntersectionObservers();
-    initTestimonialSlider();
-    setupFormScroll();
-    setupServiceCardEffects();
-    
-    // Add essential new functionality
-    initFormValidation();
+    // Core UI initialization
     initStickyHeader();
+    setupNavigation();
+    initAnimations();
+    
+    // Form handling
+    initPackageSelection();
+    initFormValidation();
+    setupFormScroll();
+    
+    // Visual elements and effects
     updateSvgColors();
+    setupServiceCardEffects();
+    initParallaxEffect();
     
-    // Initialize resource card functionality
+    // Content components
+    initTestimonialSlider();
     initResourceCards();
+    
+    // Initialize animations after a small delay
+    setTimeout(() => {
+        initIntersectionObservers();
+    }, 100);
 });
 
-// Header Background on Scroll
-window.addEventListener('scroll', () => {
+/**
+ * Sticky Header Implementation
+ * Creates a transparent to solid background transition on scroll
+ */
+function initStickyHeader() {
     const header = document.querySelector('header');
-    if (window.scrollY > 50) {
-        header.style.background = 'rgba(0, 0, 0, 0.9)';
-    } else {
-        header.style.background = 'transparent';
-    }
-});
+    if (!header) return;
 
-// Function to update SVG stroke colors from purple to pink
-function updateSvgColors() {
-    // Update the service icons
-    const serviceIcons = document.querySelectorAll('.service-card svg');
-    serviceIcons.forEach(svg => {
-        // Change the stroke color from #8c52ff to #ff9bb3
-        svg.setAttribute('stroke', '#ff9bb3');
+    // Apply initial state
+    updateHeaderState(window.scrollY > 50);
+    
+    // Throttled scroll handler
+    let ticking = false;
+    
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                updateHeaderState(window.scrollY > 50);
+                ticking = false;
+            });
+            ticking = true;
+        }
     });
     
-    // Update the quote icons
-    const quoteIcons = document.querySelectorAll('.quote-icon svg');
-    quoteIcons.forEach(svg => {
-        svg.setAttribute('stroke', '#ff9bb3');
-    });
+    // Helper function to update header styles
+    function updateHeaderState(isScrolled) {
+        if (isScrolled) {
+            header.style.background = 'rgba(0, 0, 0, 0.9)';
+            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            header.style.backdropFilter = 'blur(10px)';
+            header.style.webkitBackdropFilter = 'blur(10px)';
+        } else {
+            header.style.background = 'transparent';
+            header.style.boxShadow = 'none';
+            header.style.backdropFilter = 'none';
+            header.style.webkitBackdropFilter = 'none';
+        }
+    }
 }
 
-// Package Selection with form value storage
-function initPackageSelection() {
-    const packageBoxes = document.querySelectorAll('.package-box');
-    // Create hidden input for selected package
-    const consultationForm = document.querySelector('.consultation-form form');
+/**
+ * Navigation System
+ * Combines mobile menu, smooth scrolling, and logo click behavior
+ */
+function setupNavigation() {
+    setupMobileMenu();
+    setupSmoothScrolling();
+    setupLogoNavigation();
+}
+
+/**
+ * Mobile Menu Handler
+ * Manages the mobile menu toggle and interaction
+ */
+function setupMobileMenu() {
+    const mobileMenuToggle = document.querySelector('.mobile-menu');
+    const navMenu = document.querySelector('.nav-menu');
+    const body = document.body;
     
-    if (consultationForm) {
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.id = 'selected-package';
-        hiddenInput.name = 'selected-package';
-        hiddenInput.value = '';
-        consultationForm.appendChild(hiddenInput);
+    if (!mobileMenuToggle || !navMenu) return;
+    
+    // Toggle menu on hamburger click
+    mobileMenuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMobileMenu();
+    });
+    
+    // Close menu when a nav link is clicked
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (navMenu.classList.contains('active')) {
+                toggleMobileMenu(false);
+            }
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (navMenu.classList.contains('active') && 
+            !navMenu.contains(e.target) && 
+            !mobileMenuToggle.contains(e.target)) {
+            toggleMobileMenu(false);
+        }
+    });
+    
+    // Set index variables for staggered animations
+    navLinks.forEach((item, index) => {
+        item.style.setProperty('--index', index);
+    });
+    
+    // Helper function to toggle menu state
+    function toggleMobileMenu(show = null) {
+        if (show === null) {
+            // Toggle current state
+            navMenu.classList.toggle('active');
+            body.classList.toggle('menu-active');
+            mobileMenuToggle.classList.toggle('active');
+        } else if (show) {
+            // Force show
+            navMenu.classList.add('active');
+            body.classList.add('menu-active');
+            mobileMenuToggle.classList.add('active');
+        } else {
+            // Force hide
+            navMenu.classList.remove('active');
+            body.classList.remove('menu-active');
+            mobileMenuToggle.classList.remove('active');
+        }
     }
+}
+
+/**
+ * Smooth Scrolling Navigation
+ * Handles smooth scrolling to different sections
+ */
+function setupSmoothScrolling() {
+    // Navigation links smooth scroll
+    const navLinks = document.querySelectorAll('.nav-menu a, .scroll-down, .top-btn');
     
-    packageBoxes.forEach(box => {
-        box.addEventListener('click', () => {
-            // Remove selected class from all boxes
-            packageBoxes.forEach(b => b.classList.remove('selected'));
-            // Add selected class to clicked box
-            box.classList.add('selected');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
             
-            // Store the selected package value in hidden input
-            if (consultationForm) {
-                const packageNumber = box.querySelector('.package-number').textContent;
-                const packageName = box.querySelector('.package-name').textContent;
-                document.getElementById('selected-package').value = packageNumber + ': ' + packageName;
+            let targetSection;
+            
+            if (this.classList.contains('top-btn')) {
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            } else if (this.classList.contains('scroll-down')) {
+                // Scroll to about section
+                targetSection = document.querySelector('.about-section');
+            } else {
+                // Handle navigation links
+                const targetId = this.getAttribute('href');
+                
+                switch(targetId) {
+                    case '#about':
+                        targetSection = document.querySelector('.about-section');
+                        break;
+                    case '#modules':
+                    case '#services':
+                        targetSection = document.querySelector('.services-spotlight');
+                        break;
+                    case '#resources':
+                        targetSection = document.querySelector('.resources-section');
+                        break;
+                    case '#testimonials':
+                        targetSection = document.querySelector('.testimonials');
+                        break;
+                    case '#contact':
+                        targetSection = document.querySelector('.footer-section');
+                        break;
+                    default:
+                        targetSection = document.querySelector(targetId);
+                }
+            }
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
 }
 
-// Form Validation
+/**
+ * Logo Click Navigation
+ * Makes the logo clickable to scroll to top
+ */
+function setupLogoNavigation() {
+    const logo = document.querySelector('.logo');
+    
+    if (logo) {
+        logo.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        logo.style.cursor = 'pointer';
+    }
+}
+
+/**
+ * Package Selection System
+ * Handles the selection of service packages
+ */
+function initPackageSelection() {
+    const packageBoxes = document.querySelectorAll('.package-box');
+    if (packageBoxes.length === 0) return;
+    
+    // Create hidden input for selected package
+    const consultationForm = document.querySelector('.consultation-form form');
+    
+    if (consultationForm) {
+        // Check if hidden input already exists
+        let hiddenInput = document.getElementById('selected-package');
+        
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.id = 'selected-package';
+            hiddenInput.name = 'selected-package';
+            hiddenInput.value = '';
+            consultationForm.appendChild(hiddenInput);
+        }
+        
+        // Add click listeners to all package boxes
+        packageBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                // Remove selected class from all boxes
+                packageBoxes.forEach(b => b.classList.remove('selected'));
+                
+                // Add selected class to clicked box
+                box.classList.add('selected');
+                
+                // Store the selected package value in hidden input
+                const packageNumber = box.querySelector('.package-number')?.textContent || '';
+                const packageName = box.querySelector('.package-name')?.textContent || '';
+                hiddenInput.value = packageNumber + ': ' + packageName;
+            });
+        });
+    }
+}
+
+/**
+ * Form Validation System
+ * Comprehensive validation for all forms
+ */
 function initFormValidation() {
     const forms = document.querySelectorAll('form');
+    if (forms.length === 0) return;
     
     forms.forEach(form => {
+        // Remove any previous event listeners (prevents duplicate submissions)
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+        form = newForm;
+        
         // Form submission handler
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -96,24 +278,33 @@ function initFormValidation() {
                 // Reset form after 3 seconds
                 setTimeout(() => {
                     this.reset();
+                    
+                    // Reset hidden fields if they exist
+                    const selectedPackage = document.getElementById('selected-package');
+                    if (selectedPackage) selectedPackage.value = '';
+                    
+                    // Remove selected class from package boxes
+                    const packageBoxes = document.querySelectorAll('.package-box');
+                    packageBoxes.forEach(box => box.classList.remove('selected'));
+                    
                     // Remove any success/error messages
                     const messageEl = this.querySelector('.form-message');
                     if (messageEl) {
                         messageEl.remove();
                     }
                 }, 3000);
-                
-                // In a real scenario, you would send the form data to a server here
             }
         });
         
-        // Real-time validation
+        // Real-time validation on blur and input
         const inputs = form.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
+            // Validate on blur (when user leaves field)
             input.addEventListener('blur', function() {
                 validateInput(this);
             });
             
+            // Clear error when user starts typing in a field with an error
             input.addEventListener('input', function() {
                 if (this.classList.contains('error')) {
                     validateInput(this);
@@ -123,7 +314,84 @@ function initFormValidation() {
     });
 }
 
-// Validate individual input
+/**
+ * Validate Form
+ * Validates all inputs in a form and handles special cases
+ */
+function validateForm(form) {
+    const inputs = form.querySelectorAll('input, textarea, select');
+    let isFormValid = true;
+    
+    inputs.forEach(input => {
+        if (!validateInput(input)) {
+            isFormValid = false;
+        }
+    });
+    
+    // Additional validations for consultation form
+    if (form.closest('.consultation-form')) {
+        // Check that at least one service is selected
+        const serviceCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+        const isAnyChecked = Array.from(serviceCheckboxes).some(checkbox => checkbox.checked);
+        
+        if (!isAnyChecked) {
+            const servicesSection = form.querySelector('.services-section');
+            if (servicesSection) {
+                const existingError = servicesSection.querySelector('.error-message');
+                if (!existingError) {
+                    const errorEl = document.createElement('div');
+                    errorEl.className = 'error-message';
+                    errorEl.textContent = 'Please select at least one service';
+                    errorEl.style.color = '#ff4545';
+                    errorEl.style.fontSize = '12px';
+                    errorEl.style.marginTop = '5px';
+                    servicesSection.appendChild(errorEl);
+                }
+            }
+            isFormValid = false;
+        } else {
+            const existingError = form.querySelector('.services-section .error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+        
+        // Check that a package is selected
+        const selectedPackageInput = document.getElementById('selected-package');
+        if (selectedPackageInput && !selectedPackageInput.value) {
+            const packageSection = form.querySelector('.package-title');
+            if (packageSection) {
+                const parentElement = packageSection.parentElement;
+                const packageBoxes = form.querySelector('.package-boxes');
+                if (packageBoxes) {
+                    const existingError = parentElement.querySelector('.error-message');
+                    if (!existingError) {
+                        const errorEl = document.createElement('div');
+                        errorEl.className = 'error-message';
+                        errorEl.textContent = 'Please select a package';
+                        errorEl.style.color = '#ff4545';
+                        errorEl.style.fontSize = '12px';
+                        errorEl.style.marginTop = '5px';
+                        packageBoxes.after(errorEl);
+                    }
+                }
+            }
+            isFormValid = false;
+        } else {
+            const existingError = form.querySelector('.package-boxes + .error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+    }
+    
+    return isFormValid;
+}
+
+/**
+ * Validate Input
+ * Validates a single input field
+ */
 function validateInput(input) {
     // Return true if the input is valid, false otherwise
     let isValid = true;
@@ -138,6 +406,11 @@ function validateInput(input) {
     // Remove error class
     input.classList.remove('error');
     
+    // Skip validation for non-required empty fields
+    if (!input.hasAttribute('required') && value === '') {
+        return true;
+    }
+    
     // Check required fields
     if (input.hasAttribute('required') && value === '') {
         showInputError(input, 'This field is required');
@@ -145,7 +418,8 @@ function validateInput(input) {
     } 
     // Check email format
     else if (input.type === 'email' && value !== '') {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // More comprehensive email regex
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         if (!emailRegex.test(value)) {
             showInputError(input, 'Please enter a valid email address');
             isValid = false;
@@ -153,10 +427,10 @@ function validateInput(input) {
     }
     // Check phone format
     else if (input.type === 'tel' && value !== '') {
-        // Allow different phone formats, but require at least 10 digits
-        const phoneRegex = /(?:\d[-. ]?){9,}/;
-        if (!phoneRegex.test(value.replace(/[^0-9]/g, ''))) {
-            showInputError(input, 'Please enter a valid phone number');
+        // Simple validation - at least 10 digits
+        const digits = value.replace(/\D/g, '');
+        if (digits.length < 10) {
+            showInputError(input, 'Please enter a valid phone number with at least 10 digits');
             isValid = false;
         }
     }
@@ -164,89 +438,41 @@ function validateInput(input) {
     return isValid;
 }
 
-// Show error message for an input
+/**
+ * Show Input Error
+ * Displays an error message for an invalid input
+ */
 function showInputError(input, message) {
+    // Add error class to the input
     input.classList.add('error');
     
+    // Style the input to indicate error
+    input.style.borderColor = '#ff4545';
+    
+    // Create error message element
     const errorEl = document.createElement('div');
     errorEl.className = 'error-message';
     errorEl.textContent = message;
     errorEl.style.color = '#ff4545';
     errorEl.style.fontSize = '12px';
-    errorEl.style.marginTop = '-10px';
-    errorEl.style.marginBottom = '15px';
+    errorEl.style.marginTop = '5px';
+    errorEl.style.marginBottom = '10px';
     
+    // Insert after the input
     input.parentElement.insertBefore(errorEl, input.nextSibling);
+    
+    // Add focus event to clear error styling when user focuses on the input
+    input.addEventListener('focus', function onFocus() {
+        this.style.borderColor = '#ff9bb3';
+        // Only run this handler once
+        this.removeEventListener('focus', onFocus);
+    }, { once: true });
 }
 
-// Validate entire form
-function validateForm(form) {
-    const inputs = form.querySelectorAll('input, textarea, select');
-    let isFormValid = true;
-    
-    inputs.forEach(input => {
-        if (!validateInput(input)) {
-            isFormValid = false;
-        }
-    });
-    
-    // Additional validations for consultation form
-    if (form.parentElement.classList.contains('consultation-form')) {
-        // Check that at least one service is selected
-        const serviceCheckboxes = form.querySelectorAll('input[type="checkbox"]');
-        const isAnyChecked = Array.from(serviceCheckboxes).some(checkbox => checkbox.checked);
-        
-        if (!isAnyChecked) {
-            const servicesSection = form.querySelector('.services-section');
-            const errorEl = document.createElement('div');
-            errorEl.className = 'error-message';
-            errorEl.textContent = 'Please select at least one service';
-            errorEl.style.color = '#ff4545';
-            errorEl.style.fontSize = '12px';
-            errorEl.style.marginTop = '5px';
-            
-            const existingError = servicesSection.querySelector('.error-message');
-            if (!existingError) {
-                servicesSection.appendChild(errorEl);
-            }
-            
-            isFormValid = false;
-        } else {
-            const existingError = form.querySelector('.services-section .error-message');
-            if (existingError) {
-                existingError.remove();
-            }
-        }
-        
-        // Check that a package is selected
-        const selectedPackage = document.getElementById('selected-package').value;
-        if (!selectedPackage) {
-            const packageSection = form.querySelector('.package-title').parentElement;
-            const errorEl = document.createElement('div');
-            errorEl.className = 'error-message';
-            errorEl.textContent = 'Please select a package';
-            errorEl.style.color = '#ff4545';
-            errorEl.style.fontSize = '12px';
-            errorEl.style.marginTop = '5px';
-            
-            const existingError = packageSection.querySelector('.error-message');
-            if (!existingError) {
-                form.querySelector('.package-boxes').after(errorEl);
-            }
-            
-            isFormValid = false;
-        } else {
-            const existingError = form.querySelector('.package-boxes + .error-message');
-            if (existingError) {
-                existingError.remove();
-            }
-        }
-    }
-    
-    return isFormValid;
-}
-
-// Show form message (success/error)
+/**
+ * Show Form Message
+ * Displays a success or error message for the entire form
+ */
 function showFormMessage(form, type, message) {
     // Remove any existing message
     const existingMessage = form.querySelector('.form-message');
@@ -263,6 +489,8 @@ function showFormMessage(form, type, message) {
     messageEl.style.padding = '15px';
     messageEl.style.marginTop = '20px';
     messageEl.style.borderRadius = '4px';
+    messageEl.style.textAlign = 'center';
+    messageEl.style.fontWeight = '500';
     
     if (type === 'success') {
         messageEl.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
@@ -277,431 +505,372 @@ function showFormMessage(form, type, message) {
     // Add to form
     form.appendChild(messageEl);
     
-    // Scroll to the message
-    messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Sticky Header with improved UX
-function initStickyHeader() {
-    const header = document.querySelector('header');
-    if (header) {
-        // Add sticky header class on scroll
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                header.classList.add('sticky-header');
-                // Add box shadow and additional styles
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-                header.style.backdropFilter = 'blur(10px)';
-                header.style.webkitBackdropFilter = 'blur(10px)';
-            } else {
-                header.classList.remove('sticky-header');
-                // Remove box shadow and additional styles
-                header.style.boxShadow = 'none';
-                header.style.backdropFilter = 'none';
-                header.style.webkitBackdropFilter = 'none';
-            }
-        });
-    }
-}
-
-// Base navigation setup - handles smooth scrolling
-function setupBaseNavigation() {
-    // Scroll down arrow functionality
-    const scrollDownArrow = document.querySelector('.scroll-down');
-    const aboutSection = document.querySelector('.about-section');
-    
-    if (scrollDownArrow && aboutSection) {
-        scrollDownArrow.addEventListener('click', function() {
-            aboutSection.scrollIntoView({ behavior: 'smooth' });
-        });
-    }
-    
-    // Logo click functionality - scroll to top
-    const logo = document.querySelector('.logo');
-    
-    if (logo) {
-        logo.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // Add cursor pointer to indicate it's clickable
-        logo.style.cursor = 'pointer';
-    }
-    
-    // Set index variables for menu items (for staggered animations)
-    const menuItems = document.querySelectorAll('.nav-menu li');
-    menuItems.forEach((item, index) => {
-        item.style.setProperty('--index', index);
-    });
-    
-    // Navigation links smooth scroll
-    const navLinks = document.querySelectorAll('.nav-menu a');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const targetId = this.getAttribute('href');
-            
-            // Handle specific section navigation
-            if (targetId === '#about') {
-                e.preventDefault();
-                document.querySelector('.about-section').scrollIntoView({ behavior: 'smooth' });
-            } 
-            else if (targetId === '#modules' || targetId === '#services') {
-                e.preventDefault();
-                document.querySelector('.services-spotlight').scrollIntoView({ behavior: 'smooth' });
-            }
-            else if (targetId === '#resources') {
-                e.preventDefault();
-                document.querySelector('.resources-section').scrollIntoView({ behavior: 'smooth' });
-            }
-            else if (targetId === '#testimonials') {
-                e.preventDefault();
-                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
-            }
-            else if (targetId === '#contact') {
-                e.preventDefault();
-                document.querySelector('.footer-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-    
-    // Back to top button functionality
-    const topBtn = document.querySelector('.top-btn');
-    if (topBtn) {
-        topBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-}
-
-// Mobile menu specific functionality
-function setupMobileMenu() {
-    const mobileMenuToggle = document.querySelector('.mobile-menu');
-    const navMenu = document.querySelector('.nav-menu');
-    const body = document.body;
-    
-    if (mobileMenuToggle && navMenu) {
-        // Direct click handler for mobile menu toggle
-        mobileMenuToggle.addEventListener('click', function() {
-            // Toggle menu and body classes
-            navMenu.classList.toggle('active');
-            body.classList.toggle('menu-active');
-            // Explicitly toggle the active class on the hamburger
-            this.classList.toggle('active');
-        });
-        
-        // Ensure menu closes when a link is clicked
-        const navLinks = document.querySelectorAll('.nav-menu a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                // Close mobile menu if it's open
-                if (navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
-                    body.classList.remove('menu-active');
-                    // Ensure the hamburger icon also changes back
-                    mobileMenuToggle.classList.remove('active');
-                }
-            });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            // Check if menu is open and click is outside menu and toggle button
-            if (navMenu.classList.contains('active') && 
-                !navMenu.contains(e.target) && 
-                !mobileMenuToggle.contains(e.target)) {
-                navMenu.classList.remove('active');
-                body.classList.remove('menu-active');
-                mobileMenuToggle.classList.remove('active');
-            }
-        });
-    }
-}
-
-// Handle Initial Animations (Header and Hero)
-function initAnimations() {
-    // Header Animation
-    const header = document.querySelector('header');
-    const logo = document.querySelector('.logo');
-    const navLinks = document.querySelectorAll('.nav-menu li');
-    
-    // Animate logo and nav links with staggered delay
-    logo.style.opacity = '0';
-    logo.style.transform = 'translateY(-20px)';
-    
-    navLinks.forEach((link, index) => {
-        link.style.opacity = '0';
-        link.style.transform = 'translateY(-20px)';
-    });
-    
-    // Trigger header animations after a short delay
+    // Scroll to the message with smooth behavior
     setTimeout(() => {
-        header.classList.add('animate-header');
-        logo.style.opacity = '1';
-        logo.style.transform = 'translateY(0)';
-        logo.style.transition = 'all 0.6s ease';
+        messageEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+}
+
+/**
+ * Form Scroll Behavior
+ * Improves scrolling within form containers
+ */
+function setupFormScroll() {
+    const consultationForm = document.querySelector('.consultation-form');
+    
+    if (consultationForm) {
+        // Prevent wheel events from propagating when cursor is over the form
+        consultationForm.addEventListener('wheel', function(e) {
+            const scrollTop = this.scrollTop;
+            const scrollHeight = this.scrollHeight;
+            const height = this.clientHeight;
+            
+            // Check if we're at the boundaries
+            if ((scrollTop === 0 && e.deltaY < 0) || 
+                (scrollTop + height >= scrollHeight && e.deltaY > 0)) {
+                return;
+            }
+            
+            // Handle the scroll within the form
+            e.preventDefault();
+            e.stopPropagation();
+            this.scrollTop += e.deltaY;
+        });
+    }
+}
+
+/**
+ * SVG Color Update
+ * Updates SVG colors to match the site's color scheme
+ */
+function updateSvgColors() {
+    try {
+        // Update the service icons
+        const serviceIcons = document.querySelectorAll('.service-card svg');
+        serviceIcons.forEach(svg => {
+            svg.setAttribute('stroke', '#ff9bb3');
+        });
+        
+        // Update the quote icons
+        const quoteIcons = document.querySelectorAll('.quote-icon svg');
+        quoteIcons.forEach(svg => {
+            svg.setAttribute('stroke', '#ff9bb3');
+        });
+    } catch (error) {
+        console.error("Error updating SVG colors:", error);
+    }
+}
+
+/**
+ * Initial Animations
+ * Handles entrance animations for header and hero sections
+ */
+function initAnimations() {
+    try {
+        // Header Animation
+        const header = document.querySelector('header');
+        const logo = document.querySelector('.logo');
+        const navLinks = document.querySelectorAll('.nav-menu li');
+        
+        if (logo) {
+            logo.style.opacity = '0';
+            logo.style.transform = 'translateY(-20px)';
+        }
         
         navLinks.forEach((link, index) => {
-            setTimeout(() => {
-                link.style.opacity = '1';
-                link.style.transform = 'translateY(0)';
-                link.style.transition = 'all 0.4s ease';
-            }, 100 * (index + 1));
+            link.style.opacity = '0';
+            link.style.transform = 'translateY(-20px)';
         });
-    }, 300);
-    
-    // Hero Section Animation - Fixed timing so both elements appear together
-    const heroContent = document.querySelector('.hero-content');
-    const heroForm = document.querySelector('.consultation-form');
-    
-    if (heroContent) {
-        heroContent.style.opacity = '0';
-        heroContent.style.transform = 'translateX(-50px)';
-    }
-    
-    if (heroForm) {
-        heroForm.style.opacity = '0';
-        heroForm.style.transform = 'translateX(50px)';
-    }
-    
-    // Trigger hero animations after header is animated - both elements at same time
-    setTimeout(() => {
+        
+        // Trigger header animations after a short delay
+        setTimeout(() => {
+            if (header) header.classList.add('animate-header');
+            
+            if (logo) {
+                logo.style.opacity = '1';
+                logo.style.transform = 'translateY(0)';
+                logo.style.transition = 'all 0.6s ease';
+            }
+            
+            navLinks.forEach((link, index) => {
+                setTimeout(() => {
+                    link.style.opacity = '1';
+                    link.style.transform = 'translateY(0)';
+                    link.style.transition = 'all 0.4s ease';
+                }, 100 * (index + 1));
+            });
+        }, 300);
+        
+        // Hero Section Animation
+        const heroContent = document.querySelector('.hero-content');
+        const heroForm = document.querySelector('.consultation-form');
+        
         if (heroContent) {
-            heroContent.style.opacity = '1';
-            heroContent.style.transform = 'translateX(0)';
-            heroContent.style.transition = 'all 0.8s ease';
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateX(-50px)';
         }
         
-        // Start form animation at the same time
         if (heroForm) {
-            heroForm.style.opacity = '1';
-            heroForm.style.transform = 'translateX(0)';
-            heroForm.style.transition = 'all 0.8s ease';
+            heroForm.style.opacity = '0';
+            heroForm.style.transform = 'translateX(50px)';
         }
-    }, 800);
+        
+        // Trigger hero animations after header is animated
+        setTimeout(() => {
+            if (heroContent) {
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateX(0)';
+                heroContent.style.transition = 'all 0.8s ease';
+            }
+            
+            if (heroForm) {
+                heroForm.style.opacity = '1';
+                heroForm.style.transform = 'translateX(0)';
+                heroForm.style.transition = 'all 0.8s ease';
+            }
+        }, 800);
+    } catch (error) {
+        console.error("Error initializing animations:", error);
+        
+        // Fallback - make everything visible
+        document.querySelectorAll('.logo, .nav-menu li, .hero-content, .consultation-form').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+        });
+    }
 }
 
-// Initialize All Intersection Observers
+/**
+ * Intersection Observers
+ * Handles scroll-based animations throughout the page
+ */
 function initIntersectionObservers() {
-    // Main observer options
-    const observerOptions = {
+    // Check if IntersectionObserver is supported
+    if (!('IntersectionObserver' in window)) {
+        console.warn("IntersectionObserver not supported. Using fallback.");
+        // Simple fallback - just show all elements
+        document.querySelectorAll('.newsletter-container, .about-section, .feature-title-box, .feature-card, .section-header, .service-card, .testimonial-card, .resources-header, .resource-card, .footer-top')
+            .forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        return;
+    }
+    
+    // Set up observers for each section
+    observeSection('.newsletter-container', {threshold: 0.1});
+    observeSection('.about-section', {threshold: 0.1, rootMargin: "-150px 0px"});
+    observeEnrollSection();
+    observeServicesSection();
+    observeSection('.testimonials .section-header, .testimonial-card', {threshold: 0.1});
+    observeResourcesSection();
+    observeSection('.footer-top', {threshold: 0.1, rootMargin: "-100px 0px"});
+}
+
+/**
+ * Observe Section
+ * Generic function to observe and animate a section
+ */
+function observeSection(selector, options = {}) {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length === 0) return;
+    
+    const defaultOptions = {
         threshold: 0.1,
-        rootMargin: "-100px 0px"  // Adjust this to trigger animations earlier
+        rootMargin: "-100px 0px"
     };
     
-    // Newsletter Section Animation
-    observeElement('.newsletter', '.newsletter-container', observerOptions);
+    const observerOptions = {...defaultOptions, ...options};
     
-    // About Section Animation
-    observeElement('.about-section', '.about-section', { threshold: 0.1, rootMargin: "-150px 0px" });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
     
-    // Enroll Section (Why Work With Me)
-    observeEnrollSection();
-    
-    // Services Section Animation
-    observeServicesSection();
-    
-    // Testimonials Section
-    observeElement('.testimonials', '.testimonials', observerOptions);
-    
-    // Resources Section
-    observeResourcesSection();
-    
-    // Footer Section
-    observeElement('.footer-section', '.footer-section', { threshold: 0.1, rootMargin: "-100px 0px" });
-}
-
-// Generic section observer
-function observeElement(sectionSelector, targetSelector, options) {
-    const section = document.querySelector(sectionSelector);
-    
-    if (section) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('section-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, options);
-        
-        const target = document.querySelector(targetSelector);
-        if (target) {
-            observer.observe(target);
+    elements.forEach(element => {
+        // Prepare the element for animation if it isn't already
+        if (getComputedStyle(element).opacity !== '0') {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         }
-    }
+        
+        observer.observe(element);
+    });
 }
 
-// Enroll Section specific observer
+/**
+ * Observe Enroll Section
+ * Special handling for the feature grid section
+ */
 function observeEnrollSection() {
     const enrollSection = document.querySelector('.enroll-section');
-    if (enrollSection) {
-        const titleBox = enrollSection.querySelector('.feature-title-box');
-        const featureCards = enrollSection.querySelectorAll('.feature-card');
-        
-        // Remove CSS animations that auto-trigger
-        if (titleBox) {
-            titleBox.style.animation = 'none';
-            titleBox.style.opacity = '0';
-            titleBox.style.transform = 'translateY(30px)';
-            titleBox.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        }
-        
-        featureCards.forEach((card, index) => {
-            card.style.animation = 'none';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        });
-        
-        // Create intersection observer for scrolling
-        const enrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Animate title
-                    if (titleBox) {
-                        titleBox.style.opacity = '1';
-                        titleBox.style.transform = 'translateY(0)';
-                    }
-                    
-                    // Animate cards with delay
-                    featureCards.forEach((card, index) => {
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 200 * (index + 1));
-                    });
-                    
-                    // Stop observing
-                    enrollObserver.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.2,
-            rootMargin: "-100px 0px" // Adjust to trigger earlier
-        });
-        
-        // Start observing
-        enrollObserver.observe(enrollSection);
+    if (!enrollSection) return;
+    
+    const titleBox = enrollSection.querySelector('.feature-title-box');
+    const featureCards = enrollSection.querySelectorAll('.feature-card');
+    
+    // Prepare elements for animation
+    if (titleBox) {
+        titleBox.style.opacity = '0';
+        titleBox.style.transform = 'translateY(30px)';
+        titleBox.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     }
+    
+    featureCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    });
+    
+    // Create observer
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            // Animate title
+            if (titleBox) {
+                titleBox.style.opacity = '1';
+                titleBox.style.transform = 'translateY(0)';
+            }
+            
+            // Animate cards with delay
+            featureCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 * (index + 1));
+            });
+            
+            // Stop observing
+            observer.unobserve(entries[0].target);
+        }
+    }, {
+        threshold: 0.2,
+        rootMargin: "-100px 0px"
+    });
+    
+    // Start observing
+    observer.observe(enrollSection);
 }
 
-// Services Section specific observer
+/**
+ * Observe Services Section
+ * Special handling for services cards with staggered animation
+ */
 function observeServicesSection() {
     const servicesSection = document.querySelector('.services-spotlight');
-    if (servicesSection) {
-        const sectionHeader = servicesSection.querySelector('.section-header');
-        const serviceCards = servicesSection.querySelectorAll('.service-card');
-        
-        // Prepare header for animation
-        if (sectionHeader) {
-            sectionHeader.style.opacity = '0';
-            sectionHeader.style.transform = 'translateY(30px)';
-            sectionHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        }
-        
-        // Prepare cards for animation
-        serviceCards.forEach(card => {
-            card.style.animation = 'none';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        });
-        
-        // Create observer
-        const servicesObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Animate header first
-                if (sectionHeader) {
-                    sectionHeader.style.opacity = '1';
-                    sectionHeader.style.transform = 'translateY(0)';
-                }
-                
-                // Then staggered animation for service cards
-                serviceCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 300 + (200 * index)); // Start after header animation
-                });
-                
-                // Add visible class to the section
-                servicesSection.classList.add('section-visible');
-                
-                // Once animated, disconnect observer
-                servicesObserver.disconnect();
-            }
-        }, {
-            threshold: 0.2,
-            rootMargin: "-150px 0px" // Trigger animation earlier
-        });
-        
-        servicesObserver.observe(servicesSection);
+    if (!servicesSection) return;
+    
+    const sectionHeader = servicesSection.querySelector('.section-header');
+    const serviceCards = servicesSection.querySelectorAll('.service-card');
+    
+    // Prepare elements for animation
+    if (sectionHeader) {
+        sectionHeader.style.opacity = '0';
+        sectionHeader.style.transform = 'translateY(30px)';
+        sectionHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     }
+    
+    serviceCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    });
+    
+    // Create observer
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            // Animate header first
+            if (sectionHeader) {
+                sectionHeader.style.opacity = '1';
+                sectionHeader.style.transform = 'translateY(0)';
+            }
+            
+            // Staggered animation for service cards
+            serviceCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 300 + (200 * index));
+            });
+            
+            // Stop observing
+            observer.unobserve(entries[0].target);
+        }
+    }, {
+        threshold: 0.2,
+        rootMargin: "-150px 0px"
+    });
+    
+    // Start observing
+    observer.observe(servicesSection);
 }
 
-// Resources Section specific observer
+/**
+ * Observe Resources Section
+ * Special handling for resource cards with staggered animation
+ */
 function observeResourcesSection() {
     const resourcesSection = document.querySelector('.resources-section');
-    const resourceCards = document.querySelectorAll('.resource-card');
+    if (!resourcesSection) return;
     
-    if (resourcesSection) {
-        const resourcesHeader = resourcesSection.querySelector('.resources-header');
-        
-        // Prepare header and cards for animation
-        if (resourcesHeader) {
-            resourcesHeader.style.opacity = '0';
-            resourcesHeader.style.transform = 'translateY(30px)';
-            resourcesHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        }
-        
-        resourceCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        });
-        
-        const resourcesObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Animate header first
-                if (resourcesHeader) {
-                    resourcesHeader.style.opacity = '1';
-                    resourcesHeader.style.transform = 'translateY(0)';
-                }
-                
-                // Staggered animation for resource cards
-                resourceCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 300 + (200 * index)); // Start after header animation
-                });
-                
-                // Add visible class to the section
-                resourcesSection.classList.add('section-visible');
-                
-                // Once animated, disconnect observer
-                resourcesObserver.disconnect();
-            }
-        }, {
-            threshold: 0.2,
-            rootMargin: "-150px 0px" // Trigger animation earlier
-        });
-        
-        resourcesObserver.observe(resourcesSection);
+    const resourcesHeader = resourcesSection.querySelector('.resources-header');
+    const resourceCards = resourcesSection.querySelectorAll('.resource-card');
+    
+    // Prepare elements for animation
+    if (resourcesHeader) {
+        resourcesHeader.style.opacity = '0';
+        resourcesHeader.style.transform = 'translateY(30px)';
+        resourcesHeader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     }
+    
+    resourceCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    });
+    
+    // Create observer
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            // Animate header first
+            if (resourcesHeader) {
+                resourcesHeader.style.opacity = '1';
+                resourcesHeader.style.transform = 'translateY(0)';
+            }
+            
+            // Staggered animation for resource cards
+            resourceCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 300 + (200 * index));
+            });
+            
+            // Stop observing
+            observer.unobserve(entries[0].target);
+        }
+    }, {
+        threshold: 0.2,
+        rootMargin: "-150px 0px"
+    });
+    
+    // Start observing
+    observer.observe(resourcesSection);
 }
 
-// Testimonial Slider Function
+/**
+ * Testimonial Slider
+ * Interactive slider for testimonials with navigation
+ */
 function initTestimonialSlider() {
     const testimonialCards = document.querySelectorAll('.testimonial-card');
+    if (testimonialCards.length === 0) return;
+    
     const indicators = document.querySelectorAll('.indicator');
     const prevBtn = document.querySelector('.prev-btn');
     const nextBtn = document.querySelector('.next-btn');
@@ -709,16 +878,25 @@ function initTestimonialSlider() {
     let currentIndex = 0;
     
     // Display only the first testimonial initially
-    if (testimonialCards.length > 0) {
-        testimonialCards.forEach((card, index) => {
-            if (index !== 0) {
-                card.style.display = 'none';
-            }
-        });
+    testimonialCards.forEach((card, index) => {
+        if (index !== 0) {
+            card.style.display = 'none';
+        } else {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }
+    });
+    
+    // Active first indicator
+    if (indicators.length > 0) {
+        indicators[0].classList.add('active');
     }
     
     // Update active testimonial and indicator
     function updateActiveTestimonial(index) {
+        if (index < 0 || index >= testimonialCards.length) return;
+        
         // Hide all testimonials
         testimonialCards.forEach(card => {
             card.style.display = 'none';
@@ -730,12 +908,14 @@ function initTestimonialSlider() {
         indicators.forEach(ind => ind.classList.remove('active'));
         
         // Show current testimonial with animation
-        if (testimonialCards[index]) {
-            testimonialCards[index].style.display = 'block';
-            setTimeout(() => {
-                testimonialCards[index].style.opacity = '1';
-                testimonialCards[index].style.transform = 'translateY(0)';
-            }, 50);
+        testimonialCards[index].style.display = 'block';
+        setTimeout(() => {
+            testimonialCards[index].style.opacity = '1';
+            testimonialCards[index].style.transform = 'translateY(0)';
+        }, 50);
+        
+        // Update indicator
+        if (indicators[index]) {
             indicators[index].classList.add('active');
         }
     }
@@ -752,7 +932,7 @@ function initTestimonialSlider() {
         updateActiveTestimonial(currentIndex);
     }
     
-    // Event listeners
+    // Add event listeners
     if (nextBtn) {
         nextBtn.addEventListener('click', nextTestimonial);
     }
@@ -785,7 +965,10 @@ function initTestimonialSlider() {
     }
 }
 
-// Service Card Hover Effects
+/**
+ * Service Card Effects
+ * Adds hover effects to service cards
+ */
 function setupServiceCardEffects() {
     const serviceCards = document.querySelectorAll('.service-card');
     
@@ -803,216 +986,135 @@ function setupServiceCardEffects() {
     });
 }
 
-// Scroll Behavior for Consultation Form
-function setupFormScroll() {
-    const consultationForm = document.querySelector('.consultation-form');
+/**
+ * Parallax Background Effect
+ * Creates a subtle parallax scrolling effect for the background
+ */
+function initParallaxEffect() {
+    const backgroundImage = document.querySelector('.background-image');
+    if (!backgroundImage) return;
     
-    if (consultationForm) {
-        // Prevent wheel events from propagating when cursor is over the form
-        consultationForm.addEventListener('wheel', function(e) {
-            const scrollTop = this.scrollTop;
-            const scrollHeight = this.scrollHeight;
-            const height = this.clientHeight;
-            
-            // If we're at the top and trying to scroll up, or
-            // at the bottom and trying to scroll down, let the page scroll
-            if ((scrollTop === 0 && e.deltaY < 0) || 
-                (scrollTop + height >= scrollHeight && e.deltaY > 0)) {
-                return;
-            }
-            
-            // Otherwise, prevent the event from propagating to the page
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Handle the scroll within the form
-            this.scrollTop += e.deltaY;
-        });
+    // Use requestAnimationFrame for smoother parallax
+    let ticking = false;
+    let lastScrollY = window.scrollY;
+    
+    function updateParallax() {
+        backgroundImage.style.transform = `translateY(-${lastScrollY * 0.05}px)`;
+        ticking = false;
     }
+    
+    window.addEventListener('scroll', function() {
+        lastScrollY = window.scrollY;
+        
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    });
+    
+    // Initial position
+    updateParallax();
 }
 
-// Parallax background effect
-window.addEventListener('scroll', function() {
-    const scrollPosition = window.scrollY;
-    const backgroundImage = document.querySelector('.background-image');
-    
-    if (backgroundImage) {
-        // Move the background image slightly when scrolling
-        backgroundImage.style.transform = `translateY(-${scrollPosition * 0.05}px)`;
-    }
-});
-
-// IMPROVED: Resource card functionality with debugging
+/**
+ * Resource Cards System
+ * Handles interactions with resource cards including likes and view tracking
+ */
 function initResourceCards() {
-    console.log("Initializing resource cards");
-    
     const resourceCards = document.querySelectorAll('.resource-card');
-    console.log(`Found ${resourceCards.length} resource cards`);
-    
-    if (resourceCards.length === 0) {
-        console.warn("No resource cards found on page");
-        return;
-    }
-    
-    // Check if the first card has content
-    if (resourceCards[0]) {
-        const firstCardContent = resourceCards[0].querySelector('.content-wrapper');
-        if (firstCardContent) {
-            console.log("First card content:", firstCardContent.innerHTML.trim());
-        } else {
-            console.warn("First card missing content wrapper");
-        }
-    }
+    if (resourceCards.length === 0) return;
     
     resourceCards.forEach((card, index) => {
-        console.log(`Setting up card ${index + 1}`);
-        
         // Make entire card clickable
         card.addEventListener('click', function(event) {
             // Only navigate if the click wasn't on a button or specific interactive element
             if (!event.target.closest('.like-button') && 
                 !event.target.closest('.resource-date')) {
                 const url = this.getAttribute('data-url');
-                console.log(`Clicked card ${index + 1}, navigating to: ${url}`);
                 if (url) {
                     window.open(url, '_blank');
                 }
             }
         });
         
-        // Set up like button
-        setupLikeButton(card, index);
+        // Set up like button functionality
+        setupLikeButton(card);
         
         // Set up view counter
-        handleViewCount(card, index);
+        setupViewCounter(card);
         
         // Set up date interaction
-        setupDateInteraction(card, index);
+        setupDateInteraction(card);
     });
 }
 
-// IMPROVED: Like button setup with debugging
-function setupLikeButton(card, cardIndex) {
+/**
+ * Setup Like Button
+ * Handles like button interactions for resource cards
+ */
+function setupLikeButton(card) {
     const button = card.querySelector('.like-button');
-    console.log(`Card ${cardIndex + 1} - like button found:`, !!button);
+    if (!button) return;
     
-
-    if (!button) {
-        console.warn(`Card ${cardIndex + 1} missing like button`);
-        return;
-    }
- 
     const countElement = button.querySelector('.count');
-    if (!countElement) {
-        console.warn(`Card ${cardIndex + 1} like button missing count element`);
-        return;
-    }
+    if (!countElement) return;
     
-    const resourceId = card.getAttribute('data-url');
-    if (!resourceId) {
-        console.warn(`Card ${cardIndex + 1} missing data-url attribute`);
-    }
-    
-    const storageKey = `liked_${resourceId}`;
-    
-    // Initialize count
+    // Initialize like count
     let count = parseInt(button.getAttribute('data-count') || '0');
     countElement.textContent = count;
-    console.log(`Card ${cardIndex + 1} - initial like count:`, count);
- 
+    
+    // Get resource identifier for storage
+    const resourceId = card.getAttribute('data-url') || `resource-${Math.random().toString(36).substr(2, 9)}`;
+    const storageKey = `liked_${resourceId}`;
+    
     // Check if previously liked
     if (localStorage.getItem(storageKey) === 'true') {
         button.classList.add('liked');
-        console.log(`Card ${cardIndex + 1} - previously liked`);
     }
- 
+    
+    // Handle like button click
     button.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(`Like button clicked on card ${cardIndex + 1}`);
- 
-        if (button.classList.contains('liked')) {
+        
+        if (this.classList.contains('liked')) {
             // Unlike
-            button.classList.remove('liked');
+            this.classList.remove('liked');
             count = Math.max(0, count - 1);
             localStorage.removeItem(storageKey);
-            console.log(`Card ${cardIndex + 1} - unliked, new count:`, count);
         } else {
             // Like
-            button.classList.add('liked');
+            this.classList.add('liked');
             count++;
             localStorage.setItem(storageKey, 'true');
-            console.log(`Card ${cardIndex + 1} - liked, new count:`, count);
         }
- 
+        
         // Update count
         countElement.textContent = count;
-        button.setAttribute('data-count', count);
+        this.setAttribute('data-count', count);
     });
- }
- 
- // IMPROVED: View count handler with specific focus on visibility
- function handleViewCount(card, cardIndex) {
-    const viewElement = card.querySelector('.views .count');
-    console.log(`Card ${cardIndex + 1} - view counter found:`, !!viewElement);
+}
+
+/**
+ * Setup View Counter
+ * Tracks views for resource cards
+ */
+function setupViewCounter(card) {
+    const viewsElement = card.querySelector('.views');
+    if (!viewsElement) return;
     
-    if (!viewElement) {
-        console.warn(`Card ${cardIndex + 1} missing view counter`);
-        
-        // Try to create the views element if it doesn't exist
-        const statGroup = card.querySelector('.stat-group');
-        if (statGroup) {
-            const viewsSpan = document.createElement('span');
-            viewsSpan.className = 'views';
-            viewsSpan.setAttribute('data-count', '0');
-            viewsSpan.innerHTML = '<i class="fas fa-eye"></i> <span class="count">0</span>';
-            statGroup.prepend(viewsSpan);
-            console.log(`Created missing view element for card ${cardIndex + 1}`);
-            
-            // Now try to get the element again
-            const newViewElement = viewsSpan.querySelector('.count');
-            if (newViewElement) {
-                // Continue with the new element
-                setupViewCounter(card, cardIndex, newViewElement, viewsSpan);
-                return;
-            }
-        }
-        return;
-    }
+    const countElement = viewsElement.querySelector('.count');
+    if (!countElement) return;
     
-    const viewsContainer = card.querySelector('.views');
-    if (!viewsContainer) {
-        console.warn(`Card ${cardIndex + 1} missing views container`);
-        return;
-    }
+    // Initialize view count
+    let count = parseInt(viewsElement.getAttribute('data-count') || '0');
+    countElement.textContent = count;
     
-    setupViewCounter(card, cardIndex, viewElement, viewsContainer);
- }
- 
- // Helper function to set up the view counter functionality
- function setupViewCounter(card, cardIndex, viewElement, viewsContainer) {
-    // Ensure the view icon is visible
-    const viewIcon = viewsContainer.querySelector('i');
-    if (viewIcon) {
-        viewIcon.style.display = 'inline-block';
-        viewIcon.style.visibility = 'visible';
-        viewIcon.style.fontSize = '16px';
-        viewIcon.style.color = '#666';
-    }
-    
-    // Ensure the count element is visible
-    viewElement.style.display = 'inline-block';
-    viewElement.style.visibility = 'visible';
-    
-    const resourceId = card.getAttribute('data-url');
+    // Get resource identifier for storage
+    const resourceId = card.getAttribute('data-url') || `resource-${Math.random().toString(36).substr(2, 9)}`;
     const viewStorageKey = `viewed_${resourceId}`;
- 
-    // Get current view count
-    let viewCount = parseInt(viewsContainer.getAttribute('data-count') || '0');
-    viewElement.textContent = viewCount;
-    console.log(`Card ${cardIndex + 1} - initial view count:`, viewCount);
- 
-    // Add click handler to the card for view counting
+    
+    // View count handler
     card.addEventListener('click', function(e) {
         // Only count view if not clicking on specific elements
         if (e.target.closest('.like-button') || e.target.closest('.resource-date')) {
@@ -1021,85 +1123,40 @@ function setupLikeButton(card, cardIndex) {
         
         // Only count view once per session
         if (!sessionStorage.getItem(viewStorageKey)) {
-            viewCount++;
-            viewElement.textContent = viewCount;
-            viewsContainer.setAttribute('data-count', viewCount);
+            count++;
+            countElement.textContent = count;
+            viewsElement.setAttribute('data-count', count);
             sessionStorage.setItem(viewStorageKey, 'true');
-            console.log(`Card ${cardIndex + 1} - view count increased to:`, viewCount);
         }
     });
- }
- 
- // IMPROVED: Date interaction with enhanced styling and visibility
- function setupDateInteraction(card, cardIndex) {
-    const dateEl = card.querySelector('.resource-date');
-    console.log(`Card ${cardIndex + 1} - date element found:`, !!dateEl);
+}
+
+/**
+ * Setup Date Interaction
+ * Handles date interactions for resource cards
+ */
+function setupDateInteraction(card) {
+    const dateElement = card.querySelector('.resource-date');
+    if (!dateElement) return;
     
-    if (!dateEl) {
-        console.warn(`Card ${cardIndex + 1} missing date element`);
-        
-        // Try to create a date element if it doesn't exist
-        const contentWrapper = card.querySelector('.content-wrapper');
-        if (contentWrapper) {
-            const dateDiv = document.createElement('div');
-            dateDiv.className = 'resource-date';
-            const today = new Date();
-            const dateStr = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-            dateDiv.setAttribute('data-date', dateStr);
-            dateDiv.textContent = `${today.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})} • 1 min read`;
-            
-            // Insert at the beginning of content wrapper
-            if (contentWrapper.firstChild) {
-                contentWrapper.insertBefore(dateDiv, contentWrapper.firstChild);
-            } else {
-                contentWrapper.appendChild(dateDiv);
-            }
-            
-            console.log(`Created missing date element for card ${cardIndex + 1}`);
-            
-            // Set up the newly created date element
-            setupDateElement(dateDiv, dateStr, cardIndex);
-            return;
-        }
-        return;
-    }
- 
-    const dateValue = dateEl.getAttribute('data-date');
-    if (!dateValue) {
-        console.warn(`Card ${cardIndex + 1} date element missing data-date attribute`);
-        
-        // Try to add a data-date attribute if missing
-        const today = new Date();
-        const dateStr = today.toISOString().split('T')[0];
-        dateEl.setAttribute('data-date', dateStr);
-        console.log(`Added missing data-date attribute to card ${cardIndex + 1}`);
-        
-        setupDateElement(dateEl, dateStr, cardIndex);
-        return;
-    }
+    // Ensure styling
+    dateElement.style.cursor = 'pointer';
+    dateElement.style.transition = 'color 0.3s ease';
     
-    setupDateElement(dateEl, dateValue, cardIndex);
- }
- 
- // Helper function to set up the date element functionality
- function setupDateElement(dateEl, dateValue, cardIndex) {
-    // Make sure the date element is styled properly
-    dateEl.style.cursor = 'pointer';
-    dateEl.style.color = '#666';
-    dateEl.style.fontSize = '14px';
-    dateEl.style.marginBottom = '10px';
-    dateEl.style.display = 'block';
-    
-    // Add a subtle hover effect
-    dateEl.addEventListener('mouseenter', function() {
+    // Hover effects
+    dateElement.addEventListener('mouseenter', function() {
         this.style.color = '#ff9bb3';
     });
     
-    dateEl.addEventListener('mouseleave', function() {
+    dateElement.addEventListener('mouseleave', function() {
         this.style.color = '#666';
     });
     
-    // Update the displayed date format if needed
+    // Get date value
+    const dateValue = dateElement.getAttribute('data-date');
+    if (!dateValue) return;
+    
+    // Format the displayed date
     try {
         const displayDate = new Date(dateValue);
         if (!isNaN(displayDate.getTime())) {
@@ -1107,22 +1164,21 @@ function setupLikeButton(card, cardIndex) {
             let readTime = '1 min read';
             
             // Preserve read time if it exists
-            const currentText = dateEl.textContent;
+            const currentText = dateElement.textContent;
             if (currentText && currentText.includes('•')) {
                 readTime = currentText.split('•')[1].trim();
             }
             
-            dateEl.textContent = `${displayDate.toLocaleDateString('en-US', options)} • ${readTime}`;
+            dateElement.textContent = `${displayDate.toLocaleDateString('en-US', options)} • ${readTime}`;
         }
     } catch (e) {
-        console.error(`Error formatting date for card ${cardIndex + 1}:`, e);
+        console.error('Error formatting date:', e);
     }
     
-    // Add click event for date popup
-    dateEl.addEventListener('click', function(e) {
+    // Click handler for date popup
+    dateElement.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(`Date clicked on card ${cardIndex + 1}`);
         
         try {
             const date = new Date(dateValue);
@@ -1141,11 +1197,28 @@ function setupLikeButton(card, cardIndex) {
             const diffTime = Math.abs(now - date);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
-            console.log(`Card ${cardIndex + 1} - showing date alert: ${formattedDate}, ${diffDays} days ago`);
             alert(`Published: ${formattedDate}\n${diffDays} days ago`);
         } catch (e) {
-            console.error(`Error processing date click for card ${cardIndex + 1}:`, e);
+            console.error('Error processing date:', e);
             alert("Sorry, there was an error processing the date.");
         }
     });
- }
+}
+
+// Emergency fix for About section visibility
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      // Force About section elements to be visible
+      var aboutElements = document.querySelectorAll('.about-text, .about-content');
+      aboutElements.forEach(function(elem) {
+        elem.style.opacity = '1';
+        elem.style.transform = 'translateY(0)';
+      });
+      
+      // Make sure the entire section is visible
+      var aboutSection = document.querySelector('.about-section');
+      if (aboutSection) {
+        aboutSection.classList.add('section-visible');
+      }
+    }, 500);
+  });

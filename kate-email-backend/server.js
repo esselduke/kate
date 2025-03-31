@@ -1,17 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const sgMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
+const mailgun = require('mailgun-js');
 
 // Load environment variables
 dotenv.config();
 
+// Simple tracker for recent submissions
+const recentSubmissions = new Map();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Set up SendGrid
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Set up Mailgun
+const mg = mailgun({
+  apiKey: process.env.MAILGUN_API_KEY,
+  domain: process.env.MAILGUN_DOMAIN
+});
 
 // Middleware
 app.use(cors({
@@ -27,11 +33,39 @@ app.post('/api/send-consultation', async (req, res) => {
     try {
         console.log('Received form data:', req.body);
         
+        // Create a simple signature of this request to detect duplicates
+        const { email, phone } = req.body;
+        const requestSignature = `${email}-${phone}`;
+        
+        // Check if we've seen this exact request recently (within last 5 seconds)
+        const now = Date.now();
+        if (recentSubmissions.has(requestSignature)) {
+            const lastTime = recentSubmissions.get(requestSignature);
+            if (now - lastTime < 5000) { // 5 seconds
+                console.log('Duplicate submission detected, ignoring');
+                return res.status(200).json({ 
+                    success: true, 
+                    message: 'Your consultation request has been sent successfully!' 
+                });
+            }
+        }
+        
+        // Store this submission time
+        recentSubmissions.set(requestSignature, now);
+        
+        // Clean up old entries every minute
+        setTimeout(() => {
+            const currentTime = Date.now();
+            for (const [key, timestamp] of recentSubmissions.entries()) {
+                if (currentTime - timestamp > 60000) { // 1 minute
+                    recentSubmissions.delete(key);
+                }
+            }
+        }, 60000);
+        
         const { 
             name, 
             company, 
-            email, 
-            phone, 
             service, 
             'selected-package': selectedPackage, 
             budget, 
@@ -42,9 +76,9 @@ app.post('/api/send-consultation', async (req, res) => {
         const services = Array.isArray(service) ? service.join(', ') : service;
 
         // Email to admin
-        const adminMsg = {
+        const adminData = {
+            from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
             to: process.env.EMAIL_USER,
-            from: process.env.EMAIL_USER, // Must be verified in SendGrid
             subject: 'New Consultation Request',
             html: `
                 <h2>New Consultation Request</h2>
@@ -59,13 +93,13 @@ app.post('/api/send-consultation', async (req, res) => {
             `
         };
 
-        await sgMail.send(adminMsg);
+        await mg.messages().send(adminData);
         console.log('Admin email sent successfully');
 
         // Confirmation email to client
-        const clientMsg = {
+        const clientData = {
+            from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
             to: email,
-            from: process.env.EMAIL_USER, // Must be verified in SendGrid
             subject: 'Thank You for Your Interest',
             html: `
                 <h2>Thank You for Reaching Out!</h2>
@@ -82,7 +116,7 @@ app.post('/api/send-consultation', async (req, res) => {
             `
         };
 
-        await sgMail.send(clientMsg);
+        await mg.messages().send(clientData);
         console.log('Client email sent successfully');
 
         res.status(200).json({ success: true, message: 'Your consultation request has been sent successfully!' });
@@ -98,9 +132,9 @@ app.post('/api/subscribe-newsletter', async (req, res) => {
         const { EMAIL } = req.body;
 
         // Admin notification
-        const adminMsg = {
+        const adminData = {
+            from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
             to: process.env.EMAIL_USER,
-            from: process.env.EMAIL_USER,
             subject: 'New Newsletter Subscription',
             html: `
                 <h2>New Newsletter Subscription</h2>
@@ -108,12 +142,12 @@ app.post('/api/subscribe-newsletter', async (req, res) => {
             `
         };
 
-        await sgMail.send(adminMsg);
+        await mg.messages().send(adminData);
 
         // Confirmation to subscriber
-        const clientMsg = {
+        const clientData = {
+            from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
             to: EMAIL,
-            from: process.env.EMAIL_USER,
             subject: 'Welcome to My Newsletter!',
             html: `
                 <h2>Thank You for Subscribing!</h2>
@@ -123,7 +157,7 @@ app.post('/api/subscribe-newsletter', async (req, res) => {
             `
         };
 
-        await sgMail.send(clientMsg);
+        await mg.messages().send(clientData);
 
         res.status(200).json({ success: true, message: 'You have been subscribed successfully!' });
     } catch (error) {

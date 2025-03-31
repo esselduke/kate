@@ -1239,12 +1239,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get consultation form
     const consultationForm = document.getElementById('consultation-form');
     
+    // Track submission state
+    let isSubmitting = false;
+    
     if (consultationForm) {
         consultationForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Prevent multiple submissions
+            if (isSubmitting) {
+                console.log('Form is already being submitted');
+                return;
+            }
+            
             // Validate form before submission
             if (validateForm(this)) {
+                isSubmitting = true;
                 const submitBtn = this.querySelector('.submit-btn');
                 const originalBtnText = submitBtn.textContent;
                 
@@ -1312,6 +1322,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             // Restore button text
                             submitBtn.textContent = originalBtnText;
                             submitBtn.disabled = false;
+                            isSubmitting = false; // Reset submission state
                         }, 3000);
                     } else {
                         // Show error message
@@ -1320,8 +1331,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Restore button text
                         submitBtn.textContent = originalBtnText;
                         submitBtn.disabled = false;
+                        isSubmitting = false; // Reset submission state
                     }
-                    
                 } catch (error) {
                     console.error('Form submission error:', error);
                     
@@ -1331,10 +1342,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Restore button text
                     submitBtn.textContent = originalBtnText;
                     submitBtn.disabled = false;
+                    isSubmitting = false; // Reset submission state
                 }
             }
         });
     }
+
+    
     
     // Newsletter form (as backup to Mailchimp)
     const newsletterForm = document.getElementById('mc-embedded-subscribe-form');

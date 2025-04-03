@@ -1267,37 +1267,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     const formData = new FormData(this);
                     const formDataObject = {};
                     
-                    // Convert FormData to JSON
+                    // Convert FormData to an object for EmailJS
                     formData.forEach((value, key) => {
                         // Handle checkboxes (services) which might have multiple values
                         if (key === 'service[]') {
-                            if (!formDataObject['service']) {
-                                formDataObject['service'] = [];
+                            if (!formDataObject['services']) {
+                                formDataObject['services'] = [];
                             }
-                            formDataObject['service'].push(value);
+                            formDataObject['services'].push(value);
                         } else {
                             formDataObject[key] = value;
                         }
                     });
                     
-                    console.log('Sending data:', formDataObject); // Debug log
+                    // If services were selected, convert them to a string
+                    if (formDataObject['services']) {
+                        formDataObject['services'] = formDataObject['services'].join(', ');
+                    }
                     
-                    // Send form data to backend API
-                    const response = await fetch('http://localhost:3000/api/send-consultation', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formDataObject)
-                    });
+                    console.log('Sending data via EmailJS:', formDataObject);
                     
-                    // Log the raw response for debugging
-                    console.log('Response status:', response.status);
+                    // Send email using EmailJS
+                    const response = await emailjs.send(
+                        'service_35quybr',         // Replace with your EmailJS service ID
+                        'template_eqy3q5a',        // Replace with your EmailJS template ID
+                        formDataObject
+                    );
                     
-                    const result = await response.json();
-                    console.log('Response data:', result);
+                    console.log('EmailJS response:', response);
                     
-                    if (result.success) {
+                    if (response.status === 200) {
                         // Show success message
                         showFormMessage(this, 'success', 'Thank you for your submission! We will be in touch shortly.');
                         
@@ -1325,13 +1324,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             isSubmitting = false; // Reset submission state
                         }, 3000);
                     } else {
-                        // Show error message
-                        showFormMessage(this, 'error', result.message || 'There was an error sending your message. Please try again.');
-                        
-                        // Restore button text
-                        submitBtn.textContent = originalBtnText;
-                        submitBtn.disabled = false;
-                        isSubmitting = false; // Reset submission state
+                        throw new Error('Email failed to send');
                     }
                 } catch (error) {
                     console.error('Form submission error:', error);
@@ -1347,39 +1340,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
     
-    
-    // Newsletter form (as backup to Mailchimp)
+    // Newsletter form can use the same approach if needed
     const newsletterForm = document.getElementById('mc-embedded-subscribe-form');
     
     if (newsletterForm) {
-        // Add backup submission handler to the newsletter form
-        // This will trigger only if the Mailchimp submission fails somehow
-        newsletterForm.addEventListener('submit', async function(e) {
-            // We don't prevent default here because we want Mailchimp's handler to work first
-            // This is just a backup
+        // Just in case Mailchimp fails, you could add EmailJS as a backup here too
+        newsletterForm.addEventListener('submit', function(e) {
+            // No need to prevent default since Mailchimp integration should work
+            const email = this.querySelector('#mce-EMAIL')?.value;
             
-            try {
-                const email = this.querySelector('#mce-EMAIL').value;
-                
-                if (email) {
-                    // Send to our backend as well (without interfering with Mailchimp)
-                    fetch('http://localhost:3000/api/subscribe-newsletter', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ EMAIL: email })
-                    }).then(response => {
-                        console.log('Newsletter backup submission completed');
-                    }).catch(error => {
-                        console.error('Newsletter backup submission error:', error);
-                    });
-                }
-            } catch (error) {
-                console.error('Newsletter form handling error:', error);
-                // Don't show any error message, as Mailchimp will handle that
+            if (email) {
+                // You could add a similar EmailJS call here if needed
+                console.log('Newsletter submitted with email:', email);
             }
         });
     }
